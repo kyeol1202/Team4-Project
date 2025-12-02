@@ -8,9 +8,10 @@ function App() {
 
   return (
     <>
-    
+      front test
     </>
   )
 }
 
 export default App
+ㅎ
