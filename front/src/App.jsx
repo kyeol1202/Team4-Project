@@ -8,7 +8,6 @@ function App() {
 
   return (
     <>
-      저는백입니다 은지1
     </>
   )
 }
