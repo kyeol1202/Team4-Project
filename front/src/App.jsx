@@ -1,24 +1,28 @@
-import { useState } from 'react'
-import Main from'./component/main'
-import './App.css'
+import React from "react";
+import Main from "./component/main"
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import "./App.css";
 
-function App() {
 
+  function App() {
   return (
+
+    
     <>
-  {/*
-    네비게이터 연결부분
+    {/*
+    네비게이터 연결부분dsfds
 
     Main = 메인화면 11
     */}
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Main />} />
-        </Routes>
-      </BrowserRouter>
+    <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Main />} />
+          </Routes>
+        </BrowserRouter>
     </>
+    
+  );
 
-  )
+  
 }
-
-export default App
+export default App; 
