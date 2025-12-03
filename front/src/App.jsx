@@ -10,12 +10,8 @@ import "./App.css";
     
     <>
     {/*
-<<<<<<< HEAD
-    네비게이터 연결부분np
-=======
     네비게이터 연결부분dsfds
->>>>>>> d509f61bfe085853ec04ba2ebcbb69a17b07a264
-
+      test12312321
     Main = 메인화면 11
     */}
     <BrowserRouter>
