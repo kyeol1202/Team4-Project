@@ -7,11 +7,10 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
-    헬로우11112222132131
+    <>1
+1111
     </>
   )
 }
 
 export default App
-ㅎ
