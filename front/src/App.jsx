@@ -7,9 +7,19 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <>1
-1111
+    <>
+  {/*
+    네비게이터 연결부분
+
+    Main = 메인화면
+    */}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Main />} />
+        </Routes>
+      </BrowserRouter>
     </>
+
   )
 }
 
