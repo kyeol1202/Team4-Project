@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// DB 연결 테스트용 API
+// DB 연결 테스트용 API (프론트엔드에서 호출 가능)
 app.get("/api/check-users", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM member LIMIT 5"); // member 테이블 5개만 조회
