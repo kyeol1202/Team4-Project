@@ -23,7 +23,7 @@ function App() {
 
     <>
       {/*
-    네비게이터 연결부분dsfds
+    네비게이터 연결부분dsfds11
       test12312321
     Main = 메인화면 11
     */}
