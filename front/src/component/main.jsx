@@ -187,7 +187,7 @@ function Main() {
                 {/* 🔥 Email + Password 입력 */}
                 <input
                     type="text"
-                    placeholder="Email"
+                    placeholder="ID"
                     value={userId}
                     onChange={(e) => setUserId(e.target.value)}
                 />
