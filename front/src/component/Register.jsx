@@ -15,6 +15,8 @@ function Register() {
     const [number3, setNumber3] = useState("");
     const [hbd, setHbd] = useState(''); //hbd >> 생년월일
 
+    const number3Ref = useRef(null);
+
     function register() {
 
         const fullNumber = `${number1}${number2}${number3}`;
@@ -84,11 +86,18 @@ function Register() {
                     />
                     <span>-</span>
 
+                    
                     <input
                         type="text"
                         value={number2}
-                        onChange={(e)=>setNumber2(e.target.value.replace(/[^0-9]/g,''))}
-                        maxLength={4}
+                        onChange={(e) => {
+                            const val = e.target.value.replace(/[^0-9]/g, '');
+                            setNumber2(val);
+
+                            if (val.length === 4) {
+                                number3Ref.current?.focus();
+                            }
+                        }}
                         style={{ width: "80px", textAlign: "center" }}
                     />
                     <span>-</span>
