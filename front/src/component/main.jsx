@@ -9,7 +9,7 @@ function Main() {
 
     const products = ["", "", "", "", "", "", "", "", "", ""]; // 더미 상품 데이터
 
-    const visibleCount = 3; // 화면에 보이는 카드 수
+    const visibleCount = 3; // 화면에 보이는 카드 수11
     const cardWidth = 330;  // 카드 폭
     const gap = 20;         // 카드 간격
 
