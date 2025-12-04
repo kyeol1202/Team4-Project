@@ -10,7 +10,7 @@ function Register() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
-    const [number1, setNumber1] = useState("010");
+    const [number1] = useState("010");
     const [number2, setNumber2] = useState("");
     const [number3, setNumber3] = useState("");
     const [hbd, setHbd] = useState(''); //hbd >> 생년월일
@@ -87,18 +87,18 @@ function Register() {
                     <input
                         type="text"
                         value={number2}
+                        onChange={(e)=>setNumber2(e.target.value.replace(/[^0-9]/g,''))}
                         maxLength={4}
-                        onChange={(e) => setNumber2(e.target.value)}
-                        style={{ width: "60px", textAlign: "center" }}
+                        style={{ width: "80px", textAlign: "center" }}
                     />
                     <span>-</span>
 
                     <input
                         type="text"
                         value={number3}
+                        onChange={(e)=>setNumber3(e.target.value.replace(/[^0-9]/g,''))}
                         maxLength={4}
-                        onChange={(e) => setNumber3(e.target.value)}
-                        style={{ width: "60px", textAlign: "center" }}
+                        style={{ width: "80px", textAlign: "center" }}
                     />
                 </div>
 
