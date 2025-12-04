@@ -1,20 +1,16 @@
 import { useNavigate } from "react-router-dom";
 
-function Cart(){
+function Category3() {
     const navigate = useNavigate();
 
-    return(
+    return (
 
         <>
-            장바구니페이지
+            카테고리3페이지
             <button onClick={() => navigate("/")}>이전</button>
-
-            <button onClick={() => navigate("/payment")}>결제하기</button>
-
-
         </>
     )
 
 }
 
-export default Cart;
+export default Category3;

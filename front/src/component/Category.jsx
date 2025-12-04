@@ -1,13 +1,13 @@
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
+function Category() {
+    const navigate = useNavigate();
 
-function Category(){
-
-
-    return(
+    return (
 
         <>
-        
+            카테고리1페이지
+            <button onClick={() => navigate("/")}>이전</button>
         </>
     )
 

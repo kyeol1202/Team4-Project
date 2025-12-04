@@ -172,12 +172,20 @@
 }
 
 .search-box input {
-  width: 100%;
+  width: 85%;
+  flex: 1;                 /* 입력창이 남은 공간 전체 차지 */
   padding: 12px 15px;
   border-radius: 6px;
   border: 1px solid #dcdcdc;
   background: #fafafa;
   transition: all 0.25s;
+}
+
+.search-box button.search {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 .search-box input:focus {
@@ -279,6 +287,13 @@
 
 .product-card:last-child {
   margin-right: 0;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 90;
 }
 
 .login-drawer {
