@@ -17,7 +17,19 @@
       }
     });
 
-    // 서버 실행
-    app.listen(8080, '0.0.0.0', () => {
-        console.log("서버 실행 중: http://0.0.0.0:8080");
-    });
+app.get("/test", async (req, res) => {
+  console.log("📌 /test 요청 도착");
+
+  try {
+    const rows = await pool.query("SELECT * FROM product");
+    res.json(rows);
+  } catch (err) {
+    console.error("🔥 /test DB 에러:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 서버 실행
+app.listen(8080, '0.0.0.0', () => {
+    console.log("서버 실행 중: http://0.0.0.0:8080");
+});
