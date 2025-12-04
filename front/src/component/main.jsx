@@ -1,0 +1,213 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+function Main() {
+    const [loginOpen, setLoginOpen] = useState(false);
+    const [login, setLogin] = useState(false);
+    const [index, setIndex] = useState(0);
+    const [surcharge, setSurcharge] = useState('');
+    const navigate = useNavigate();
+
+    // 로그인 입력값
+    const [userId, setUserId] = useState('');
+    const [password, setPassword] = useState('');
+
+    const products = [
+        { id: 1, img: "" },
+        { id: 2, img: "" },
+        { id: 3, img: "" },
+        { id: 4, img: "image/gam2.jpeg" },
+        { id: 5, img: "" },
+        { id: 6, img: "image/gam" },
+    ];
+
+    const visibleCount = 3;
+    const cardWidth = 330;
+    const gap = 20;
+
+    // 자동 슬라이드
+    useEffect(() => {
+        const timer = setInterval(() => {
+            slideRight();
+        }, 3000);
+        return () => clearInterval(timer);
+    }, [index]);
+
+    useEffect(() => {
+        const saved = localStorage.getItem("login");
+        if (saved === "true") {
+            setLogin(true);
+        }
+    }, []);
+
+    const slideRight = () => {
+        setIndex((prev) => {
+            if (prev >= products.length - visibleCount) return 0;
+            return prev + 1;
+        });
+    };
+
+    const slideLeft = () => {
+        setIndex((prev) => {
+            if (prev === 0) return products.length - visibleCount;
+            return prev - 1;
+        });
+    };
+
+    // -------------------------
+    // 🔥 로그인 함수(백엔드 연결)
+    // -------------------------
+    async function Login() {
+        if (!userId || !password) {
+            return alert("이메일과 비밀번호를 입력하세요!");
+        }
+
+        try {
+            const res = await fetch("http://localhost:8080/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: userId,
+                    password: password
+                })
+            });
+
+            const data = await res.json();
+            console.log("로그인 응답:", data);
+
+            if (!data.success) {
+                return alert(data.message || "로그인 실패");
+            }
+
+            alert(`${data.user.name}님 환영합니다!`);
+
+            // 로그인 성공 처리
+            localStorage.setItem("login", "true");
+            localStorage.setItem("user", JSON.stringify(data.user));
+
+            setLogin(true);
+            setLoginOpen(false);
+
+            setUserId("");
+            setPassword("");
+
+        } catch (err) {
+            console.error("로그인 오류:", err);
+            alert("서버 오류 발생");
+        }
+    }
+
+    function search() {
+        if (!surcharge.trim()) return alert("검색어를 입력하세요!");
+        navigate("/search/" + surcharge);
+    }
+
+    return (
+        <div className="page">
+
+            {/* HEADER */}
+            <header className="header">
+                <div className="header-left">
+                    MENU
+                    <ul className="dropdown">
+                        <li className="dropdownlist" type="button" onClick={() => navigate("/category")}>베스트셀러</li>
+                        <li className="dropdownlist" type="button" onClick={() => navigate("/category2")}>전체상품</li>
+                        <li className="dropdownlist" type="button" onClick={() => navigate("/category3")}>남성향수</li>
+                        <li className="dropdownlist" type="button" onClick={() => navigate("/category4")}>여성향수</li>
+                        <li className="dropdownlist" type="button" onClick={() => navigate("/category5")}>향수 기프트 세트</li>
+                    </ul>
+                </div>
+
+                <div className="header-title">Aura</div>
+
+                <div className="header-right">
+                    <button
+                        onClick={() => {
+                            if (login) navigate("/wish");
+                            else {
+                                alert("로그인 후 이용 가능합니다.");
+                                setLoginOpen(true);
+                            }
+                        }}
+                    >
+                        ♡
+                    </button>
+
+                    <button onClick={() => navigate("/cart")}>🛒</button>
+
+                    <button onClick={() => (login ? navigate("/mypage") : setLoginOpen(true))}>
+                        👤
+                    </button>
+                </div>
+            </header>
+
+            {/* 검색창 */}
+            <div className="search-box">
+                <input
+                    type="text"
+                    placeholder="검색하기"
+                    value={surcharge}
+                    onChange={(e) => setSurcharge(e.target.value)}
+                />
+                <button className="search" onClick={search}>🔍</button>
+            </div>
+
+            <h1 className="section-title">BEST SELLERS</h1>
+
+            {/* 슬라이더 */}
+            <div className="slider-wrapper">
+                <span className="arrow left" onClick={slideLeft}>‹</span>
+
+                <div className="slider">
+                    <div
+                        className="slider-inner"
+                        style={{
+                            transform: `translateX(-${index * (cardWidth + gap)}px)`
+                        }}
+                    >
+                        {products.map((item) => (
+                            <button key={item.id} className="product-card">
+                                <img src={item.img} alt="" className="product-img" />
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <span className="arrow right" onClick={slideRight}>›</span>
+            </div>
+
+            {loginOpen && <div className="overlay" onClick={() => setLoginOpen(false)}></div>}
+
+            <div className={`login-drawer ${loginOpen ? "open" : ""}`}>
+                <button className="close-btn" onClick={() => setLoginOpen(false)}>
+                    ✕
+                </button>
+                <h2>Login</h2>
+
+                {/* 🔥 Email + Password 입력 */}
+                <input
+                    type="text"
+                    placeholder="Email"
+                    value={userId}
+                    onChange={(e) => setUserId(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+
+                <button className="login-btn" onClick={Login}>로그인</button>
+                <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
+            </div>
+
+            <footer className="footer">
+                <button onClick={() => navigate("/service")}>🎧</button>
+                <button>🤖</button>
+            </footer>
+        </div>
+    );
+}
+
+export default Main;
