@@ -8,6 +8,10 @@ function Main() {
     const [surcharge, setSurcharge] = useState('');
     const navigate = useNavigate();
 
+    // 로그인 입력값 상태 추가 (여기만 새로 추가)
+    const [userId, setUserId] = useState('');
+    const [password, setPassword] = useState('');
+
     const products = [
         { id: 1, img: "" },
         { id: 2, img: "" },
@@ -51,17 +55,24 @@ function Main() {
         });
     };
 
+    // 로그인 함수 수정 (여기만 바뀜)
     function Login() {
-        alert("로그인 되었습니다!");
-        setLoginOpen(false);
-        setLogin(true);
-        localStorage.setItem("login", "true");   // 저장
+        if (userId === 'admin' && password === 'admin1234') {  // 더미 ID/PW (DB 연결되면 API로 바꿔)
+            alert("로그인 되었습니다!");
+            setLoginOpen(false);
+            setLogin(true);
+            localStorage.setItem("login", "true");  // 저장
+            setUserId('');  // 입력값 초기화
+            setPassword('');
+        } else {
+            alert("올바르지 않습니다");
+        }
     }
 
     function search() {
         if (!surcharge.trim()) return alert("검색어를 입력하세요!");
 
-        navigate(`/search?keyword=${surcharge}`);
+        navigate("/search/" + surcharge);
     }
 
     return (
@@ -112,11 +123,7 @@ function Main() {
 
             {/* 검색창 */}
             <div className="search-box">
-                <input type="text" placeholder="검색하기" value={surcharge} onChange={(e) => setSurcharge(e.target.value)} onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                        search();
-                    }
-                }} /><button className="search" onClick={search}>🔍</button>
+                <input type="text" placeholder="검색하기" value={surcharge} onChange={(e) => setSurcharge(e.target.value)} /><button className="search" onClick={search}>🔍</button>
             </div>
 
             <h1 className="section-title">BEST SELLERS</h1>
@@ -155,8 +162,9 @@ function Main() {
                     ✕
                 </button>
                 <h2>Login</h2>
-                <input type="text" placeholder="ID" />
-                <input type="password" placeholder="Password" />
+                {/* 입력 필드 수정 (여기만 바뀜) */}
+                <input type="text" placeholder="ID" value={userId} onChange={(e) => setUserId(e.target.value)} />
+                <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 <button className="login-btn" onClick={Login}>로그인</button>
                 <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
             </div>  {/*로그인 관련*/}
