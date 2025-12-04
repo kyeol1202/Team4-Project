@@ -1,4 +1,3 @@
-import React, { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function Search() {
@@ -6,6 +5,7 @@ function Search() {
     const navigate = useNavigate();
     const params = new URLSearchParams(location.search);
     const keyword = params.get("keyword")?.toLowerCase();
+    const [product, setProduct] = useState([]);
 
     const products = [
         { id: 1, name: "가벼운 향수", img: "/image/AuRa Etherlune.png" },
@@ -21,6 +21,15 @@ function Search() {
             p.name.toLowerCase().includes(keyword)
         );
     }, [keyword]);
+
+    useEffect(() => {
+            fetch('http://192.168.0.25:8080/')
+                .then(res => res.json())
+                .then(data => {
+                    setProduct(Array.isArray(data) ? data : [data]);
+                    
+                });
+        }, [product]);
 
     return (
         <div className="search-page">
