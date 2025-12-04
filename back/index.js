@@ -18,9 +18,15 @@ app.get("/api/check-users", async (req, res) => {
 });
 
 app.get("/test", async (req, res) => {
-  const rows = await pool.query("SELECT * FROM product");
-  res.json(rows);
+  console.log("📌 /test 요청 도착");
 
+  try {
+    const rows = await pool.query("SELECT * FROM product");
+    res.json(rows);
+  } catch (err) {
+    console.error("🔥 /test DB 에러:", err.message);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // 서버 실행
