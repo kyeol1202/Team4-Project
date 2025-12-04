@@ -67,7 +67,7 @@ function Main() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    email: userId,
+                    username: userId,
                     password: password
                 })
             });
@@ -184,7 +184,7 @@ function Main() {
                 </button>
                 <h2>Login</h2>
 
-                {/* 🔥 Email + Password 입력 */}
+                {/* 🔥 id + Password 입력 */}
                 <input
                     type="text"
                     placeholder="ID"
