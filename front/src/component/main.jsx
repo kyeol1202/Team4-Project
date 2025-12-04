@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Register from "./Register";
 
 function Main() {
     const [loginOpen, setLoginOpen] = useState(false);
     const [index, setIndex] = useState(0);
+    const navigate = useNavigate();
 
-    const products = ["제품 1", "제품 2", "제품 3", "제품 4", "제품 5", "제품 6"];
+    const products = ["", "", "", "", "", "", "", "", "", ""]; // 더미 상품 데이터
 
     const visibleCount = 3; // 화면에 보이는 카드 수
     const cardWidth = 330;  // 카드 폭
     const gap = 20;         // 카드 간격
+    
 
     // 자동 슬라이드
     useEffect(() => {
@@ -31,11 +35,6 @@ function Main() {
             return prev - 1;
         });
     };
-
-    function login() {
-
-
-    }
 
     return (
         <div className="page">
@@ -99,6 +98,7 @@ function Main() {
                 <input type="text" placeholder="ID" />
                 <input type="password" placeholder="Password" />
                 <button className="login-btn">로그인</button>
+                <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
             </div>
 
             <footer className="footer">
