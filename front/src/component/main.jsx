@@ -8,7 +8,7 @@ function Main() {
     const [surcharge, setSurcharge] = useState('');
     const navigate = useNavigate();
 
-    // 로그인 입력값 상태 추가 (여기만 새로 추가)
+    // 로그인 입력값
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
 
@@ -19,12 +19,11 @@ function Main() {
         { id: 4, img: "image/gam2.jpeg" },
         { id: 5, img: "" },
         { id: 6, img: "image/gam" },
-    ]; // 더미 상품 데이터
+    ];
 
-    const visibleCount = 3; // 화면에 보이는 카드 수11
-    const cardWidth = 330;  // 카드 폭
-    const gap = 20;         // 카드 간격
-
+    const visibleCount = 3;
+    const cardWidth = 330;
+    const gap = 20;
 
     // 자동 슬라이드
     useEffect(() => {
@@ -55,23 +54,51 @@ function Main() {
         });
     };
 
-    // 로그인 함수 수정 (여기만 바뀜)
-    function Login() {
-        if (userId === 'admin' && password === 'admin1234') {  // 더미 ID/PW (DB 연결되면 API로 바꿔)
-            alert("로그인 되었습니다!");
-            setLoginOpen(false);
+    // -------------------------
+    // 🔥 로그인 함수(백엔드 연결)
+    // -------------------------
+    async function Login() {
+        if (!userId || !password) {
+            return alert("이메일과 비밀번호를 입력하세요!");
+        }
+
+        try {
+            const res = await fetch("http://localhost:8080/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: userId,
+                    password: password
+                })
+            });
+
+            const data = await res.json();
+            console.log("로그인 응답:", data);
+
+            if (!data.success) {
+                return alert(data.message || "로그인 실패");
+            }
+
+            alert(`${data.user.name}님 환영합니다!`);
+
+            // 로그인 성공 처리
+            localStorage.setItem("login", "true");
+            localStorage.setItem("user", JSON.stringify(data.user));
+
             setLogin(true);
-            localStorage.setItem("login", "true");  // 저장
-            setUserId('');  // 입력값 초기화
-            setPassword('');
-        } else {
-            alert("올바르지 않습니다");
+            setLoginOpen(false);
+
+            setUserId("");
+            setPassword("");
+
+        } catch (err) {
+            console.error("로그인 오류:", err);
+            alert("서버 오류 발생");
         }
     }
 
     function search() {
         if (!surcharge.trim()) return alert("검색어를 입력하세요!");
-
         navigate("/search/" + surcharge);
     }
 
@@ -94,16 +121,12 @@ function Main() {
                 <div className="header-title">Aura</div>
 
                 <div className="header-right">
-
                     <button
                         onClick={() => {
-                            if (login) {
-                                navigate("/wish");
-                            } else {
-
+                            if (login) navigate("/wish");
+                            else {
                                 alert("로그인 후 이용 가능합니다.");
                                 setLoginOpen(true);
-
                             }
                         }}
                     >
@@ -112,23 +135,26 @@ function Main() {
 
                     <button onClick={() => navigate("/cart")}>🛒</button>
 
-                    <button
-                        onClick={() => login ? navigate("/mypage") : setLoginOpen(true)}
-                    >
+                    <button onClick={() => (login ? navigate("/mypage") : setLoginOpen(true))}>
                         👤
                     </button>
                 </div>
             </header>
 
-
             {/* 검색창 */}
             <div className="search-box">
-                <input type="text" placeholder="검색하기" value={surcharge} onChange={(e) => setSurcharge(e.target.value)} /><button className="search" onClick={search}>🔍</button>
+                <input
+                    type="text"
+                    placeholder="검색하기"
+                    value={surcharge}
+                    onChange={(e) => setSurcharge(e.target.value)}
+                />
+                <button className="search" onClick={search}>🔍</button>
             </div>
 
             <h1 className="section-title">BEST SELLERS</h1>
 
-            {/* --- 슬라이더 --- */}
+            {/* 슬라이더 */}
             <div className="slider-wrapper">
                 <span className="arrow left" onClick={slideLeft}>‹</span>
 
@@ -152,30 +178,35 @@ function Main() {
 
             {loginOpen && <div className="overlay" onClick={() => setLoginOpen(false)}></div>}
 
-            <div
-                className={`login-drawer ${loginOpen ? "open" : ""}`}
-                onClick={(e) => e.stopPropagation()}
-            ></div>
-
             <div className={`login-drawer ${loginOpen ? "open" : ""}`}>
                 <button className="close-btn" onClick={() => setLoginOpen(false)}>
                     ✕
                 </button>
                 <h2>Login</h2>
-                {/* 입력 필드 수정 (여기만 바뀜) */}
-                <input type="text" placeholder="ID" value={userId} onChange={(e) => setUserId(e.target.value)} />
-                <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+
+                {/* 🔥 Email + Password 입력 */}
+                <input
+                    type="text"
+                    placeholder="Email"
+                    value={userId}
+                    onChange={(e) => setUserId(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+
                 <button className="login-btn" onClick={Login}>로그인</button>
                 <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
-            </div>  {/*로그인 관련*/}
+            </div>
 
             <footer className="footer">
                 <button onClick={() => navigate("/service")}>🎧</button>
                 <button>🤖</button>
             </footer>
         </div>
-
-
     );
 }
 
