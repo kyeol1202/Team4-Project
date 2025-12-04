@@ -13,6 +13,7 @@ import Category3 from "./component/Category3";
 import Category4 from "./component/Category4";
 import Category5 from "./component/Category5";
 import Mypage from "./component/Mypage";
+import SearchPage from "./component/search/search";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
     */}
       <BrowserRouter>
         <Routes>
+          <Route path="/search/:keyword" element={<SearchPage />} />
           <Route path="/" element={<Main />} />{/* 메인 페이지 */}
           <Route path="/cart" element={<Cart />} /> {/* 장바구니 페이지 */}
           <Route path="/category" element={<Category />} />{/* 카테고리 페이지 */}

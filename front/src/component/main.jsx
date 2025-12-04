@@ -5,9 +5,17 @@ function Main() {
     const [loginOpen, setLoginOpen] = useState(false);
     const [login, setLogin] = useState(false);
     const [index, setIndex] = useState(0);
+    const [surcharge, setSurcharge] = useState('');
     const navigate = useNavigate();
 
-    const products = ["", "", "", "", "", "", "", "", "", ""]; // 더미 상품 데이터
+    const products = [
+        { id: 1, img: "" },
+        { id: 2, img: "" },
+        { id: 3, img: "" },
+        { id: 4, img: "image/gam2.jpeg" },
+        { id: 5, img: "" },
+        { id: 6, img: "image/gam" },
+    ]; // 더미 상품 데이터
 
     const visibleCount = 3; // 화면에 보이는 카드 수11
     const cardWidth = 330;  // 카드 폭
@@ -48,6 +56,12 @@ function Main() {
         setLoginOpen(false);
         setLogin(true);
         localStorage.setItem("login", "true");   // 저장
+    }
+
+    function search() {
+        if (!surcharge.trim()) return alert("검색어를 입력하세요!");
+
+        navigate("/search/" + surcharge);
     }
 
     return (
@@ -98,7 +112,7 @@ function Main() {
 
             {/* 검색창 */}
             <div className="search-box">
-                <input type="text" placeholder="검색하기" /><button className="search">🔍</button>
+                <input type="text" placeholder="검색하기" value={surcharge} onChange={(e) => setSurcharge(e.target.value)} /><button className="search" onClick={search}>🔍</button>
             </div>
 
             <h1 className="section-title">BEST SELLERS</h1>
@@ -114,9 +128,9 @@ function Main() {
                             transform: `translateX(-${index * (cardWidth + gap)}px)`
                         }}
                     >
-                        {products.map((item, i) => (
-                            <button key={i} className="product-card">
-                                {item}
+                        {products.map((item) => (
+                            <button key={item.id} className="product-card">
+                                <img src={item.img} alt="" className="product-img" />
                             </button>
                         ))}
                     </div>
