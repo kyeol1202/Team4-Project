@@ -90,9 +90,11 @@ function Register() {
                     <input
                         type="text"
                         value={number2}
+                         maxLength={4}
                         onChange={(e) => {
                             const val = e.target.value.replace(/[^0-9]/g, '');
                             setNumber2(val);
+                            
                             if (val.length === 4) {
                                 number3Ref.current?.focus();
                             }
