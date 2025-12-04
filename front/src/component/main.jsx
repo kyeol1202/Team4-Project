@@ -155,7 +155,7 @@ function Main() {
                 <input type="password" placeholder="Password" />
                 <button className="login-btn" onClick={Login}>로그인</button>
                 <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
-            </div>
+            </div>  {/*로그인 관련*/}
 
             <footer className="footer">
                 <button onClick={() => navigate("/service")}>🎧</button>
