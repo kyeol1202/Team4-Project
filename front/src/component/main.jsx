@@ -61,7 +61,7 @@ function Main() {
     function search() {
         if (!surcharge.trim()) return alert("검색어를 입력하세요!");
 
-         navigate(`/search?keyword=${surcharge}`);
+        navigate(`/search?keyword=${surcharge}`);
     }
 
     return (
@@ -112,7 +112,11 @@ function Main() {
 
             {/* 검색창 */}
             <div className="search-box">
-                <input type="text" placeholder="검색하기" value={surcharge} onChange={(e) => setSurcharge(e.target.value)} /><button className="search" onClick={search}>🔍</button>
+                <input type="text" placeholder="검색하기" value={surcharge} onChange={(e) => setSurcharge(e.target.value)} onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                        search();
+                    }
+                }} /><button className="search" onClick={search}>🔍</button>
             </div>
 
             <h1 className="section-title">BEST SELLERS</h1>
