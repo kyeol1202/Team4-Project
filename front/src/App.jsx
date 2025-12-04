@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import "./App.css";
+import "./Search.css";
 import Main from "./component/main"
 import Cart from "./component/Cart";
 import Payment from "./component/Payment";
@@ -13,7 +14,7 @@ import Category3 from "./component/Category3";
 import Category4 from "./component/Category4";
 import Category5 from "./component/Category5";
 import Mypage from "./component/Mypage";
-import SearchPage from "./component/search/search";
+import Search from "./component/search/search";
 
 
 function App() {
@@ -22,13 +23,13 @@ function App() {
 
     <>
       {/*
-    네비게이터 연결부분dsfds
+    네비게이터 연결부분dsfds11
       test12312321
     Main = 메인화면 11
     */}
       <BrowserRouter>
         <Routes>
-          <Route path="/search/:keyword" element={<SearchPage />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/" element={<Main />} />{/* 메인 페이지 */}
           <Route path="/cart" element={<Cart />} /> {/* 장바구니 페이지 */}
           <Route path="/category" element={<Category />} />{/* 카테고리 페이지 */}
