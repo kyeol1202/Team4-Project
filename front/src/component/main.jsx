@@ -148,6 +148,9 @@ function Main() {
                     placeholder="검색하기"
                     value={surcharge}
                     onChange={(e) => setSurcharge(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") search();
+                    }}
                 />
                 <button className="search" onClick={search}>🔍</button>
             </div>
