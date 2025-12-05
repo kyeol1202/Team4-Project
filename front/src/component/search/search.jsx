@@ -24,7 +24,17 @@ function Search() {
     }, [keyword]); // keyword가 변경될 때만 실행
 
     return (
+        
         <div className="search-page">
+            {/* <div className="search-box">
+                <input
+                    type="text"
+                    placeholder="검색하기"
+                    value={surcharge}
+                    onChange={(e) => setSurcharge(e.target.value)}
+                />
+                <button className="search" onClick={search}>🔍</button>
+            </div> */}
             <h1 className="search-title">“{keyword}” 검색 결과</h1>
 
             {products.length === 0 && (
@@ -40,6 +50,7 @@ function Search() {
                 ))}
             </div>
         </div>
+        
     );
 }
 
