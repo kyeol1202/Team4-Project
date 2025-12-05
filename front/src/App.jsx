@@ -28,6 +28,10 @@ function App() {
     Main = 메인화면 11
     */}
       <BrowserRouter>
+      <nav style={{ display: "flex", gap: "20px" }}>
+        <Link to="/">메인</Link>
+        <Link to="/cart">장바구니</Link>
+      </nav>
         <Routes>
           <Route path="/search" element={<Search />} />
           <Route path="/" element={<Main />} />{/* 메인 페이지 */}
