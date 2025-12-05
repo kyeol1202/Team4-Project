@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import "./App.css";
 import "./Search.css";
@@ -23,14 +22,20 @@ function App() {
 
     <>
       {/*
-    네비게이터 연결부분
-    Main = 메인화면
+    네비게이터 연결부분dsfds11
+      test12312321
+    Main = 메인화면 11
     */}
       <BrowserRouter>
+      {/* <nav style={{ display: "flex", gap: "20px" }}>
+        <Link to="/">메인</Link>
+        <Link to="/cart">장바구니</Link>
+      </nav> */}
         <Routes>
           <Route path="/search" element={<Search />} />
-          <Route path="/" element={<Main />} />{/* 메인 페이지 */}
-          <Route path="/main" element={<Main />} />{/* 메인 페이지 */}
+          <Route path="/main" element={<Main />} />
+          <Route path="/" element={<Main />} />
+
           <Route path="/cart" element={<Cart />} /> {/* 장바구니 페이지 */}
           <Route path="/category" element={<Category />} />{/* 카테고리 페이지 */}
           <Route path="/category2" element={<Category2 />} />{/* 카테고리 페이지 */}
