@@ -87,9 +87,10 @@
     if (err) return res.status(500).send("DB 오류");
 
     if (result.length > 0) {
-      return res.json({ exists: true });   // 이미 존재
+      return res.json({ exists: true , message: "중복된 아이디입니다" });   // 이미 존재
+      
     } else {
-      return res.json({ exists: false });  // 사용 가능
+      return res.json({ exists: false , message:"사용 가능한 아이디입니다" });  // 사용 가능
     }
   });
 });
