@@ -22,19 +22,11 @@ function Register() {
  //hbd >> 생년월일
     
     //아이디중복확인
-<<<<<<< HEAD
-//     const IdChecked = async () => {
-//   if (!id) {
-//     alert("아이디를 입력해주세요!");
-//     return;
-//   }
-=======
     const IdChecked = async () => {
   if (!id) {
     alert("아이디를 입력해주세요!");
     return;
   }
->>>>>>> front-dev
 
 //   try {
 //     const res = await axios.post("http://localhost:4000/check-id", { id });
@@ -95,11 +87,7 @@ function Register() {
                 <div>아이디</div>
                 <div style={{ display: "flex", gap: "10px" }}>
                 <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
-<<<<<<< HEAD
-                {/* <button onClick={IdChecked}>중복확인</button> */}
-=======
                 <button onClick={IdChecked}>중복확인</button>
->>>>>>> front-dev
                 </div>
             </div>
             <div>
@@ -205,5 +193,5 @@ function Register() {
     )
 }
 
-
+}
 export default Register;

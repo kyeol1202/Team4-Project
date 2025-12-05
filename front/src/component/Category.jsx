@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext";
-import { useWish } from "../context/WishContext";
+
 
 
 function Category() {
@@ -10,12 +9,6 @@ function Category() {
     const [index, setIndex] = useState(0);
     const [surcharge, setSurcharge] = useState("");
     const navigate = useNavigate();
-<<<<<<< HEAD
-    const { addToCart } = useCart();
-    const { addToWish } = useWish();
-
-    const p = { id: 1, name: "상품1", price: 1000};
-=======
 
     useEffect(() => {
         const saved = localStorage.getItem("login");
@@ -46,20 +39,10 @@ function Category() {
         if (!surcharge.trim()) return alert("검색어를 입력하세요!");
         navigate(`/search?keyword=${surcharge}`);
     }
->>>>>>> front-dev
 
     return (
         <div className="page">
 
-<<<<<<< HEAD
-        <>
-            카테고리1페이지
-            <button onClick={() => navigate("/")}>이전</button>
-            <button onClick={() => addToWish(p)}>찜하기</button>
-            <button onClick={() => addToCart(p)}>장바구니 담기</button>
-        </>
-    )
-=======
             {/* HEADER */}
             <header className="header">
                 <div className="header-left">
@@ -72,7 +55,6 @@ function Category() {
                         <li className="dropdownlist" onClick={() => navigate("/category5")}>향수 기프트 세트</li>
                     </ul>
                 </div>
->>>>>>> front-dev
 
                 <div className="header-title">Aura</div>
 
