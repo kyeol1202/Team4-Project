@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 
 function Search() {
     const location = useLocation();
@@ -9,6 +9,13 @@ function Search() {
     const keyword = params.get("keyword")?.toLowerCase();
 
     const [products, setProducts] = useState([]);
+    const [newKeyword, setNewKeyword] = useState(keyword || "");
+
+    // 🔍 검색 function
+    function search() {
+        if (!newKeyword.trim()) return alert("검색어를 입력하세요!");
+        navigate(`/search?keyword=${newKeyword}`);
+    }
 
     useEffect(() => {
         if (!keyword) return;
@@ -21,20 +28,22 @@ function Search() {
                 }
             })
             .catch(err => console.log("검색 에러:", err));
-    }, [keyword]); // keyword가 변경될 때만 실행
+    }, [keyword]);
 
     return (
-        
         <div className="search-page">
-            {/* <div className="search-box">
+
+            {/* 🔍 검색창 UI 추가 */}
+            <div className="search-box">
                 <input
                     type="text"
                     placeholder="검색하기"
-                    value={surcharge}
-                    onChange={(e) => setSurcharge(e.target.value)}
+                    value={newKeyword}
+                    onChange={(e) => setNewKeyword(e.target.value)}
                 />
                 <button className="search" onClick={search}>🔍</button>
-            </div> */}
+            </div>
+
             <h1 className="search-title">“{keyword}” 검색 결과</h1>
 
             {products.length === 0 && (
@@ -50,7 +59,6 @@ function Search() {
                 ))}
             </div>
         </div>
-        
     );
 }
 
