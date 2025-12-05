@@ -19,9 +19,9 @@ function Main() {
         { id: 1, img: "" },
         { id: 2, img: "" },
         { id: 3, img: "" },
-        { id: 4, img: "image/gam2.jpeg" },
+        { id: 4, img: "image/gam.png" },
         { id: 5, img: "" },
-        { id: 6, img: "image/gam" },
+        { id: 6, img: "image/jung1.jpg" },
     ];
 
     const visibleCount = 3;

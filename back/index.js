@@ -36,30 +36,12 @@
   }
 });
 
-<<<<<<< HEAD
-app.get("/api/products", async (req, res) => {
-  const keyword = req.query.keyword || "";  // ?keyword=사과 처럼 들어옴
-
-  try {
-    const rows = await pool.query(
-      "SELECT product_id, name, price FROM product WHERE name LIKE ?",
-      [`%${keyword}%`]
-    );
-
-    res.json({ success: true, data: rows });
-  } catch (err) {
-    console.error("DB Error:", err.message);
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-=======
   // =========================
   // 👉 추가: 로그인 API
   // =========================
 
   app.post("/api/auth/login", async (req, res) => {
     const {username, password } = req.body;
->>>>>>> back-dev
 
     console.log("🔍 로그인 요청:",username, password);
 

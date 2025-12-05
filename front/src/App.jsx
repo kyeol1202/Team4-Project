@@ -1,9 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CartProvider } from "./context/CartContext";
-<<<<<<< HEAD
-=======
 import { WishProvider } from "./context/WishContext";
->>>>>>> 49b2c206272b95a9b67bff6f9b5886588e3241a6
 import "./App.css";
 import "./Search.css";
 import Main from "./component/main"

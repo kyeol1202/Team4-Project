@@ -31,7 +31,7 @@ function Register() {
   try {
     const res = await axios.post("http://localhost:4000/check-id", { id });
 
-    if (res.data.exists) {
+    if (res.data.exists) {  
       alert(res.data.message); // "중복된 아이디입니다."
     } else {
       alert(res.data.message); // "사용 가능한 아이디입니다."
@@ -87,7 +87,7 @@ function Register() {
                 <div>아이디</div>
                 <div style={{ display: "flex", gap: "10px" }}>
                 <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
-                <button onClick={checkDuplicateId}>중복확인</button>
+                <button onClick={checkId}>중복확인</button>
                 </div>
             </div>
             <div>
