@@ -78,22 +78,22 @@
     }
   });
   
-  // 아이디 중복 확인
-  app.post("/check-id", async(req, res) => {
-  const { id } = req.body;
+//   // 아이디 중복 확인
+//   app.post("/check-id", async(req, res) => {
+//   const { id } = req.body;
 
-  const sql = "SELECT * FROM users WHERE id = ?";
-  pool.query(sql, [id], (err, result) => {
-    if (err) return res.status(500).send("DB 오류");
+//   const sql = "SELECT * FROM users WHERE id = ?";
+//   pool.query(sql, [id], (err, result) => {
+//     if (err) return res.status(500).send("DB 오류");
 
-    if (result.length > 0) {
-      return res.json({ exists: true , message: "중복된 아이디입니다" });   // 이미 존재
+//     if (result.length > 0) {
+//       return res.json({ exists: true , message: "중복된 아이디입니다" });   // 이미 존재
       
-    } else {
-      return res.json({ exists: false , message:"사용 가능한 아이디입니다" });  // 사용 가능
-    }
-  });
-});
+//     } else {
+//       return res.json({ exists: false , message:"사용 가능한 아이디입니다" });  // 사용 가능
+//     }
+//   });
+// });
 
 //회원가입 저장
 app.post("/register", (req, res) => {
