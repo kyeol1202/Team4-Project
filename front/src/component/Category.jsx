@@ -15,19 +15,28 @@ function Category() {
         if (saved === "true") setLogin(true);
     }, []);
 
-    // 여자 향수 3개
-    const woman = [
-        { id: 1, img: "image/gam2.jpeg" },
-        { id: 2, img: "image/gam2.jpeg" },
-        { id: 3, img: "" }
-    ];
+    // ============================
+    // 🔥 woman, man을 state로 변경
+    // ============================
+    const [woman, setWoman] = useState([]);
+    const [man, setMan] = useState([]);
 
-    // 남자 향수 3개
-    const man = [
-        { id: 4, img: "" },
-        { id: 5, img: "" },
-        { id: 6, img: "" }
-    ];
+    // ============================
+    // 🔥 DB에서 데이터 가져오는 useEffect 추가
+    // ============================
+    useEffect(() => {
+        fetch("http://192.168.0.224:8080/api/products/woman")
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) setWoman(data.data);
+            });
+
+        fetch("http://192.168.0.224:8080/api/products/man")
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) setMan(data.data);
+            });
+    }, []);
 
     // 페이지 2개 (여자 / 남자)
     const slides = [woman, man];
@@ -93,21 +102,20 @@ function Category() {
                             transform: `translateX(-${index * 50}%)`,
                         }}
                     >
-                        {/* 여자향수 */}
+                        {/* 여자 + 남자 향수 카드 */}
                         <div className="slide">
-                            {woman.map((item) => (
-                                <button className="product-card" key={item.id}>
+                            {woman.map(item => (
+                                <button className="product-card" key={item.product_id}>
                                     <img src={item.img} alt="" className="product-img" />
                                 </button>
                             ))}
-                                                    {/* 남자향수 */}
-                            {man.map((item) => (
-                                <button className="product-card" key={item.id}>
+
+                            {man.map(item => (
+                                <button className="product-card" key={item.product_id}>
                                     <img src={item.img} alt="" className="product-img" />
                                 </button>
                             ))}
                         </div>
-
 
                     </div>
                 </div>
