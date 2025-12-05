@@ -1,9 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CartProvider } from "./context/CartContext";
-<<<<<<< HEAD
-=======
 import { WishProvider } from "./context/WishContext";
->>>>>>> 49b2c206272b95a9b67bff6f9b5886588e3241a6
+
 import "./App.css";
 import "./Search.css";
 import Main from "./component/main"
@@ -29,6 +27,8 @@ function App() {
     네비게이터 연결부분
     Main = 메인화면
     */}
+    <CartProvider>
+      <WishProvider>
       <BrowserRouter>
       {/* <nav style={{ display: "flex", gap: "20px" }}>
         <Link to="/">메인</Link>
@@ -51,6 +51,8 @@ function App() {
           <Route path="/mypage" element={<Mypage />} />{/* 마이페이지 */}
         </Routes>
       </BrowserRouter>
+      </WishProvider>
+    </CartProvider>
     </>
 
   );
