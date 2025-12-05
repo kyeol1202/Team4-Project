@@ -20,17 +20,21 @@
     }
   });
 
-  app.get("/test", async (req, res) => {
-    console.log("📌 /test 요청 도착");
+  app.get("/api/products", async (req, res) => {
+  const keyword = req.query.keyword || "";  // ?keyword=사과 처럼 들어옴
 
-    try {
-      const rows = await pool.query("SELECT * FROM product");
-      res.json(rows);
-    } catch (err) {
-      console.error("🔥 /test DB 에러:", err.message);
-      res.status(500).json({ error: err.message });
-    }
-  });
+  try {
+    const rows = await pool.query(
+      "SELECT product_id, name, price FROM product WHERE name LIKE ?",
+      [`%${keyword}%`]
+    );
+
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error("DB Error:", err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
   // =========================
   // 👉 추가: 로그인 API
