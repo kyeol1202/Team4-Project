@@ -59,7 +59,7 @@ function Main() {
     // -------------------------
     async function Login() {
         if (!userId || !password) {
-            return alert("이메일과 비밀번호를 입력하세요!");
+            return alert("아이디와 비밀번호를 입력하세요!");
         }
 
         try {
