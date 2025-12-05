@@ -5,17 +5,21 @@ function Mypage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔥 토글 상태 3개
   const [openUserInfo, setOpenUserInfo] = useState(false);
   const [openOrderList, setOpenOrderList] = useState(false);
-  const [openReviewList, setOpenReviewList] = useState(false); // 향후 사용 가능
+  const [openReviewList, setOpenReviewList] = useState(false);
+
+  // 🔹 현재 수정 중인 리뷰 ID와 임시 텍스트
+  const [editingReviewId, setEditingReviewId] = useState(null);
+  const [editingText, setEditingText] = useState("");
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const storedOrders = localStorage.getItem("orders");
-     const storedReviews = localStorage.getItem("reviews");
+    const storedReviews = localStorage.getItem("reviews");
 
     if (!storedUser) {
       alert("로그인 후 이용 가능합니다.");
@@ -39,16 +43,24 @@ function Mypage() {
     navigate(`/order/${orderId}`);
   };
 
-   const handleEditReview = (reviewId) => {
-    const review = reviews.find((r) => r.id === reviewId);
-    const newContent = prompt("리뷰를 수정하세요:", review.content);
-    if (newContent !== null) {
-      const updatedReviews = reviews.map((r) =>
-        r.id === reviewId ? { ...r, content: newContent } : r
-      );
-      setReviews(updatedReviews);
-      localStorage.setItem("reviews", JSON.stringify(updatedReviews));
-    }
+  const startEditing = (review) => {
+    setEditingReviewId(review.id);
+    setEditingText(review.content);
+  };
+
+  const cancelEditing = () => {
+    setEditingReviewId(null);
+    setEditingText("");
+  };
+
+  const saveEditing = () => {
+    const updatedReviews = reviews.map((r) =>
+      r.id === editingReviewId ? { ...r, content: editingText } : r
+    );
+    setReviews(updatedReviews);
+    localStorage.setItem("reviews", JSON.stringify(updatedReviews));
+    setEditingReviewId(null);
+    setEditingText("");
   };
 
   const handleDeleteReview = (reviewId) => {
@@ -59,35 +71,25 @@ function Mypage() {
     }
   };
 
-
   const Logout = () => {
     localStorage.clear();
     alert("로그아웃 되었습니다.");
     navigate("/", { replace: true });
   };
 
-  if (loading) {
-    return <div style={{ padding: "40px" }}>로딩중...</div>;
-  }
+  if (loading) return <div style={{ padding: "40px" }}>로딩중...</div>;
 
   return (
     <div style={{ padding: "40px" }}>
       <h2>마이페이지</h2>
 
-      {/* 🔥 회원 정보 토글 */}
+      {/* 회원 정보 */}
       <h3
-        style={{
-          cursor: "pointer",
-          userSelect: "none",
-          borderBottom: "1px solid #aaa",
-          paddingBottom: "10px",
-          marginTop: "25px"
-        }}
+        style={{ cursor: "pointer", userSelect: "none", borderBottom: "1px solid #aaa", paddingBottom: "10px", marginTop: "25px" }}
         onClick={() => setOpenUserInfo(!openUserInfo)}
       >
         회원 정보 {openUserInfo ? "▲" : "▼"}
       </h3>
-
       {openUserInfo && (
         <p style={{ marginTop: "15px", lineHeight: "1.8" }}>
           <strong>이름:</strong> {user.name} <br />
@@ -96,20 +98,13 @@ function Mypage() {
         </p>
       )}
 
-      {/* 🔥 주문 내역 토글 */}
+      {/* 주문 내역 */}
       <h3
-        style={{
-          cursor: "pointer",
-          userSelect: "none",
-          borderBottom: "1px solid #aaa",
-          paddingBottom: "10px",
-          marginTop: "25px"
-        }}
+        style={{ cursor: "pointer", userSelect: "none", borderBottom: "1px solid #aaa", paddingBottom: "10px", marginTop: "25px" }}
         onClick={() => setOpenOrderList(!openOrderList)}
       >
         주문 내역 {openOrderList ? "▲" : "▼"}
       </h3>
-
       {openOrderList && (
         <>
           {orders.length === 0 ? (
@@ -119,11 +114,7 @@ function Mypage() {
               {orders.map((order) => (
                 <li
                   key={order.id}
-                  style={{
-                    cursor: "pointer",
-                    borderBottom: "1px solid #ddd",
-                    padding: "10px 0"
-                  }}
+                  style={{ cursor: "pointer", borderBottom: "1px solid #ddd", padding: "10px 0" }}
                   onClick={() => handleOrderClick(order.id)}
                 >
                   <strong>주문번호:</strong> {order.id} <br />
@@ -152,12 +143,31 @@ function Mypage() {
               {reviews.map((review) => (
                 <li key={review.id} style={{ borderBottom: "1px solid #ddd", padding: "10px 0" }}>
                   <strong>상품명:</strong> {review.productName} <br />
-                  <strong>리뷰:</strong> {review.content} <br />
                   <strong>작성일:</strong> {review.date} <br />
-                  <div style={{ marginTop: "5px", display: "flex", gap: "10px" }}>
-                    <button onClick={() => handleEditReview(review.id)}>수정</button>
-                    <button onClick={() => handleDeleteReview(review.id)}>삭제</button>
-                  </div>
+
+                  {/* 🔹 인라인 수정 중이면 textarea 표시 */}
+                  {editingReviewId === review.id ? (
+                    <>
+                      <textarea
+                        value={editingText}
+                        onChange={(e) => setEditingText(e.target.value)}
+                        rows={3}
+                        style={{ width: "100%", marginTop: "5px" }}
+                      />
+                      <div style={{ marginTop: "5px", display: "flex", gap: "10px" }}>
+                        <button onClick={saveEditing}>저장</button>
+                        <button onClick={cancelEditing}>취소</button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <strong>리뷰:</strong> {review.content}
+                      <div style={{ marginTop: "5px", display: "flex", gap: "10px" }}>
+                        <button onClick={() => startEditing(review)}>수정</button>
+                        <button onClick={() => handleDeleteReview(review.id)}>삭제</button>
+                      </div>
+                    </>
+                  )}
                 </li>
               ))}
             </ul>
@@ -174,4 +184,3 @@ function Mypage() {
 }
 
 export default Mypage;
-
