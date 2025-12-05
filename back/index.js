@@ -82,7 +82,7 @@
   app.post("/check-id", async(req, res) => {
   const { id } = req.body;
 
-  const sql = "SELECT * FROM users WHERE id = ?";
+  const sql = "SELECT * FROM member WHERE username = ?";
   pool.query(sql, [id], (err, result) => {
     if (err) return res.status(500).send("DB 오류");
 
