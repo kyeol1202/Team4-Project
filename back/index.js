@@ -40,60 +40,61 @@
   // 👉 추가: 로그인 API
   // =========================
 
-  app.post("/api/auth/login", async (req, res) => {
-    const {username, password } = req.body;
+ app.post("/api/auth/login", async (req, res) => {
+  const { username, password } = req.body;
 
-    console.log("🔍 로그인 요청:",username, password);
+  if (!username || !password) {
+    return res.json({ success: false, message: "아이디와 비밀번호를 입력하세요." });
+  }
 
-     if (!username || !password) {
-      return res.json({ success: false, message: "아이디와 비밀번호를 입력하세요." });
+  try {
+    const result = await pool.query(
+      "SELECT * FROM member WHERE username = ? AND password = ?",
+      [username, password]
+    );
+
+    const rows = Array.isArray(result) ? result[0] : result;
+
+    if (!rows || rows.length === 0) {
+      return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
     }
 
-    try {
-      const [rows] = await pool.query(
-        "SELECT * FROM member WHERE username = ? AND password = ?",
-        [username, password]
-      );
+    const user = rows;
 
-      if (rows.length === 0) {
-        return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
+    return res.json({
+      success: true,
+      message: "로그인 성공",
+      user: {
+        username: user.username,
+        name: user.name,  // ✔✔✔ 여기가 포인트
+        role: user.role,
+        email:user.email,
+        address:user.address
       }
+    });
 
-      const user = rows[0];
-
-      return res.json({
-        success: true,
-        message: "로그인 성공",
-        user: {
-          member_id: user.member_id,
-          email: user.email,
-          name: user.name,
-          role: user.role
-        }
-      });
-
-    } catch (err) {
-      console.error("로그인 오류:", err.message);
-      res.status(500).json({ success: false, message: "서버 오류" });
-    }
-  });
+  } catch (err) {
+    console.error("로그인 오류:", err);
+    res.status(500).json({ success: false, message: "서버 오류" });
+  }
+});
   
   // 아이디 중복 확인
-  app.post("/check-id", async(req, res) => {
-  const { id } = req.body;
+//   app.post("/check-id", async(req, res) => {
+//   const { id } = req.body;
 
-  const sql = "SELECT * FROM users WHERE id = ?";
-  pool.query(sql, [id], (err, result) => {
-    if (err) return res.status(500).send("DB 오류");
+//   const sql = "SELECT * FROM member WHERE username = ?";
+//   pool.query(sql, [id], (err, result) => {
+//     if (err) return res.status(500).send("DB 오류");
 
-    if (result.length > 0) {
-      return res.json({ exists: true , message: "중복된 아이디입니다" });   // 이미 존재
+//     if (result.length > 0) {
+//       return res.json({ exists: true , message: "중복된 아이디입니다" });   // 이미 존재
       
-    } else {
-      return res.json({ exists: false , message:"사용 가능한 아이디입니다" });  // 사용 가능
-    }
-  });
-});
+//     } else {
+//       return res.json({ exists: false , message:"사용 가능한 아이디입니다" });  // 사용 가능
+//     }
+//   });
+// });
 
 //회원가입 저장
 app.post("/register", (req, res) => {

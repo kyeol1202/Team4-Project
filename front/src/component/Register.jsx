@@ -2,8 +2,6 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-
-
 function Register() {
     const navigate = useNavigate();
     const [id, setId] = useState('');
@@ -22,42 +20,43 @@ function Register() {
     day: ""
 });
  //hbd >> 생년월일
-     const number3Ref = useRef(null);
     
     //아이디중복확인
-    const IdChecked = async () => {
-  if (!id) return alert("아이디를 입력해주세요.");{
-    
+//     const IdChecked = async () => {
+//   if (!id) {
+//     alert("아이디를 입력해주세요!");
+//     return;
+//   }
 
-  try {
-    const res = await axios.post("http://localhost:4000/check-id", { id });
+//   try {
+//     const res = await axios.post("http://localhost:4000/check-id", { id });
 
-    if (res.data.exists) {
-      alert(res.data.message); // "중복된 아이디입니다."
-    } else {
-      alert(res.data.message); // "사용 가능한 아이디입니다."
-      setIdChecked(true);
-    }
+//     if (res.data.exists) {
+//       alert(res.data.message); // "중복된 아이디입니다."
+//     } else {
+//       alert(res.data.message); // "사용 가능한 아이디입니다."
+//     }
 
-  } catch (err) {
-    console.error(err);
-    alert("서버 오류입니다.");
-  }
-};
+//   } catch (err) {
+//     console.error(err);
+//     alert("서버 오류입니다.");
+//   }
+// };
 
 
+    const number3Ref = useRef(null);
 
     function register() {
 
         const fullNumber = `${number1}${number2}${number3}`;
-        if (!id || !pw || !name || !email || !address || !number2 || !number3 || !hbd.year||!hbd.month||!hbd.day) { //필수항목이 비어있을 때
+        if (!id || !pw || !name || !email || !address || !number2 || !number3 || !hbd) { //필수항목이 비어있을 때
             alert("필수항목을 입력해주세요");
             return;
         }
-        if (!idChecked) {
-        alert("아이디 중복확인을 해주세요!");
-        return;
-        }
+        // if (!idChecked) {
+        // alert("아이디 중복확인을 해주세요!");
+        // return;
+        // }
         if (pw !== pwCheck) {
             alert("비밀번호가 일치하지 않습니다");
             return;
@@ -70,7 +69,7 @@ function Register() {
         localStorage.setItem('email', email);
         localStorage.setItem('address', address);
         localStorage.setItem('number', fullNumber);
-        localStorage.setItem('hbd', JSON.stringify(hbd));
+        localStorage.setItem('hbd', hbd);
 
         alert("회원가입 완료")
 
@@ -88,7 +87,7 @@ function Register() {
                 <div>아이디</div>
                 <div style={{ display: "flex", gap: "10px" }}>
                 <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
-                <button onClick={IdChecked}>중복확인</button>
+                {/* <button onClick={IdChecked}>중복확인</button> */}
                 </div>
             </div>
             <div>
@@ -192,7 +191,7 @@ function Register() {
             </div>
         </>
     )
-}}
+}
 
 
 export default Register;
