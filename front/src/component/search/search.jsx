@@ -40,6 +40,10 @@ function Search() {
                     placeholder="검색하기"
                     value={newKeyword}
                     onChange={(e) => setNewKeyword(e.target.value)}
+
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") search();
+                    }}
                 />
                 <button className="search" onClick={search}>🔍</button>
             </div>
