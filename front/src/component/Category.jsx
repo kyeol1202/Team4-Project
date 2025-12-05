@@ -15,8 +15,8 @@ function Category() {
 
     // 여자 향수 3개
     const woman = [
-        { id: 1, img: "" },
-        { id: 2, img: "" },
+        { id: 1, img: "image/gam2.jpeg" },
+        { id: 2, img: "image/gam2.jpeg" },
         { id: 3, img: "" }
     ];
 
