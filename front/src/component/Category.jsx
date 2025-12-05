@@ -8,30 +8,28 @@ function Category() {
     const [surcharge, setSurcharge] = useState("");
     const navigate = useNavigate();
 
-    // 저장되어 있던 로그인 상태 불러오기
     useEffect(() => {
         const saved = localStorage.getItem("login");
         if (saved === "true") setLogin(true);
     }, []);
 
-    // ⭐⭐⭐ 여자향수 BEST 3
+    // 여자 향수 3개
     const woman = [
-        { id: 1, img: "/img/w1.jpg" },
-        { id: 2, img: "/img/w2.jpg" },
-        { id: 3, img: "/img/w3.jpg" }
+        { id: 1, img: "" },
+        { id: 2, img: "" },
+        { id: 3, img: "" }
     ];
 
-    // ⭐⭐⭐ 남자향수 BEST 3
+    // 남자 향수 3개
     const man = [
-        { id: 4, img: "/img/m1.jpg" },
-        { id: 5, img: "/img/m2.jpg" },
-        { id: 6, img: "/img/m3.jpg" }
+        { id: 4, img: "" },
+        { id: 5, img: "" },
+        { id: 6, img: "" }
     ];
 
-    // ⭐⭐⭐ 슬라이드 2개: 0 = 여자, 1 = 남자
+    // 페이지 2개 (여자 / 남자)
     const slides = [woman, man];
 
-    // 슬라이드 이동
     const slideRight = () => setIndex((prev) => (prev + 1) % slides.length);
     const slideLeft = () => setIndex((prev) => (prev - 1 + slides.length) % slides.length);
 
@@ -43,7 +41,7 @@ function Category() {
     return (
         <div className="page">
 
-            {/* HEADER 동일 */}
+            {/* HEADER */}
             <header className="header">
                 <div className="header-left">
                     MENU
@@ -76,7 +74,7 @@ function Category() {
                 <button className="search" onClick={search}>🔍</button>
             </div>
 
-            {/* 현재 페이지 제목 */}
+            {/* 제목 */}
             <h1 className="section-title">
                 {index === 0 ? "WOMAN BEST SELLERS" : "MAN BEST SELLERS"}
             </h1>
@@ -90,26 +88,25 @@ function Category() {
                     <div
                         className="slider-inner"
                         style={{
-                            transform: `translateX(-${index * 100}%)`
+                            transform: `translateX(-${index * 50}%)`,
                         }}
                     >
-                        {/* 여자 페이지 */}
+                        {/* 여자향수 */}
                         <div className="slide">
                             {woman.map((item) => (
                                 <button className="product-card" key={item.id}>
                                     <img src={item.img} alt="" className="product-img" />
                                 </button>
                             ))}
-                        </div>
-
-                        {/* 남자 페이지 */}
-                        <div className="slide">
+                                                    {/* 남자향수 */}
                             {man.map((item) => (
                                 <button className="product-card" key={item.id}>
                                     <img src={item.img} alt="" className="product-img" />
                                 </button>
                             ))}
                         </div>
+
+
                     </div>
                 </div>
 
@@ -117,7 +114,7 @@ function Category() {
 
             </div>
 
-            {loginOpen && <div className="overlay" onClick={() => setLoginOpen(false)}></div>}
+            {loginOpen && <div className="overlay" onClick={() => setLoginOpen(false)} />}
         </div>
     );
 }
