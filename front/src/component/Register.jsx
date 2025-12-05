@@ -115,7 +115,40 @@ function Register() {
 
                 <div>
                     <div>생년월일</div>
-                    <input type="text" value={hbd} onChange={(e) => setHbd(e.target.value)} />
+    <div style={{ display: "flex", gap: "10px" }}>
+        {/* 연도 */}
+        <select
+            value={hbd.year}
+            onChange={(e) => setHbd({ ...hbd, year: e.target.value })}
+        >
+            <option value="">년도</option>
+            {Array.from({ length: 120 }, (_, i) => 2025 - i).map((year) => (
+                <option key={year} value={year}>{year}</option>
+            ))}
+        </select>
+
+        {/* 월 */}
+        <select
+            value={hbd.month}
+            onChange={(e) => setHbd({ ...hbd, month: e.target.value })}
+        >
+            <option value="">월</option>
+            {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+                <option key={month} value={month}>{month}</option>
+            ))}
+        </select>
+
+        {/* 일 */}
+        <select
+            value={hbd.day}
+            onChange={(e) => setHbd({ ...hbd, day: e.target.value })}
+        >
+            <option value="">일</option>
+            {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
+                <option key={day} value={day}>{day}</option>
+            ))}
+        </select>
+    </div>
                 </div>
                 <button onClick={() => navigate("/")}>🏡</button>
                 <button onClick={register}>회원가입</button>
