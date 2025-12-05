@@ -59,17 +59,15 @@
       return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
     }
 
-    const user = rows[0];
+    const user = rows;
 
     return res.json({
       success: true,
       message: "로그인 성공",
       user: {
-        member_id: user.member_id,
         username: user.username,
-        email: user.email,
-        name: user.name,
-        role: user.role,
+        name: user.name,  // ✔✔✔ 여기가 포인트
+        role: user.role
       }
     });
 
@@ -80,21 +78,21 @@
 });
   
   // 아이디 중복 확인
-  app.post("/check-id", async(req, res) => {
-  const { id } = req.body;
+//   app.post("/check-id", async(req, res) => {
+//   const { id } = req.body;
 
-  const sql = "SELECT * FROM member WHERE id = ?";
-  pool.query(sql, [id], (err, result) => {
-    if (err) return res.status(500).send("DB 오류");
+//   const sql = "SELECT * FROM member WHERE username = ?";
+//   pool.query(sql, [id], (err, result) => {
+//     if (err) return res.status(500).send("DB 오류");
 
-    if (result.length > 0) {
-      return res.json({ exists: true , message: "중복된 아이디입니다" });   // 이미 존재
+//     if (result.length > 0) {
+//       return res.json({ exists: true , message: "중복된 아이디입니다" });   // 이미 존재
       
-    } else {
-      return res.json({ exists: false , message:"사용 가능한 아이디입니다" });  // 사용 가능
-    }
-  });
-});
+//     } else {
+//       return res.json({ exists: false , message:"사용 가능한 아이디입니다" });  // 사용 가능
+//     }
+//   });
+// });
 
 //회원가입 저장
 app.post("/register", (req, res) => {

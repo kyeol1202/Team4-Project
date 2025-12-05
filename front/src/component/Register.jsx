@@ -22,26 +22,26 @@ function Register() {
  //hbd >> 생년월일
     
     //아이디중복확인
-    const IdChecked = async () => {
-  if (!id) {
-    alert("아이디를 입력해주세요!");
-    return;
-  }
+//     const IdChecked = async () => {
+//   if (!id) {
+//     alert("아이디를 입력해주세요!");
+//     return;
+//   }
 
-  try {
-    const res = await axios.post("http://localhost:4000/check-id", { id });
+//   try {
+//     const res = await axios.post("http://localhost:4000/check-id", { id });
 
-    if (res.data.exists) {
-      alert(res.data.message); // "중복된 아이디입니다."
-    } else {
-      alert(res.data.message); // "사용 가능한 아이디입니다."
-    }
+//     if (res.data.exists) {
+//       alert(res.data.message); // "중복된 아이디입니다."
+//     } else {
+//       alert(res.data.message); // "사용 가능한 아이디입니다."
+//     }
 
-  } catch (err) {
-    console.error(err);
-    alert("서버 오류입니다.");
-  }
-};
+//   } catch (err) {
+//     console.error(err);
+//     alert("서버 오류입니다.");
+//   }
+// };
 
 
     const number3Ref = useRef(null);
@@ -53,10 +53,10 @@ function Register() {
             alert("필수항목을 입력해주세요");
             return;
         }
-        if (!idChecked) {
-        alert("아이디 중복확인을 해주세요!");
-        return;
-        }
+        // if (!idChecked) {
+        // alert("아이디 중복확인을 해주세요!");
+        // return;
+        // }
         if (pw !== pwCheck) {
             alert("비밀번호가 일치하지 않습니다");
             return;
@@ -87,7 +87,7 @@ function Register() {
                 <div>아이디</div>
                 <div style={{ display: "flex", gap: "10px" }}>
                 <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
-                <button onClick={IdChecked}>중복확인</button>
+                {/* <button onClick={IdChecked}>중복확인</button> */}
                 </div>
             </div>
             <div>
