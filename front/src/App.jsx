@@ -31,6 +31,7 @@ function App() {
         <Routes>
           <Route path="/search" element={<Search />} />
           <Route path="/" element={<Main />} />{/* 메인 페이지 */}
+          <Route path="/main" element={<Main />} />
           <Route path="/cart" element={<Cart />} /> {/* 장바구니 페이지 */}
           <Route path="/category" element={<Category />} />{/* 카테고리 페이지 */}
           <Route path="/category2" element={<Category2 />} />{/* 카테고리 페이지 */}
