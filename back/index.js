@@ -45,14 +45,14 @@
 
     console.log("🔍 로그인 요청:",username, password);
 
-    if (!username || !password) {
-      return res.json({ success: false, message: "이메일과 비밀번호를 입력하세요." });
+     if (!username || !password) {
+      return res.json({ success: false, message: "아이디와 비밀번호를 입력하세요." });
     }
 
     try {
-      const rows = await pool.query(
+      const [rows] = await pool.query(
         "SELECT * FROM member WHERE username = ? AND password = ?",
-        [email, password]
+        [username, password]
       );
 
       if (rows.length === 0) {
@@ -79,11 +79,11 @@
   });
   
   // 아이디 중복 확인
-  app.post("/check-id", (req, res) => {
+  app.post("/check-id", async(req, res) => {
   const { id } = req.body;
 
   const sql = "SELECT * FROM users WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
+  pool.query(sql, [id], (err, result) => {
     if (err) return res.status(500).send("DB 오류");
 
     if (result.length > 0) {
@@ -101,7 +101,7 @@ app.post("/register", (req, res) => {
 
   const sql = "INSERT INTO users (id, pw, name, email) VALUES (?, ?, ?, ?)";
 
-  db.query(sql, [id, pw, name, email], (err, result) => {
+  pool.query(sql, [id, pw, name, email], (err, result) => {
     if (err) {
       console.log("회원가입 실패:", err);
       return res.status(500).send("DB 오류");
