@@ -22,28 +22,28 @@ function Register() {
  //hbd >> 생년월일
     
     //아이디중복확인
-    const checkDuplicateId = async () => {
-    if (!id) {
-        alert("아이디를 입력해주세요!");
-        return;
-    }
+    const checkId = async () => {
+  if (!id) {
+    alert("아이디를 입력해주세요!");
+    return;
+  }
 
-    const res = await fetch("http://localhost:4000/api/check-id", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
-    });
+  try {
+    const res = await axios.post("http://localhost:4000/check-id", { id });
 
-    const data = await res.json();
-
-    if (data.exists) {
-        alert("이미 사용 중인 아이디입니다.");
-        setIdChecked(false);
+    if (res.data.exists) {
+      alert(res.data.message); // "중복된 아이디입니다."
     } else {
-        alert("사용 가능한 아이디입니다!");
-        setIdChecked(true);
+      alert(res.data.message); // "사용 가능한 아이디입니다."
     }
+
+  } catch (err) {
+    console.error(err);
+    alert("서버 오류입니다.");
+  }
 };
+
+
     const number3Ref = useRef(null);
 
     function register() {
