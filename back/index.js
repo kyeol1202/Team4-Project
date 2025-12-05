@@ -67,7 +67,9 @@
       user: {
         username: user.username,
         name: user.name,  // ✔✔✔ 여기가 포인트
-        role: user.role
+        role: user.role,
+        email:user.email,
+        address:user.address
       }
     });
 
