@@ -4,11 +4,19 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState(() => {
-    return JSON.parse(localStorage.getItem("cart")) || [];
+    try {
+      return JSON.parse(localStorage.getItem("cart")) || [];
+    } catch {
+      return [];
+    }
   });
 
+  // 저장 과도 호출 방지 (200~300ms debounce 추천)
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
+    const timer = setTimeout(() => {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }, 250);
+    return () => clearTimeout(timer);
   }, [cart]);
 
   const addToCart = (product) => {
@@ -28,9 +36,11 @@ export function CartProvider({ children }) {
   };
 
   const updateQty = (id, qty) => {
-    setCart(prev =>
-      prev.map(item => (item.id === id ? { ...item, qty } : item))
-    );
+    setCart(prev => {
+      return prev
+        .map(item => item.id === id ? { ...item, qty } : item)
+        .filter(item => item.qty >= 1); // 0 이하 입력 시 자동 삭제
+    });
   };
 
   return (
@@ -41,5 +51,5 @@ export function CartProvider({ children }) {
 }
 
 export function useCart() {
-  return useContext(CartContext);
+  return useContext(CCartContext);
 }
