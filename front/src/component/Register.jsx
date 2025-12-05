@@ -22,7 +22,7 @@ function Register() {
  //hbd >> 생년월일
     
     //아이디중복확인
-    const checkId = async () => {
+    const IdChecked = async () => {
   if (!id) {
     alert("아이디를 입력해주세요!");
     return;
@@ -87,7 +87,7 @@ function Register() {
                 <div>아이디</div>
                 <div style={{ display: "flex", gap: "10px" }}>
                 <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
-                <button onClick={checkDuplicateId}>중복확인</button>
+                <button onClick={IdChecked}>중복확인</button>
                 </div>
             </div>
             <div>
