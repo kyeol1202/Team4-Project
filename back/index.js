@@ -77,6 +77,38 @@
       res.status(500).json({ success: false, message: "서버 오류" });
     }
   });
+  
+  // 아이디 중복 확인
+  app.post("/check-id", (req, res) => {
+  const { id } = req.body;
+
+  const sql = "SELECT * FROM users WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) return res.status(500).send("DB 오류");
+
+    if (result.length > 0) {
+      return res.json({ exists: true });   // 이미 존재
+    } else {
+      return res.json({ exists: false });  // 사용 가능
+    }
+  });
+});
+
+//회원가입 저장
+app.post("/register", (req, res) => {
+  const { id, pw, name, email } = req.body;
+
+  const sql = "INSERT INTO users (id, pw, name, email) VALUES (?, ?, ?, ?)";
+
+  db.query(sql, [id, pw, name, email], (err, result) => {
+    if (err) {
+      console.log("회원가입 실패:", err);
+      return res.status(500).send("DB 오류");
+    }
+    res.send("회원가입 성공!");
+  });
+});
+
 
   // =========================
   // 서버 실행
