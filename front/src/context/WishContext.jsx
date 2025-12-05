@@ -1,36 +1,29 @@
+// context/WishContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
 
 const WishContext = createContext();
 
 export function WishProvider({ children }) {
-    const [wishList, setWishList] = useState(() => {
-        try { return JSON.parse(localStorage.getItem("wishList")) || []; }
-        catch { return []; }
+  const [wishList, setWishList] = useState(() => JSON.parse(localStorage.getItem("wish")) || []);
+
+  useEffect(() => {
+    localStorage.setItem("wish", JSON.stringify(wishList));
+  }, [wishList]);
+
+  const addToWish = (product) => {
+    setWishList((prev) => {
+      if (!prev.find((item) => item.id === product.id)) return [...prev, product];
+      return prev;
     });
+  };
 
-    useEffect(() => {
-        localStorage.setItem("wishList", JSON.stringify(wishList));
-    }, [wishList]);
+  const removeFromWish = (id) => setWishList((prev) => prev.filter((item) => item.id !== id));
 
-    const addToWish = (product) => {
-        setWishList(prev => {
-            const exist = prev.find(item => item.id === product.id);
-            if (exist) return prev; // 이미 찜하면 중복 방지
-            return [...prev, product];
-        });
-    };
-
-    const removeFromWish = (id) => {
-        setWishList(prev => prev.filter(item => item.id !== id));
-    };
-
-    return (
-        <WishContext.Provider value={{ wishList, addToWish, removeFromWish }}>
-            {children}
-        </WishContext.Provider>
-    );
+  return (
+    <WishContext.Provider value={{ wishList, addToWish, removeFromWish }}>
+      {children}
+    </WishContext.Provider>
+  );
 }
 
-export function useWish() {
-    return useContext(WishContext);
-}
+export const useWish = () => useContext(WishContext);

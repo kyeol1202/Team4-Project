@@ -26,13 +26,15 @@ function App() {
     네비게이터 연결부분
     Main = 메인화면
     */}
+    <CartProvider>
+      <WishProvider>
       <BrowserRouter>
       {/* <nav style={{ display: "flex", gap: "20px" }}>
         <Link to="/">메인</Link>
         <Link to="/cart">장바구니</Link>
       </nav> */}
         <Routes>
-          <Route path="/search" element={<Search />} />
+          <Route path="/search" element={<Search />} />{/* 검색 페이지 */}
           <Route path="/" element={<Main />} />{/* 메인 페이지 */}
           <Route path="/main" element={<Main />} />{/* 메인 페이지 */}
           <Route path="/cart" element={<Cart />} /> {/* 장바구니 페이지 */}
@@ -48,6 +50,8 @@ function App() {
           <Route path="/mypage" element={<Mypage />} />{/* 마이페이지 */}
         </Routes>
       </BrowserRouter>
+      </WishProvider>
+    </CartProvider>
     </>
 
   );
