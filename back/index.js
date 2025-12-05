@@ -1,46 +1,46 @@
-  const express = require('express');
-  const cors = require('cors');
-  const pool = require('./db');
+const express = require('express');
+const cors = require('cors');
+const pool = require('./db'); // DB 연결 파일
 
-  const app = express();
-  app.use(cors());
-  app.use(express.json());
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-  // =========================
-  // 기존에 있던 API (유지)
-  // =========================
-
-  app.get("/api/check-users", async (req, res) => {
-    try {
-      const rows = await pool.query("SELECT * FROM member LIMIT 5");
-      res.json({ success: true, data: rows });
-    } catch (err) {
-      console.error('DB 에러:', err.message);
-      res.status(500).json({ success: false, error: err.message });
-    }
-  });
-
-  app.get("/api/products", async (req, res) => {
-  const keyword = req.query.keyword || "";  // ?keyword=사과 처럼 들어옴
-
+/* =====================================================
+   🔵 1. 사용자 조회 (테스트용)
+===================================================== */
+app.get("/api/check-users", async (req, res) => {
   try {
-    const rows = await pool.query(
-      "SELECT product_id, name, price FROM product WHERE name LIKE ?",
-      [`%${keyword}%`]
-    );
-
+    const rows = await pool.query("SELECT * FROM member LIMIT 5");
     res.json({ success: true, data: rows });
   } catch (err) {
-    console.error("DB Error:", err.message);
     res.status(500).json({ success: false, error: err.message });
   }
 });
 
-  // =========================
-  // 👉 추가: 로그인 API
-  // =========================
 
-  app.post("/api/auth/login", async (req, res) => {
+/* =====================================================
+   🟣 2. 상품 검색 API
+===================================================== */
+app.get("/api/products", async (req, res) => {
+  const keyword = req.query.keyword || "";
+
+  try {
+    const rows = await pool.query(
+      "SELECT product_id, name, price, img, gender FROM product WHERE name LIKE ?",
+      [`%${keyword}%`]
+    );
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+
+/* =====================================================
+   🔵 3. 로그인 API
+===================================================== */
+app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -53,23 +53,22 @@
       [username, password]
     );
 
-    const rows = Array.isArray(result) ? result[0] : result;
+    const user = Array.isArray(result) ? result[0] : result;
 
-    if (!rows || rows.length === 0) {
+    if (!user) {
       return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
     }
-
-    const user = rows;
 
     return res.json({
       success: true,
       message: "로그인 성공",
       user: {
+        id: user.id,
         username: user.username,
-        name: user.name,  // ✔✔✔ 여기가 포인트
+        name: user.name,
         role: user.role,
-        email:user.email,
-        address:user.address
+        email: user.email,
+        address: user.address
       }
     });
 
@@ -78,43 +77,100 @@
     res.status(500).json({ success: false, message: "서버 오류" });
   }
 });
-  
-  // 아이디 중복 확인
-  app.post("/check-id", async(req, res) => {
+
+
+/* =====================================================
+   🔴 4. 아이디 중복 확인
+===================================================== */
+app.post("/check-id", async (req, res) => {
   const { id } = req.body;
 
-  const sql = "SELECT * FROM member WHERE username = ?";
-  pool.query(sql, [id], (err, result) => {
-    if (err) return res.status(500).send("DB 오류");
+  try {
+    const rows = await pool.query(
+      "SELECT * FROM member WHERE username = ?",
+      [id]
+    );
 
-    if (result.length > 0) {
-      return res.json({ exists: true , message: "중복된 아이디입니다" });   // 이미 존재
-      
+    if (rows.length > 0) {
+      return res.json({ exists: true, message: "중복된 아이디입니다" });
     } else {
-      return res.json({ exists: false , message:"사용 가능한 아이디입니다" });  // 사용 가능
+      return res.json({ exists: false, message: "사용 가능한 아이디입니다" });
     }
-  });
+
+  } catch (err) {
+    res.status(500).send("DB 오류");
+  }
 });
 
-//회원가입 저장
-app.post("/register", (req, res) => {
+
+/* =====================================================
+   🟢 5. 회원가입 저장
+   ✔ 반드시 member 테이블에 저장해야 로그인됨
+===================================================== */
+app.post("/register", async (req, res) => {
   const { id, pw, name, email } = req.body;
 
-  const sql = "INSERT INTO users (id, pw, name, email) VALUES (?, ?, ?, ?)";
+  try {
+    await pool.query(
+      "INSERT INTO member (username, password, name, email) VALUES (?, ?, ?, ?)",
+      [id, pw, name, email]
+    );
+    res.json({ success: true, message: "회원가입 성공!" });
 
-  pool.query(sql, [id, pw, name, email], (err, result) => {
-    if (err) {
-      console.log("회원가입 실패:", err);
-      return res.status(500).send("DB 오류");
-    }
-    res.send("회원가입 성공!");
-  });
+  } catch (err) {
+    console.error("회원가입 실패:", err);
+    res.status(500).send("DB 오류");
+  }
 });
 
 
-  // =========================
-  // 서버 실행
-  // =========================
-  app.listen(8080, '0.0.0.0', () => {
-    console.log("서버 실행 중: http://0.0.0.0:8080");
-  });
+/* =====================================================
+   🟡 6. 상품 추가 (관리자 기능)
+===================================================== */
+app.post("/api/products/add", async (req, res) => {
+  const { name, price, gender, img, description } = req.body;
+
+  try {
+    await pool.query(
+      "INSERT INTO product (name, price, gender, img, description) VALUES (?, ?, ?, ?, ?)",
+      [name, price, gender, img, description]
+    );
+    res.json({ success: true, message: "상품 등록 성공" });
+
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/*====================================================*/
+
+app.get("/api/products/woman", async (req, res) => {
+  try {
+    const rows = await pool.query(
+      "SELECT name, price, img FROM product WHERE gender='여성' LIMIT 3"
+    );
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+});
+
+app.get("/api/products/man", async (req, res) => {
+  try {
+    const rows = await pool.query(
+      "SELECT name, price, img FROM product WHERE gender='남성' LIMIT 3"
+    );
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+});
+
+
+
+/* =====================================================
+   서버 실행
+===================================================== */
+app.listen(8080, '0.0.0.0', () => {
+  console.log("서버 실행 중: http://0.0.0.0:8080");
+});
