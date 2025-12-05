@@ -16,6 +16,8 @@ import Category4 from "./component/Category4";
 import Category5 from "./component/Category5";
 import Mypage from "./component/Mypage";
 import Search from "./component/search/search";
+import OrderDetail from "./OrderDetail";
+import EditUserInfo from "./EditUserInfo";
 
 
 function App() {
@@ -48,6 +50,8 @@ function App() {
           <Route path="/wish" element={<Wish />} />{/* 찜 목록 페이지 */}
           <Route path="/service" element={<Service />} />{/* 고객센터 페이지 */}
           <Route path="/mypage" element={<Mypage />} />{/* 마이페이지 */}
+          <Route path="/orderdetail" element={<OrderDetail />} />{/* 주문상세페이지 */}
+          <Route path="/edituserinfo" element={<EditUserInfo />} />{/* 회원정보수정페이지 */}   
         </Routes>
       </BrowserRouter>
       </WishProvider>
