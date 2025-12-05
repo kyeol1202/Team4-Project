@@ -42,7 +42,7 @@
     console.log("🔍 로그인 요청:",username, password);
 
     if (!username || !password) {
-      return res.json({ success: false, message: "이메일과 비밀번호를 입력하세요." });
+      return res.json({ success: false, message: "아이디와 비밀번호를 입력하세요." });
     }
 
     try {
