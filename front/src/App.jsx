@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { CartProvider } from "./context/CartContext";
+import { WishProvider } from "./context/WishContext";
 import "./App.css";
 import "./Search.css";
 import Main from "./component/main"
