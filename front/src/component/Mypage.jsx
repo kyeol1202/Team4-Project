@@ -7,13 +7,15 @@ function Mypage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔥 토글 상태 2개
+  // 🔥 토글 상태 3개
   const [openUserInfo, setOpenUserInfo] = useState(false);
   const [openOrderList, setOpenOrderList] = useState(false);
+  const [openReviewList, setOpenReviewList] = useState(false); // 향후 사용 가능
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const storedOrders = localStorage.getItem("orders");
+     const storedReviews = localStorage.getItem("reviews");
 
     if (!storedUser) {
       alert("로그인 후 이용 가능합니다.");
@@ -24,6 +26,7 @@ function Mypage() {
     try {
       setUser(JSON.parse(storedUser));
       setOrders(JSON.parse(storedOrders) || []);
+      setReviews(JSON.parse(storedReviews) || []);
     } catch {
       alert("세션 오류 발생. 다시 로그인하세요");
       navigate("/", { replace: true });
@@ -35,6 +38,27 @@ function Mypage() {
   const handleOrderClick = (orderId) => {
     navigate(`/order/${orderId}`);
   };
+
+   const handleEditReview = (reviewId) => {
+    const review = reviews.find((r) => r.id === reviewId);
+    const newContent = prompt("리뷰를 수정하세요:", review.content);
+    if (newContent !== null) {
+      const updatedReviews = reviews.map((r) =>
+        r.id === reviewId ? { ...r, content: newContent } : r
+      );
+      setReviews(updatedReviews);
+      localStorage.setItem("reviews", JSON.stringify(updatedReviews));
+    }
+  };
+
+  const handleDeleteReview = (reviewId) => {
+    if (window.confirm("정말로 삭제하시겠습니까?")) {
+      const updatedReviews = reviews.filter((r) => r.id !== reviewId);
+      setReviews(updatedReviews);
+      localStorage.setItem("reviews", JSON.stringify(updatedReviews));
+    }
+  };
+
 
   const Logout = () => {
     localStorage.clear();
@@ -105,6 +129,35 @@ function Mypage() {
                   <strong>주문번호:</strong> {order.id} <br />
                   <strong>주문일:</strong> {order.date} <br />
                   <strong>총 금액:</strong> {order.total.toLocaleString()}원
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
+      )}
+
+      {/* 내가 쓴 리뷰 */}
+      <h3
+        style={{ cursor: "pointer", userSelect: "none", borderBottom: "1px solid #aaa", paddingBottom: "10px", marginTop: "25px" }}
+        onClick={() => setOpenReviewList(!openReviewList)}
+      >
+        내가 쓴 리뷰 {openReviewList ? "▲" : "▼"}
+      </h3>
+      {openReviewList && (
+        <>
+          {reviews.length === 0 ? (
+            <p style={{ marginTop: "10px" }}>작성한 리뷰가 없습니다.</p>
+          ) : (
+            <ul style={{ marginTop: "10px", lineHeight: "1.8" }}>
+              {reviews.map((review) => (
+                <li key={review.id} style={{ borderBottom: "1px solid #ddd", padding: "10px 0" }}>
+                  <strong>상품명:</strong> {review.productName} <br />
+                  <strong>리뷰:</strong> {review.content} <br />
+                  <strong>작성일:</strong> {review.date} <br />
+                  <div style={{ marginTop: "5px", display: "flex", gap: "10px" }}>
+                    <button onClick={() => handleEditReview(review.id)}>수정</button>
+                    <button onClick={() => handleDeleteReview(review.id)}>삭제</button>
+                  </div>
                 </li>
               ))}
             </ul>
