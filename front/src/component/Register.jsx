@@ -35,22 +35,6 @@ function Register() {
         });
     };
 
-<<<<<<< HEAD
-//   try {
-//     const res = await axios.post("http://localhost:4000/check-id", { id });
-
-//     if (res.data.exists) {
-//       alert(res.data.message); // "중복된 아이디입니다."
-//     } else {
-//       alert(res.data.message); // "사용 가능한 아이디입니다."
-//     }
-
-//   } catch (err) {
-//     console.error(err);
-//     alert("서버 오류입니다.");
-//   }
-// };
-=======
 
     if (res.data.exists) {
         alert(res.data.message); // "중복된 아이디입니다."
@@ -61,42 +45,12 @@ function Register() {
 
 
 };
->>>>>>> front-dev
 
 
 const number3Ref = useRef(null);
 
 function register() {
 
-<<<<<<< HEAD
-        const fullNumber = `${number1}${number2}${number3}`;
-        if (!id || !pw || !name || !email || !address || !number2 || !number3 || !hbd) { //필수항목이 비어있을 때
-            alert("필수항목을 입력해주세요");
-            return;
-        }
-        // if (!idChecked) {
-        // alert("아이디 중복확인을 해주세요!");
-        // return;
-        // }
-        if (pw !== pwCheck) {
-            alert("비밀번호가 일치하지 않습니다");
-            return;
-        }
-
-        //LocalStorage에 저장
-        localStorage.setItem('id', id);
-        localStorage.setItem('pw', pw);
-        localStorage.setItem('name', name);
-        localStorage.setItem('email', email);
-        localStorage.setItem('address', address);
-        localStorage.setItem('number', fullNumber);
-        localStorage.setItem('hbd', hbd);
-
-        alert("회원가입 완료")
-
-        //회원가입 후 메인페이지로 이동
-        navigate('/main');
-=======
     const fullNumber = `${number1}${number2}${number3}`;
     if (!id || !pw || !name || !email || !address || !number2 || !number3 || !hbd) { //필수항목이 비어있을 때
         alert("필수항목을 입력해주세요");
@@ -109,7 +63,6 @@ function register() {
     if (pw !== pwCheck) {
         alert("비밀번호가 일치하지 않습니다");
         return;
->>>>>>> front-dev
     }
 
     //LocalStorage에 저장
@@ -127,9 +80,6 @@ function register() {
     navigate('/main');
 }
 
-<<<<<<< HEAD
-}
-=======
 
 //회원가입
 return (
@@ -246,5 +196,4 @@ return (
 )
 
 
->>>>>>> front-dev
 export default Register;

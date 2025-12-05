@@ -16,8 +16,8 @@ import Category4 from "./component/Category4";
 import Category5 from "./component/Category5";
 import Mypage from "./component/Mypage";
 import Search from "./component/search/search";
-import OrderDetail from "./OrderDetail";
-import EditUserInfo from "./EditUserInfo";
+import OrderDetail from "./component/OrderDetail";
+import EditUserInfo from "./component/EditUserInfo";
 
 
 function App() {
