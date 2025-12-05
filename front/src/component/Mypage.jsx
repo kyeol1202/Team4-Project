@@ -1,30 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-
-function Mypage(){
+function Mypage() {
     const navigate = useNavigate();
-     const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null);
 
-      // 페이지 로드 시 localStorage에서 사용자 정보 가져오기
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        } else {
+        if (storedUser) setUser(JSON.parse(storedUser));
+        else {
             alert("로그인 후 이용 가능합니다.");
-            navigate("/"); // 로그인 안 되어있으면 메인으로
+            navigate("/");
         }
     }, [navigate]);
-    
+
     const Logout = () => {
         localStorage.removeItem("login");
         localStorage.removeItem("user");
         alert("로그아웃 되었습니다.");
-        navigate("/"); // 로그아웃 후 메인으로
+        navigate("/");
     };
 
-    if (!user) return null; // 유저 정보 없으면 렌더링 안 함
+    if (!user) return null;
 
     return (
         <div style={{ padding: "40px" }}>
