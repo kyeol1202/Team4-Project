@@ -1,6 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "./search.css";
 
 function Search() {
     const location = useLocation();
