@@ -59,11 +59,11 @@ function Main() {
     // -------------------------
     async function Login() {
         if (!userId || !password) {
-            return alert("아이디와 비밀번호를 입력하세요!");
+            return alert("이메일과 비밀번호를 입력하세요!");
         }
 
         try {
-            const res = await fetch("http://localhost:8080/api/auth/login", {
+            const res = await fetch("http://192.168.0.224:8080/api/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -98,9 +98,9 @@ function Main() {
     }
 
     function search() {
-    if (!surcharge.trim()) return alert("검색어를 입력하세요!");
-    navigate(`/search?keyword=${surcharge}`);
-}
+        if (!surcharge.trim()) return alert("검색어를 입력하세요!");
+        navigate(`/search?keyword=${surcharge}`);
+    }
 
     return (
         <div className="page">
