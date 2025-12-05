@@ -34,7 +34,7 @@ function App() {
         <Link to="/cart">장바구니</Link>
       </nav> */}
         <Routes>
-          <Route path="/search" element={<Search />} />
+          <Route path="/search" element={<Search />} />{/* 검색 페이지 */}
           <Route path="/" element={<Main />} />{/* 메인 페이지 */}
           <Route path="/main" element={<Main />} />{/* 메인 페이지 */}
           <Route path="/cart" element={<Cart />} /> {/* 장바구니 페이지 */}

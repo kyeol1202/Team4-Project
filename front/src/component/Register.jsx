@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 
 
 function Register() {
@@ -20,13 +22,12 @@ function Register() {
     day: ""
 });
  //hbd >> 생년월일
+     const number3Ref = useRef(null);
     
     //아이디중복확인
     const IdChecked = async () => {
-  if (!id) {
-    alert("아이디를 입력해주세요!");
-    return;
-  }
+  if (!id) return alert("아이디를 입력해주세요.");{
+    
 
   try {
     const res = await axios.post("http://localhost:4000/check-id", { id });
@@ -35,6 +36,7 @@ function Register() {
       alert(res.data.message); // "중복된 아이디입니다."
     } else {
       alert(res.data.message); // "사용 가능한 아이디입니다."
+      setIdChecked(true);
     }
 
   } catch (err) {
@@ -44,12 +46,11 @@ function Register() {
 };
 
 
-    const number3Ref = useRef(null);
 
     function register() {
 
         const fullNumber = `${number1}${number2}${number3}`;
-        if (!id || !pw || !name || !email || !address || !number2 || !number3 || !hbd) { //필수항목이 비어있을 때
+        if (!id || !pw || !name || !email || !address || !number2 || !number3 || !hbd.year||!hbd.month||!hbd.day) { //필수항목이 비어있을 때
             alert("필수항목을 입력해주세요");
             return;
         }
@@ -69,7 +70,7 @@ function Register() {
         localStorage.setItem('email', email);
         localStorage.setItem('address', address);
         localStorage.setItem('number', fullNumber);
-        localStorage.setItem('hbd', hbd);
+        localStorage.setItem('hbd', JSON.stringify(hbd));
 
         alert("회원가입 완료")
 
@@ -191,7 +192,7 @@ function Register() {
             </div>
         </>
     )
-}
+}}
 
 
 export default Register;

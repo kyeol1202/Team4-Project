@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useCart } from "../context/CartContext";
+import { useWish } from "../context/WishContext";
 
 
 
@@ -10,6 +11,8 @@ function Main() {
     const [index, setIndex] = useState(0);
     const [surcharge, setSurcharge] = useState('');
     const navigate = useNavigate();
+    const { addToCart } = useCart();
+    const { addToWish } = useWish();
 
     // 로그인 입력값
     const [userId, setUserId] = useState('');
@@ -30,11 +33,9 @@ function Main() {
 
     // 자동 슬라이드
     useEffect(() => {
-        const timer = setInterval(() => {
-            slideRight();
-        }, 3000);
-        return () => clearInterval(timer);
-    }, [index]);
+  const timer = setInterval(slideRight, 3000);
+  return () => clearInterval(timer);
+}, []); 
 
     useEffect(() => {
         const saved = localStorage.getItem("login");
