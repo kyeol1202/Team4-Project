@@ -98,9 +98,9 @@ function Main() {
     }
 
     function search() {
-        if (!surcharge.trim()) return alert("검색어를 입력하세요!");
-        navigate("/search/" + surcharge);
-    }
+    if (!surcharge.trim()) return alert("검색어를 입력하세요!");
+    navigate(`/search?keyword=${surcharge}`);
+}
 
     return (
         <div className="page">
