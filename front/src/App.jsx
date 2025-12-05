@@ -20,19 +20,6 @@ function App() {
     <CartProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/payment" element={<Payment />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/wish" element={<Wish />} />
-          <Route path="/service" element={<Service />} />
-          <Route path="/mypage" element={<Mypage />} />
-          <Route path="/category" element={<Category />} />
-          <Route path="/category2" element={<Category2 />} />
-          <Route path="/category3" element={<Category3 />} />
-          <Route path="/category4" element={<Category4 />} />
-          <Route path="/category5" element={<Category5 />} />
-          <Route path="/search" element={<Search />} />
           <Route path="/" element={<Main />} />{/* 메인 페이지 */}
           <Route path="/main" element={<Main />} />
           <Route path="/cart" element={<Cart />} /> {/* 장바구니 페이지 */}
