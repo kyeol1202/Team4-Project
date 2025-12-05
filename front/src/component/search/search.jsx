@@ -1,53 +1,41 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect, useMemo } from "react";
 
 function Search() {
     const location = useLocation();
     const navigate = useNavigate();
+
     const params = new URLSearchParams(location.search);
     const keyword = params.get("keyword")?.toLowerCase();
-    const [product, setProduct] = useState([]);
 
-    const products = [
-        { id: 1, name: "가벼운 향수", img: "/image/AuRa Etherlune.png" },
-        { id: 2, name: "달콤한 향수", img: "/image/AuRa Noctivale.png" },
-        { id: 3, name: "남성 향수", img: "/image/gam.png" },
-        { id: 4, name: "달콤한이었다가 아닌", img: "/image/gam2.jpeg" },
-    ];
-
-     // 검색된 상품만 필터링
-    const filtered = useMemo(() => {
-        if (!keyword) return [];
-        return products.filter((p) =>
-            p.name.toLowerCase().includes(keyword)
-        );
-    }, [keyword]);
+    const [products, setProducts] = useState([]);
 
     useEffect(() => {
-            fetch('http://192.168.0.25:8080/')
-                .then(res => res.json())
-                .then(data => {
-                    setProduct(Array.isArray(data) ? data : [data]);
-                    
-                });
-        }, [product]);
+        if (!keyword) return;
+
+        fetch(`http://192.168.0.224:8080/api/products?keyword=${keyword}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    setProducts(data.data);
+                }
+            })
+            .catch(err => console.log("검색 에러:", err));
+    }, [keyword]); // keyword가 변경될 때만 실행
 
     return (
         <div className="search-page">
             <h1 className="search-title">“{keyword}” 검색 결과</h1>
 
-            {filtered.length === 0 && (
+            {products.length === 0 && (
                 <p className="no-result">검색 결과가 없습니다.</p>
             )}
 
             <div className="product-grid">
-                {filtered.map((item) => (
-                    <div
-                        key={item.id}
-                        className="product-card2"
-                        onClick={() => navigate(`/product/${item.id}`)}
-                    >
-                        <img src={item.img} alt={item.name} />
+                {products.map((item) => (
+                    <div key={item.product_id} className="product-card2">
                         <h3>{item.name}</h3>
+                        <p>{item.price} 원</p>
                     </div>
                 ))}
             </div>
