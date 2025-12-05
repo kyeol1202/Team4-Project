@@ -5,6 +5,7 @@
   const app = express();
   app.use(cors());
   app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
   // =========================
   // 기존에 있던 API (유지)
@@ -79,24 +80,27 @@
   });
   
   // 아이디 중복 확인
-  app.post("/check-id", async(req, res) => {
-  const { id } = req.body;
+//   app.post("/check-id", async(req, res) => {
+//   const { id } = req.body;
 
-  const sql = "SELECT * FROM member WHERE username = ?";
-  pool.query(sql, [id], (err, result) => {
-    if (err) return res.status(500).send("DB 오류");
+//   const sql = "SELECT * FROM member WHERE username = ?";
+//   pool.query(sql, [id], (err, result) => {
+//     if (err) return res.status(500).send("DB 오류");
 
-    if (result.length > 0) {
-      return res.json({ exists: true , message: "중복된 아이디입니다" });   // 이미 존재
+//     if (result.length > 0) {
+//       return res.json({ exists: true , message: "중복된 아이디입니다" });   // 이미 존재
       
-    } else {
-      return res.json({ exists: false , message:"사용 가능한 아이디입니다" });  // 사용 가능
-    }
-  });
-});
+//     } else {
+//       return res.json({ exists: false , message:"사용 가능한 아이디입니다" });  // 사용 가능
+//     }
+//   });
+// });
 
 //회원가입 저장
 app.post("/register", (req, res) => {
+  console.log("📥 /register 요청 들어옴");
+  console.log("req.body =", req.body);
+
   const { id, pw, name, email } = req.body;
 
   const sql = "INSERT INTO users (id, pw, name, email) VALUES (?, ?, ?, ?)";
@@ -106,6 +110,7 @@ app.post("/register", (req, res) => {
       console.log("회원가입 실패:", err);
       return res.status(500).send("DB 오류");
     }
+    console.log(result);
     res.send("회원가입 성공!");
   });
 });
