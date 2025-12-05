@@ -14,7 +14,12 @@ function Register() {
     const [number1] = useState("010");
     const [number2, setNumber2] = useState("");
     const [number3, setNumber3] = useState("");
-    const [hbd, setHbd] = useState(''); //hbd >> 생년월일
+    const [hbd, setHbd] = useState({
+    year: "",
+    month: "",
+    day: ""
+});
+ //hbd >> 생년월일
     
     //아이디중복확인
     const checkDuplicateId = async () => {
@@ -33,10 +38,10 @@ function Register() {
 
     if (data.exists) {
         alert("이미 사용 중인 아이디입니다.");
-        setIsIdChecked(false);
+        setIdChecked(false);
     } else {
         alert("사용 가능한 아이디입니다!");
-        setIsIdChecked(true);
+        setIdChecked(true);
     }
 };
     const number3Ref = useRef(null);
@@ -48,7 +53,7 @@ function Register() {
             alert("필수항목을 입력해주세요");
             return;
         }
-        if (!isIdChecked) {
+        if (!idChecked) {
         alert("아이디 중복확인을 해주세요!");
         return;
         }
