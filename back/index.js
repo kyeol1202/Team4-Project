@@ -22,31 +22,58 @@
   });
 
   app.get("/api/products", async (req, res) => {
-  const keyword = req.query.keyword || "";  // ?keyword=사과 처럼 들어옴
+    const keyword = req.query.keyword || "";
 
-  try {
-    const rows = await pool.query(
-      "SELECT product_id, name, price FROM product WHERE name LIKE ?",
-      [`%${keyword}%`]
-    );
+    try {
+      const rows = await pool.query(
+        "SELECT product_id, name, price FROM product WHERE name LIKE ?",
+        [`%${keyword}%`]
+      );
 
-    res.json({ success: true, data: rows });
-  } catch (err) {
-    console.error("DB Error:", err.message);
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
+      res.json({ success: true, data: rows });
+    } catch (err) {
+      console.error("DB Error:", err.message);
+      res.status(500).json({ success: false, error: err.message });
+    }
+  });
 
   // =========================
-  // 👉 추가: 로그인 API
+  // 👉 추가: 여자 / 남자 상품 API
+  // =========================
+  app.get("/api/products/woman", async (req, res) => {
+    try {
+      const rows = await pool.query(
+        "SELECT * FROM product WHERE category='woman'"
+      );
+      res.json({ success: true, data: rows });
+    } catch (err) {
+      console.error(err);
+      res.json({ success: false, error: err.message });
+    }
+  });
+
+  app.get("/api/products/man", async (req, res) => {
+    try {
+      const rows = await pool.query(
+        "SELECT * FROM product WHERE category='man'"
+      );
+      res.json({ success: true, data: rows });
+    } catch (err) {
+      console.error(err);
+      res.json({ success: false, error: err.message });
+    }
+  });
+
+  // =========================
+  // 👉 로그인 API
   // =========================
 
   app.post("/api/auth/login", async (req, res) => {
-    const {username, password } = req.body;
+    const { username, password } = req.body;
 
-    console.log("🔍 로그인 요청:",username, password);
+    console.log("🔍 로그인 요청:", username, password);
 
-     if (!username || !password) {
+    if (!username || !password) {
       return res.json({ success: false, message: "아이디와 비밀번호를 입력하세요." });
     }
 
@@ -78,43 +105,52 @@
       res.status(500).json({ success: false, message: "서버 오류" });
     }
   });
-  
-  // 아이디 중복 확인
-//   app.post("/check-id", async(req, res) => {
-//   const { id } = req.body;
 
-//   const sql = "SELECT * FROM member WHERE username = ?";
-//   pool.query(sql, [id], (err, result) => {
-//     if (err) return res.status(500).send("DB 오류");
 
-//     if (result.length > 0) {
-//       return res.json({ exists: true , message: "중복된 아이디입니다" });   // 이미 존재
-      
-//     } else {
-//       return res.json({ exists: false , message:"사용 가능한 아이디입니다" });  // 사용 가능
-//     }
-//   });
-// });
+  // =========================
+  // 👉 아이디 중복 확인 API 추가
+  // =========================
+  app.post("/idcheck", async (req, res) => {
+    const { id } = req.body;
 
-//회원가입 저장
-app.post("/register", (req, res) => {
-  console.log("📥 /register 요청 들어옴");
-  console.log("req.body =", req.body);
+    try {
+      const [rows] = await pool.query(
+        "SELECT * FROM member WHERE username = ?",
+        [id]
+      );
 
-  const { id, pw, name, email } = req.body;
-
-  const sql = "INSERT INTO users (id, pw, name, email) VALUES (?, ?, ?, ?)";
-
-  pool.query(sql, [id, pw, name, email], (err, result) => {
-    if (err) {
-      console.log("회원가입 실패:", err);
-      return res.status(500).send("DB 오류");
+      if (rows.length > 0) {
+        return res.json({ exists: true, message: "중복된 아이디입니다." });
+      } else {
+        return res.json({ exists: false, message: "사용 가능한 아이디입니다." });
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ exists: true, message: "DB 오류" });
     }
-    console.log(result);
-    res.send("회원가입 성공!");
   });
-});
 
+
+  // =========================
+  // 👉 회원가입 API 수정 (users → member)
+  // =========================
+  app.post("/register", (req, res) => {
+    console.log("📥 /register 요청 들어옴");
+    console.log("req.body =", req.body);
+
+    const { id, pw, name, email } = req.body;
+
+    const sql = "INSERT INTO member (username, password, name, email) VALUES (?, ?, ?, ?)";
+
+    pool.query(sql, [id, pw, name, email], (err, result) => {
+      if (err) {
+        console.log("회원가입 실패:", err);
+        return res.status(500).send("DB 오류");
+      }
+      console.log(result);
+      res.send("회원가입 성공!");
+    });
+  });
 
   // =========================
   // 서버 실행
