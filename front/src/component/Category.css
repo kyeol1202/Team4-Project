@@ -207,3 +207,18 @@
 .arrow.left { left: -40px; }
 .arrow.right { right: -40px; }
 .arrow:hover { opacity: 0.5; }
+
+
+.slider-inner {
+  display: flex;
+  transition: transform 0.7s ease-in-out;
+}
+
+.slide {
+  min-width: 100%;
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;       /* 카드 여러 줄 허용 */
+  justify-content: center;
+  gap: 20px;
+}

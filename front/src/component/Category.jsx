@@ -107,12 +107,16 @@ function Category() {
                         <div className="slide">
                             {woman.map(item => (
                                 <button className="product-card" key={item.product_id}>
+                                    <img src="/image/gam.png" alt="" className="product-img" />
+                                    <img src={item.img} alt="" className="product-img" />
                                     <img src={item.img} alt="" className="product-img" />
                                 </button>
                             ))}
 
                             {man.map(item => (
                                 <button className="product-card" key={item.product_id}>
+                                    <img src={item.img} alt="" className="product-img" />
+                                    <img src={item.img} alt="" className="product-img" />
                                     <img src={item.img} alt="" className="product-img" />
                                 </button>
                             ))}
