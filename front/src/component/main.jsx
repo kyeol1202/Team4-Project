@@ -49,7 +49,6 @@ function Main() {
                         <li className="dropdownlist" type="button">전체상품</li>
                         <li className="dropdownlist" type="button">남성향수</li>
                         <li className="dropdownlist" type="button">여성향수</li>
-                        <li className="dropdownlist" type="button">향수 기프트 세트</li>
                     </ul>
                 </div>
 
