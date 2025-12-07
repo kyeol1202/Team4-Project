@@ -4,6 +4,10 @@ function Main() {
     const [loginOpen, setLoginOpen] = useState(false);
     const [index, setIndex] = useState(0);
 
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
+
+
     const products = ["제품 1", "제품 2", "제품 3", "제품 4", "제품 5", "제품 6"];
 
     const visibleCount = 3; // 화면에 보이는 카드 수
@@ -32,11 +36,20 @@ function Main() {
         });
     };
 
-    function login() {
-
-
+    function Login() {
+        console.log("로그인 시도:", { id, password });
+        
+        
+       
+        if (id === "user" && password === "1234") {
+            alert("로그인 성공!");
+            setLoginOpen(false); 
+            setId(''); 
+            setPassword('');
+        } else {
+            alert("아이디 또는 비밀번호가 올바르지 않습니다.");
+        }
     }
-
     return (
         <div className="page">
 
@@ -45,14 +58,14 @@ function Main() {
                 <div className="header-left">
                     MENU
                     <ul className="dropdown">
-                        <li className="dropdownlist" type="button">베스트셀러</li>
+                        <li className="dropdownlist" type="button">BEST SELLERS</li>
                         <li className="dropdownlist" type="button">전체상품</li>
                         <li className="dropdownlist" type="button">남성향수</li>
                         <li className="dropdownlist" type="button">여성향수</li>
                     </ul>
                 </div>
 
-                <div className="header-title">Aura</div>
+                <div className="header-title">AuRa</div>
 
                 <div className="header-right">
                     <button>♡</button>
@@ -97,7 +110,7 @@ function Main() {
                 <h2>Login</h2>
                 <input type="text" placeholder="ID" />
                 <input type="password" placeholder="Password" />
-                <button className="login-btn">로그인</button>
+                <button className="login-btn" onClick={Login}>로그인</button>
             </div>
 
             <footer className="footer">
