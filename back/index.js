@@ -1,42 +1,42 @@
-  const express = require('express');
-  const cors = require('cors');
-  const pool = require('./db');
+const express = require('express');
+const cors = require('cors');
+const pool = require('./db');
 
-  const app = express();
-  app.use(cors());
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-  // =========================
-  // 기존에 있던 API (유지)
-  // =========================
+// =========================
+// 기존 기능 유지
+// =========================
 
-  app.get("/api/check-users", async (req, res) => {
-    try {
-      const rows = await pool.query("SELECT * FROM member");
-      res.json({ success: true, data: rows });
-    } catch (err) {
-      console.error('DB 에러:', err.message);
-      res.status(500).json({ success: false, error: err.message });
-    }
-  });
+app.get("/api/check-users", async (req, res) => {
+  try {
+    const rows = await pool.query("SELECT * FROM member");
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error('DB 에러:', err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
-   app.get("/api/category", async (req, res) => {
-    try {
-      const rows = await pool.query("SELECT * FROM category");
-      res.json({ success: true, data: rows });
-    } catch (err) {
-      console.error('DB 에러:', err.message);
-      res.status(500).json({ success: false, error: err.message });
-    }
-  });
+app.get("/api/category", async (req, res) => {
+  try {
+    const rows = await pool.query("SELECT * FROM category");
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error('DB 에러:', err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
-  app.get("/api/products", async (req, res) => {
-  const keyword = req.query.keyword || "";  // ?keyword=사과 처럼 들어옴
+app.get("/api/products", async (req, res) => {
+  const keyword = req.query.keyword || "";
 
   try {
     const rows = await pool.query(
-      "SELECT product_id, name, price FROM product WHERE name LIKE ?",
+      "SELECT product_id, name, price, img FROM product WHERE name LIKE ?",
       [`%${keyword}%`]
     );
 
@@ -47,77 +47,63 @@
   }
 });
 
-  // =========================
-  // 👉 추가: 로그인 API
-  // =========================
+// =========================
+// 🔥 로그인 API
+// =========================
 
-  app.post("/api/auth/login", async (req, res) => {
-    const {username, password } = req.body;
+app.post("/api/auth/login", async (req, res) => {
+  const { username, password } = req.body;
 
-    console.log("🔍 로그인 요청:",username, password);
+  console.log("🔍 로그인 요청:", username, password);
 
-     if (!username || !password) {
-      return res.json({ success: false, message: "아이디와 비밀번호를 입력하세요." });
-    } 
+  if (!username || !password) {
+    return res.json({ success: false, message: "아이디와 비밀번호를 입력하세요." });
+  }
 
-    try {
-      const [rows] = await pool.query(
-        "SELECT * FROM member WHERE username = ? AND password = ?",
-        [username, password]
-      );
+  try {
+    const [rows] = await pool.query(
+      "SELECT * FROM member WHERE username = ? AND password = ?",
+      [username, password]
+    );
 
-      if (rows.length === 0) {
-        return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
-      }
-
-      const user = rows[0];
-
-      return res.json({
-        success: true,
-        message: "로그인 성공",
-        user: {
-          member_id: user.member_id,
-          email: user.email,
-          name: user.name,
-          role: user.role
-        }
-      });
-
-    } catch (err) {
-      console.error("로그인 오류:", err.message);
-      res.status(500).json({ success: false, message: "서버 오류" });
+    if (rows.length === 0) {
+      return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
     }
-  });
-  
-  // 아이디 중복 확인
-//   app.post("/check-id", async(req, res) => {
-//   const { id } = req.body;
 
-//   const sql = "SELECT * FROM member WHERE username = ?";
-//   pool.query(sql, [id], (err, result) => {
-//     if (err) return res.status(500).send("DB 오류");
+    const user = rows[0];
 
-//     if (result.length > 0) {
-//       return res.json({ exists: true , message: "중복된 아이디입니다" });   // 이미 존재
-      
-//     } else {
-//       return res.json({ exists: false , message:"사용 가능한 아이디입니다" });  // 사용 가능
-//     }
-//   });
-// });
+    return res.json({
+      success: true,
+      message: "로그인 성공",
+      user: {
+        member_id: user.member_id,
+        email: user.email,
+        name: user.name,
+        role: user.role
+      }
+    });
 
-//회원가입 저장
+  } catch (err) {
+    console.error("로그인 오류:", err.message);
+    res.status(500).json({ success: false, message: "서버 오류" });
+  }
+});
+
+// =========================
+// 회원가입
+// =========================
+
 app.post("/api/register", async (req, res) => {
-  console.log("📥회원가입 요청:" , req.body);
+  console.log("📥회원가입 요청:", req.body);
 
   const { id, pw, name, email, adderss, number, hbd } = req.body;
 
-  try{
+  try {
     await pool.query(
       `
       INSERT INTO member
       (username, password, name, email, address, phone, created_at)
-      VALUES (?,?,?,?,?,?,?)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
       `,
       [id, pw, name, email, adderss, number, hbd]
     );
@@ -131,13 +117,17 @@ app.post("/api/register", async (req, res) => {
       [name]
     );
 
-    return res.json({ success: true, message:"회원가입 성공!"});
+    return res.json({ success: true, message: "회원가입 성공!" });
 
   } catch (err) {
-    console.log("❌회원가입 실패:" , err);
-    return res.json({ success : false, message: "DB 오류발생"})
+    console.log("❌회원가입 실패:", err);
+    return res.json({ success: false, message: "DB 오류발생" })
   }
 });
+
+// =========================
+// 상품 등록
+// =========================
 
 app.post("/api/productadd", async (req, res) => {
   console.log("📥상품등록 요청:", req.body);
@@ -160,9 +150,60 @@ app.post("/api/productadd", async (req, res) => {
   }
 });
 
-  // =========================
-  // 서버 실행
-  // =========================
-  app.listen(8080, '0.0.0.0', () => {
-    console.log("서버 실행 중: http://0.0.0.0:8080");
-  });
+
+// ==========================================================
+// 🟦🟦🟦 여기부터 "새로 추가" 상품 API — 기존 코드 절대 수정 X
+// ==========================================================
+
+// 🔥 전체상품
+app.get("/api/products/all", async (req, res) => {
+  try {
+    const rows = await pool.query("SELECT * FROM product");
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error("상품 전체 조회 오류:", err.message);
+    res.status(500).json({ success: false });
+  }
+});
+
+// 🔥 여성향수
+app.get("/api/products/woman", async (req, res) => {
+  try {
+    const rows = await pool.query("SELECT * FROM product WHERE gender='여성'");
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error("여성향수 오류:", err.message);
+    res.status(500).json({ success: false });
+  }
+});
+
+// 🔥 남성향수
+app.get("/api/products/man", async (req, res) => {
+  try {
+    const rows = await pool.query("SELECT * FROM product WHERE gender='남성'");
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error("남성향수 오류:", err.message);
+    res.status(500).json({ success: false });
+  }
+});
+
+// 🔥 상품 상세
+app.get("/api/products/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const rows = await pool.query("SELECT * FROM product WHERE product_id=?", [id]);
+    res.json({ success: true, data: rows[0] });
+  } catch (err) {
+    console.error("상품 상세 오류:", err.message);
+    res.status(500).json({ success: false });
+  }
+});
+
+// ==========================================================
+// 서버 실행
+// ==========================================================
+app.listen(8080, '0.0.0.0', () => {
+  console.log("서버 실행 중: http://0.0.0.0:8080");
+});
