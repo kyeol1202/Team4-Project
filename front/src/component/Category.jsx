@@ -72,7 +72,7 @@ function Category() {
                     </ul>
                 </div>
 
-                <div className="header-title">Aura</div>
+                <div className="header-title" onClick={() => navigate("/")}>Aura</div>
 
                 <div className="header-right">
                     <button onClick={() => (login ? navigate("/wish") : setLoginOpen(true))}>♡</button>
