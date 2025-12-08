@@ -39,7 +39,6 @@ function Register() {
 
             const res = await response.json();
 
-<<<<<<< HEAD
             if (res.exists) {
                 alert("중복된 아이디입니다.");
                 setIdChecked(false);
@@ -47,15 +46,6 @@ function Register() {
                 alert("사용 가능한 아이디입니다.");
                 setIdChecked(true);
             }
-=======
-            // if (res.exists) {
-            //     alert("중복된 아이디입니다.");
-            //     setIdChecked(false);
-            // } else {
-            //     alert("사용 가능한 아이디입니다.");
-            //     setIdChecked(true);
-            // }
->>>>>>> 4c8dcfd3f27d8d9c635cf4073e3846e20d843cd9
         } catch (error) {
             console.error("중복확인 오류:", error);
             alert("서버 오류가 발생했습니다.");
@@ -65,11 +55,7 @@ function Register() {
     // ============================
     // 🔥 회원가입 함수
     // ============================
-<<<<<<< HEAD
     async function register() {
-=======
-    function register() {
->>>>>>> 4c8dcfd3f27d8d9c635cf4073e3846e20d843cd9
         const fullNumber = `${number1}${number2}${number3}`;
 
         // 필수항목 체크 (생년월일 제대로 확인)
@@ -84,7 +70,6 @@ function Register() {
         //     alert("아이디 중복확인을 해주세요!");
         //     return;
         // }
-<<<<<<< HEAD
 
         // 비밀번호 일치 확인
         if (pw !== pwCheck) {
@@ -126,38 +111,6 @@ function Register() {
         <>
             <h2>회원가입</h2>
 
-=======
-
-        // 비밀번호 일치 확인
-        if (pw !== pwCheck) {
-            alert("비밀번호가 일치하지 않습니다");
-            return;
-        }
-
-        // 회원정보 저장
-        const userData = {
-            id: id,
-            pw: pw,
-            name: name,
-            email: email,
-            address: address,
-            number: fullNumber,
-            hbd: hbd
-        };
-
-        localStorage.setItem("user", JSON.stringify(userData));
-        alert("회원가입 완료");
-        navigate('/main');
-    }
-
-    // ============================
-    // JSX 반환
-    // ============================
-    return (
-        <>
-            <h2>회원가입</h2>
-
->>>>>>> 4c8dcfd3f27d8d9c635cf4073e3846e20d843cd9
             <div>
                 <div>아이디</div>
                 <div style={{ display: "flex", gap: "10px" }}>
@@ -169,11 +122,7 @@ function Register() {
                             setIdChecked(false); // 아이디 변경 시 중복확인 초기화
                         }}
                     />
-<<<<<<< HEAD
                     <button onClick={IdChecked}>중복확인</button>
-=======
-                    {/* <button onClick={IdChecked}>중복확인</button> */}
->>>>>>> 4c8dcfd3f27d8d9c635cf4073e3846e20d843cd9
                 </div>
             </div>
 
@@ -281,10 +230,6 @@ function Register() {
             <button onClick={register}>회원가입</button>
         </>
     );
-<<<<<<< HEAD
 }
-=======
->>>>>>> 4c8dcfd3f27d8d9c635cf4073e3846e20d843cd9
 }
-
 export default Register;
