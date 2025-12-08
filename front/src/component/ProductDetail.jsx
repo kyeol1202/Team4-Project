@@ -3,26 +3,29 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 function ProductDetail() {
-  const { id } = useParams();              // URL에서 productId 가져오기
+  const { id } = useParams(); // 상품 ID
   const navigate = useNavigate();
 
   const [product, setProduct] = useState(null);
 
-  // 🔥 상세정보 불러오기
+  // 상품 상세 불러오기
   useEffect(() => {
     fetch(`http://192.168.0.224:8080/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.success) setProduct(data.data);
+        console.log("📌 상품 상세 응답:", data);  // 디버그용
+        if (data.success) {
+          setProduct(data.data);
+        }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("상품 상세 오류:", err));
   }, [id]);
 
+  // 데이터 오기 전
   if (!product) return <div style={{ padding: 40 }}>Loading...</div>;
 
   return (
     <div style={styles.container}>
-
       {/* 뒤로가기 */}
       <button style={styles.backBtn} onClick={() => navigate(-1)}>
         ← Back
@@ -39,7 +42,7 @@ function ProductDetail() {
         {product.description || "이 향수는 은은하고 고급스러운 분위기를 연출합니다."}
       </p>
 
-      {/* 장바구니 */}
+      {/* 장바구니 버튼 */}
       <button style={styles.cartBtn}>장바구니에 담기 🛒</button>
     </div>
   );
