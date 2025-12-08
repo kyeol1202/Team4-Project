@@ -13,7 +13,6 @@ import Category from "./component/Category";
 import Category2 from "./component/Category2";
 import Category3 from "./component/Category3";
 import Category4 from "./component/Category4";
-import Category5 from "./component/Category5";
 import Mypage from "./component/Mypage";
 import Search from "./component/search/search";
 import OrderDetail from "./component/OrderDetail";
@@ -44,7 +43,6 @@ function App() {
           <Route path="/category2" element={<Category2 />} />{/* 카테고리 페이지 */}
           <Route path="/category3" element={<Category3 />} />{/* 카테고리 페이지 */}
           <Route path="/category4" element={<Category4 />} />{/* 카테고리 페이지 */}
-          <Route path="/category5" element={<Category5 />} />{/* 카테고리 페이지 */}
           <Route path="/payment" element={<Payment />} />{/* 결제 페이지 */}
           <Route path="/register" element={<Register />} />{/* 회원가입 페이지 */}
           <Route path="/wish" element={<Wish />} />{/* 찜 목록 페이지 */}
