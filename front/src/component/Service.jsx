@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import {ChevronDown, ChevronUp} from "react-feather";
 
-function CustomerService() {
+function Service() {
     const navigate = useNavigate();
     const [openIndex, setOpenIndex] = useState(null);
 
@@ -72,4 +72,4 @@ window.open(url, "_blank");
         </div>
     );
 }
-export default CustomerService;
+export default Service;
