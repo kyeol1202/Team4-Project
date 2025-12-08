@@ -1,19 +1,21 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 function Category2() {
+  const navigate = useNavigate();
   const products = [
-    { id: 1, name: "AuRa Primeveil", img: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=400&fit=crop" },
-    { id: 2, name: "AuRa Elenique", img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&h=400&fit=crop" },
-    { id: 3, name: "AuRa Vorelle", img: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=400&h=400&fit=crop" },
-    { id: 4, name: "AuRa Immeren", img: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400&h=400&fit=crop" },
-    { id: 5, name: "AuRa Noctivale", img: "https://images.unsplash.com/photo-1588405748880-12d1d2a59d75?w=400&h=400&fit=crop" },
-    { id: 6, name: "AuRa Solivane", img: "https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=400&h=400&fit=crop" },
-    { id: 7, name: "AuRa Freesia", img: "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&h=400&fit=crop" },
-    { id: 8, name: "AuRa Vanilla Musk", img: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=400&fit=crop" },
-    { id: 9, name: "AuRa Rose", img: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=400&h=400&fit=crop" },
+    { id: 1, name: "AuRa Noverin", img: "/image/AuRa_Noverin_woman.png" },
+    { id: 2, name: "AuRa Velese", img: "/image/AuRa_Velese_woman.png" },
+    { id: 3, name: "AuRa ClairVent", img: "/image/AuRa_ClairVent_man.png" },
+    { id: 4, name: "AuRa Elenique", img: "/image/AuRa_Elenique_woman.jpeg" },
+    { id: 5, name: "AuRa Etherlune", img: "/image/AuRa_Etherlune_woman.png" },
+    { id: 6, name: "AuRa Noctivale", img: "/image/AuRa_Noctivale_man.png" },
+    { id: 7, name: "AuRa Primeveil", img: "/image/AuRa_Primeveil_woman.png" },
+    { id: 8, name: "AuRa Silvaron", img: "/image/AuRa_Silvaron_man.png" },
+    { id: 9, name: "AuRa Solivane", img: "/image/AuRa_Solivane_man.jpeg" },
   ];
 
-  const handleClick = (id) => {
+ const handleClick = (id) => {
     alert(`Product ${id} clicked! (Navigation would happen here)`);
   };
 
