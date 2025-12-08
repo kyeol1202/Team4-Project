@@ -8,7 +8,7 @@ import Cart from "./component/Cart";
 import Payment from "./component/Payment";
 import Register from "./component/Register";
 import Wish from "./component/Wish";
-// import Service from "./component/Service";
+import Service from "./component/Service";
 import Category from "./component/Category";
 import Category2 from "./component/Category2";
 import Category3 from "./component/Category3";

@@ -75,7 +75,7 @@
 
     if (!username || !password) {
       return res.json({ success: false, message: "아이디와 비밀번호를 입력하세요." });
-    }
+    } 
 
     try {
       const [rows] = await pool.query(
