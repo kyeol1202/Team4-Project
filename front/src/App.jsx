@@ -13,7 +13,6 @@ import Category from "./component/Category";
 import Category2 from "./component/Category2";
 import Category3 from "./component/Category3";
 import Category4 from "./component/Category4";
-import Category5 from "./component/Category5";
 import Mypage from "./component/Mypage";
 import Search from "./component/search/search";
 import OrderDetail from "./component/OrderDetail";

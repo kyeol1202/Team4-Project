@@ -19,7 +19,7 @@ function Category() {
     // 🔥 테스트용 이미지 데이터 (베스트 3개씩)
     // ============================
     const [woman, setWoman] = useState([
-        { product_id: 1, name: "AuRa Primeveil", img: "/image/AuRa .jpg" },
+        { product_id: 1, name: "AuRa Primeveil", img: "/image/AuRa Elenque.jpeg" },
         { product_id: 2, name: "AuRa Elenique", img: "/image/per2.jpeg" },
         { product_id: 3, name: "AuRa Vorelle", img: "/image/per3.jpeg" },
     ]);
