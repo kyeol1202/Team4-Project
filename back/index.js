@@ -124,7 +124,7 @@ app.post("/api/productadd", async(req, res) => {
 
   console.log("📥상품등록 요청:", req.body);
   const { name , price , category_id  } = req.body;
-  try{
+  
     await pool.query(
       `
       INSERT INTO product
@@ -135,12 +135,6 @@ app.post("/api/productadd", async(req, res) => {
     );
 
     return res.json({ success: true, message:"상품 등록 성공!!"});
-
-  } catch (err) {
-    console.log("❌회원가입 실패:" , err);
-    return res.json({ success : false, message: "DB 오류발생"})
-  }
-
 
 })
 
