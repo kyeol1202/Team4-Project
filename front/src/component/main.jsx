@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+// import { useCart } from "../context/CartContext";
+// import { useWish } from "../context/WishContext";
+
+
 
 function Main() {
     const [loginOpen, setLoginOpen] = useState(false);
@@ -7,6 +11,8 @@ function Main() {
     const [index, setIndex] = useState(0);
     const [surcharge, setSurcharge] = useState('');
     const navigate = useNavigate();
+    // const { addToCart } = useCart();
+    // const { addToWish } = useWish();
 
     // 로그인 입력값
     const [userId, setUserId] = useState('');
@@ -16,16 +22,10 @@ function Main() {
         { id: 1, img: "" },
         { id: 2, img: "" },
         { id: 3, img: "" },
-        { id: 4, img: "image/gam2.jpeg" },
+        { id: 4, img: "image/gam.png" },
         { id: 5, img: "" },
-        { id: 6, img: "image/gam" },
+        { id: 6, img: "image/jung1.jpg" },
     ];
-
-    const [id, setId] = useState('');
-    // const [password, setPassword] = useState('');
-
-
-    // const products = ["제품 1", "제품 2", "제품 3", "제품 4", "제품 5", "제품 6"];
 
     const visibleCount = 3;
     const cardWidth = 330;
@@ -33,11 +33,9 @@ function Main() {
 
     // 자동 슬라이드
     useEffect(() => {
-        const timer = setInterval(() => {
-            slideRight();
-        }, 3000);
-        return () => clearInterval(timer);
-    }, [index]);
+  const timer = setInterval(slideRight, 3000);
+  return () => clearInterval(timer);
+}, []); 
 
     useEffect(() => {
         const saved = localStorage.getItem("login");
@@ -60,6 +58,9 @@ function Main() {
         });
     };
 
+    // -------------------------
+    // 🔥 로그인 함수(백엔드 연결)
+    // -------------------------
     async function Login() {
         if (!userId || !password) {
             return alert("아이디와 비밀번호를 입력하세요!");
@@ -113,15 +114,15 @@ function Main() {
                 <div className="header-left">
                     MENU
                     <ul className="dropdown">
-                        <li className="dropdownlist" type="button">베스트셀러</li>
-                        <li className="dropdownlist" type="button">전체상품</li>
-                        <li className="dropdownlist" type="button">남성향수</li>
-                        <li className="dropdownlist" type="button">여성향수</li>
-                        <li className="dropdownlist" type="button">향수 기프트 세트</li>
+                        <li className="dropdownlist" type="button" onClick={() => navigate("/category")}>베스트셀러</li>
+                        <li className="dropdownlist" type="button" onClick={() => navigate("/category2")}>전체상품</li>
+                        <li className="dropdownlist" type="button" onClick={() => navigate("/category3")}>남성향수</li>
+                        <li className="dropdownlist" type="button" onClick={() => navigate("/category4")}>여성향수</li>
+                        <li className="dropdownlist" type="button" onClick={() => navigate("/category5")}>향수 기프트 세트</li>
                     </ul>
                 </div>
 
-                <div className="header-title">AuRa</div>
+                <div className="header-title">Aura</div>
 
                 <div className="header-right">
                     <button
@@ -189,9 +190,23 @@ function Main() {
                     ✕
                 </button>
                 <h2>Login</h2>
-                <input type="text" placeholder="ID" />
-                <input type="password" placeholder="Password" />
-                <button className="login-btn">로그인</button>
+
+                {/* 🔥 id + Password 입력 */}
+                <input
+                    type="text"
+                    placeholder="ID"
+                    value={userId}
+                    onChange={(e) => setUserId(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+
+                <button className="login-btn" onClick={Login}>로그인</button>
+                <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
             </div>
 
             <footer className="footer">
