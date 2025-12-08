@@ -9,6 +9,7 @@ function Game() {
   const [food, setFood] = useState({ x: 10, y: 10 });
   const [direction, setDirection] = useState({ x: 1, y: 0 });
   const [gameOver, setGameOver] = useState(false);
+  const [speed, setSpeed] = useState(150);
 
   // 방향키 입력
   useEffect(() => {
@@ -22,12 +23,57 @@ function Game() {
     return () => window.removeEventListener("keydown", handleKey);
   }, []);
 
-  // 게임 루프
+  
+  // 게임 루프  ---<<< 여기가 핵심 수정!
   useEffect(() => {
     if (gameOver) return;
-    const timer = setInterval(moveSnake, 150);
+
+    const timer = setInterval(moveSnake, speed);
     return () => clearInterval(timer);
-  });
+  }, [snake, speed, gameOver]);
+
+
+  const [ranking, setRanking] = useState([]);
+
+  useEffect(() => {
+    async function getRank() {
+      const res = await fetch("http://192.168.0.224:8080/game");
+      const data = await res.json();
+      if (data.success) setRanking(data.data);
+    }
+    getRank();
+  }, []);
+
+  function restart() {
+    setSnake([{ x: 5, y: 5 }]);
+    setFood({ x: 10, y: 10 });
+    setDirection({ x: 1, y: 0 });
+    setGameOver(false);
+    setSpeed(150);   // 👈 속도 초기화
+  }
+
+  
+  async function rangking() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const name = user?.name || "Unknown";
+    const score = snake.length - 1;
+
+    const userData = { name, score };
+
+    const response = await fetch("http://192.168.0.224:8080/game", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData)
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      alert("🎉 랭킹 저장 완료!");
+    } else {
+      alert("❌ 랭킹 저장 실패: " + result.message);
+    }
+  }
+
 
   function moveSnake() {
     const newSnake = [...snake];
@@ -39,6 +85,7 @@ function Game() {
     // 벽 충돌
     if (head.x < 0 || head.x >= GRID_SIZE || head.y < 0 || head.y >= GRID_SIZE) {
       setGameOver(true);
+      rangking();
       return;
     }
 
@@ -46,18 +93,23 @@ function Game() {
     for (let s of newSnake) {
       if (s.x === head.x && s.y === head.y) {
         setGameOver(true);
+        rangking();
         return;
       }
     }
 
     newSnake.unshift(head);
 
-    // 먹이 먹으면 길이 증가
+    // 먹이 충돌
     if (head.x === food.x && head.y === food.y) {
       setFood({
         x: Math.floor(Math.random() * GRID_SIZE),
         y: Math.floor(Math.random() * GRID_SIZE),
       });
+
+      // ⭐ 속도 점점 UP
+      setSpeed(prev => Math.max(60, prev - 10));
+
     } else {
       newSnake.pop();
     }
@@ -65,10 +117,20 @@ function Game() {
     setSnake(newSnake);
   }
 
+
   return (
     <div className="game">
       <h2>🐍 지렁이 게임</h2>
-      {gameOver && <p className="game-over">GAME OVER</p>}
+
+      {gameOver && (
+        <div className="game-over-box">
+          <p className="game-over">GAME OVER</p>
+          <button onClick={restart} className="restart-btn">
+            🔄 다시하기
+          </button>
+        </div>
+      )}
+
       <div
         className="board"
         style={{ width: GRID_SIZE * CELL_SIZE, height: GRID_SIZE * CELL_SIZE }}
@@ -83,6 +145,7 @@ function Game() {
             }}
           />
         ))}
+
         <div
           className="food"
           style={{
@@ -90,6 +153,17 @@ function Game() {
             top: food.y * CELL_SIZE,
           }}
         />
+
+        <div className="ranking-box">
+          <h3>🏆 Ranking</h3>
+          <ul>
+            {ranking.map((r, idx) => (
+              <li key={idx}>
+                {idx + 1}위 — {r.name} : {r.score}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
