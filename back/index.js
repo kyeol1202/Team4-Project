@@ -13,7 +13,17 @@
 
   app.get("/api/check-users", async (req, res) => {
     try {
-      const rows = await pool.query("SELECT * FROM member LIMIT 5");
+      const rows = await pool.query("SELECT * FROM member");
+      res.json({ success: true, data: rows });
+    } catch (err) {
+      console.error('DB 에러:', err.message);
+      res.status(500).json({ success: false, error: err.message });
+    }
+  });
+
+   app.get("/api/category", async (req, res) => {
+    try {
+      const rows = await pool.query("SELECT * FROM category");
       res.json({ success: true, data: rows });
     } catch (err) {
       console.error('DB 에러:', err.message);
@@ -112,6 +122,15 @@ app.post("/api/register", async (req, res) => {
       [id, pw, name, email, adderss, number, hbd]
     );
 
+    await pool.query(
+      `
+      INSERT INTO category
+      (name)
+      VALUES (?)
+      `,
+      [name]
+    );
+
     return res.json({ success: true, message:"회원가입 성공!"});
 
   } catch (err) {
@@ -120,23 +139,26 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-app.post("/api/productadd", async(req, res) => {
-
+app.post("/api/productadd", async (req, res) => {
   console.log("📥상품등록 요청:", req.body);
-  const { name , price , category_id  } = req.body;
-  
+  const { name, price, category_id } = req.body;
+
+  try {
     await pool.query(
       `
-      INSERT INTO product
-      (name, price, category_id)
-      VALUES (?,?,?)
+      INSERT INTO product (name, price, category_id)
+      VALUES (?, ?, ?)
       `,
       [name, price, category_id]
     );
 
-    return res.json({ success: true, message:"상품 등록 성공!!"});
+    return res.json({ success: true, message: "상품 등록 성공!!" });
 
-})
+  } catch (err) {
+    console.error("❌상품등록 실패:", err);
+    return res.json({ success: false, message: "DB 오류 발생" });
+  }
+});
 
   // =========================
   // 서버 실행
