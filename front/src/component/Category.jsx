@@ -68,7 +68,6 @@ function Category() {
                         <li className="dropdownlist" onClick={() => navigate("/category2")}>전체상품</li>
                         <li className="dropdownlist" onClick={() => navigate("/category3")}>남성향수</li>
                         <li className="dropdownlist" onClick={() => navigate("/category4")}>여성향수</li>
-                        <li className="dropdownlist" onClick={() => navigate("/category5")}>향수 기프트 세트</li>
                     </ul>
                 </div>
 
