@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 function Register() {
     const navigate = useNavigate();
     const [id, setId] = useState('');
-    const [idChecked, setIdChecked] = useState(false);
+    // const [idChecked, setIdChecked] = useState(false);
     const [pw, setPw] = useState('');
     const [pwCheck, setPwCheck] = useState('');
     const [name, setName] = useState('');
@@ -68,7 +68,7 @@ function Register() {
         alert("비밀번호가 일치하지 않습니다");
         return;
     }
-
+    const birth = `${hbd.year}-${String(hbd.month).padStart(2, '0')}-${String(hbd.day).padStart(2, '0')}`;
     const userData = {
             id: id,
             pw: pw,
@@ -76,7 +76,7 @@ function Register() {
             email: email,
             address: address,
             number: fullNumber,
-            hbd: hbd
+            hbd: birth
         };
 
     const response = await fetch("http://192.168.0.224:8080/api/register", {

@@ -87,7 +87,7 @@
         return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
       }
 
-      const user = rows[0];
+      const user = rows;
 
       return res.json({
         success: true,
@@ -134,23 +134,28 @@
   // =========================
   // 👉 회원가입 API 수정 (users → member)
   // =========================
-  app.post("/register", (req, res) => {
-    console.log("📥 /register 요청 들어옴");
-    console.log("req.body =", req.body);
+  app.post("/api/register", async (req, res) => {
+    console.log("📥 회원가입 요청:", req.body);
 
-    const { id, pw, name, email } = req.body;
+    const { id, pw, name, email, address, number, hbd } = req.body;
 
-    const sql = "INSERT INTO member (username, password, name, email) VALUES (?, ?, ?, ?)";
+    try {
+        await pool.query(
+            `
+            INSERT INTO member 
+            (username, password, name, email, address, phone, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            `,
+            [id, pw, name, email, address, number, hbd]
+        );
 
-    pool.query(sql, [id, pw, name, email], (err, result) => {
-      if (err) {
-        console.log("회원가입 실패:", err);
-        return res.status(500).send("DB 오류");
-      }
-      console.log(result);
-      res.send("회원가입 성공!");
-    });
-  });
+        return res.json({ success: true, message: "회원가입 성공!" });
+
+    } catch (err) {
+        console.log("❌ 회원가입 실패:", err);
+        return res.json({ success: false, message: "DB 오류 발생" });
+    }
+});
 
   // =========================
   // 서버 실행
