@@ -18,12 +18,12 @@ const toggleFAQ = (index) => setOpenIndex(openIndex === index ? null : index);
 
 
 const kakaoChat = () => {
-const url = "https://pf.kakao.com/당신카카오채널ID/chat";
-if (/Android|iPhone/i.test(navigator.userAgent)) {
-window.location.href = url;
-} else {
-window.open(url, "_blank");
-}
+    const url = "https://pf.kakao.com/당신카카오채널ID/chat";
+    if (/Android|iPhone/i.test(navigator.userAgent)) {
+        window.location.href = url;
+    } else {
+        window.open(url, "_blank");
+    }
 };
     return (
         <div className="bg-white text-black min-h-screen px-8 py-14 max-w-4xl mx-auto font-[Cormorant]">
@@ -55,8 +55,9 @@ window.open(url, "_blank");
 
               {/*1:1 문의*/}
               <div className="text-center mb-10">
-                <button onClick={()=>navigate("/qna")} className="bg-black text-white px-10 py-4 rounded-none hover:bg-gray-900 text-lg tracking-widest">
-                   카톡 1:1 문의하기
+                <button onClick={()=>navigate("/qna")} 
+                className="bg-black text-white px-10 py-4 rounded-none hover:bg-gray-900 text-lg tracking-widest">
+                    1:1 문의하기
                     </button>
                 </div>
                 {/*카카오톡 채널*/}
@@ -64,7 +65,7 @@ window.open(url, "_blank");
                     <img src="https://developers.kakao.com/tool/resource/static/img/buttonbutton/channel/consult_small_yellow.png" alt="kakao" className="w-10" />
                     </div>
                      
-                     {/*운영 안내*/}
+               {/*운영 안내*/}
                 <footer className="text-center text-sm text-gray-500 mt-20">
                     <p>운영 시간: 평일 09:00~18:00 | 점심시간: 12:30~13:30 | 주말 및 공휴일 휴무</p>
                     <p className="mt-2">고객센터 전화: 1234-5678 </p>
