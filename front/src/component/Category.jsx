@@ -19,13 +19,13 @@ function Category() {
     // 🔥 테스트용 이미지 데이터 (베스트 3개씩)
     // ============================
     const [woman, setWoman] = useState([
-        { product_id: 1, name: "AuRa Primeveil", img: "/image/per1.jpeg" },
+        { product_id: 1, name: "AuRa Primeveil", img: "/image/jumg2.jpg" },
         { product_id: 2, name: "AuRa Elenique", img: "/image/per2.jpeg" },
         { product_id: 3, name: "AuRa Vorelle", img: "/image/per3.jpeg" },
     ]);
 
     const [man, setMan] = useState([
-        { product_id: 5, name: "AuRa Noctivale", img: "/image/per5.jpeg" },
+        { product_id: 5, name: "AuRa Noctivale", img: "/image/jung1.jpg" },
         { product_id: 6, name: "AuRa Solivane", img: "/image/per6.jpeg" },
         { product_id: 7, name: "AuRa Freesia", img: "/image/per7.jpeg" },
     ]);
@@ -111,7 +111,7 @@ function Category() {
                     <div
                         className="slider-inner"
                         style={{
-                            transform: `translateX(-${index * 100}%)`,
+                            transform: `translateX(-${index * 53}%)`,
                             width: "200%",
                             display: "flex",
                             transition: "0.5s ease"
