@@ -49,7 +49,7 @@ function App() {
 
               <Route path="/orderdetail" element={<OrderDetail />} />
               <Route path="/edituserinfo" element={<EditUserInfo />} />
-
+              <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/register" element={<Register />} />
             </Route>
 
