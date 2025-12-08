@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
-import {ChevronDown, ChevronUp} from "react-feather";
+import { ChevronDown, ChevronUp } from "react-feather";
 
-function CustomerService() {
+function Service() {
     const navigate = useNavigate();
     const [openIndex, setOpenIndex] = useState(null);
 
@@ -26,7 +26,7 @@ window.open(url, "_blank");
 }
 };
     return (
-        <div className="bg-white text-black min-h-screen px-8 py-14 max-w-4xl mx-auto font-[Cormorant]]">
+        <div className="bg-white text-black min-h-screen px-8 py-14 max-w-4xl mx-auto font-[Cormorant]">
            <h1 className="text-4xl font-bold text-center mb-14 tracking-wider">고객센터</h1> 
            
            {/*공지사항*/}
@@ -56,7 +56,7 @@ window.open(url, "_blank");
               {/*1:1 문의*/}
               <div className="text-center mb-10">
                 <button onClick={()=>navigate("/qna")} className="bg-black text-white px-10 py-4 rounded-none hover:bg-gray-900 text-lg tracking-widest">
-                    1:1 문의 바로가기
+                    카톡으로 상담하기
                     </button>
                 </div>
                 {/*카카오톡 채널*/}
@@ -72,4 +72,4 @@ window.open(url, "_blank");
         </div>
     );
 }
-export default CustomerService;
+export default Service;
