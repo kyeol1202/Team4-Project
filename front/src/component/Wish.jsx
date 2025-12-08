@@ -88,7 +88,7 @@ function Wish() {
                     }}
                     onClick={() => navigate("/")}
                 >
-                    메인으로
+                    쇼핑 계속하기
                 </button>
             </div>
         </div>
