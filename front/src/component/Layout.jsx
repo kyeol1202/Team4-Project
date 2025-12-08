@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import { useWish } from "../context/WishContext";
+import Game from "./Game";
 
 function Layout() {
 
@@ -18,6 +19,7 @@ function Layout() {
   const [p_category, setP_category] = useState("");
 
   const [categoryList, setCategoryList] = useState([]);
+  const [gameOpen, setGameOpen] = useState(false);
 
   // 로그인 상태 가져오기
   useEffect(() => {
@@ -139,42 +141,51 @@ function Layout() {
 
       {/* 로그인 drawer */}
       {/* 🔥 로그인 배경 */}
-            {loginOpen && (
-                <div className="overlay" onClick={() => setLoginOpen(false)}></div>
-            )}
+      {loginOpen && (
+        <div className="overlay" onClick={() => setLoginOpen(false)}></div>
+      )}
 
-            {/* 🔥 로그인 drawer */}
-            <div className={`login-drawer ${loginOpen ? "open" : ""}`}>
-                <button className="close-btn" onClick={() => setLoginOpen(false)}>✕</button>
-                <h2>Login</h2>
+      {/* 🔥 로그인 drawer */}
+      <div className={`login-drawer ${loginOpen ? "open" : ""}`}>
+        <button className="close-btn" onClick={() => setLoginOpen(false)}>✕</button>
+        <h2>Login</h2>
 
-                <input
-                    type="text"
-                    placeholder="ID"
-                    value={userId}
-                    onChange={(e) => setUserId(e.target.value)}
-                />
+        <input
+          type="text"
+          placeholder="ID"
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
+        />
 
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-                <button className="login-btn" onClick={Login}>로그인</button>
-                <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
-            </div>
+        <button className="login-btn" onClick={Login}>로그인</button>
+        <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
+      </div>
+
+      
 
       {/* 페이지 내용 바뀌는 부분 */}
       <Outlet />
+      {gameOpen && (
+        <div className="game-overlay" onClick={() => setGameOpen(false)}>
+          <div className="game-popup" onClick={(e) => e.stopPropagation()}>
+            <Game />
+            <button onClick={() => setGameOpen(false)}>닫기</button>
+          </div>
+        </div>
+      )}
 
       {/* FOOTER */}
       <footer className="footer">
         <button onClick={() => navigate("/service")}>🎧</button>
         <button>🤖</button>
-        <button>🎮</button>
-        <button>🎯</button>
+        <button onClick={() => setGameOpen(true)}>🎮</button>
       </footer>
     </>
   );
