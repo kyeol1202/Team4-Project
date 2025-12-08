@@ -56,7 +56,7 @@ window.open(url, "_blank");
               {/*1:1 문의*/}
               <div className="text-center mb-10">
                 <button onClick={()=>navigate("/qna")} className="bg-black text-white px-10 py-4 rounded-none hover:bg-gray-900 text-lg tracking-widest">
-                    1:1 문의 바로가기
+                    카톡으로 상담하기
                     </button>
                 </div>
                 {/*카카오톡 채널*/}
