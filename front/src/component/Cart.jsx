@@ -61,7 +61,7 @@ function Cart() {
       <h2 className="font-bold mt-4">선택 총 금액: {total.toLocaleString()}원</h2>
 
       <div className="mt-4 flex gap-2">
-        <button className="flex-1 border py-2 rounded" onClick={() => navigate("/")}>계속 쇼핑하기</button>
+        <button className="flex-1 border py-2 rounded" onClick={() => navigate("/main")}>계속 쇼핑하기</button>
         <button
           className="flex-1 bg-black text-white py-2 rounded"
           onClick={handleCheckout}
