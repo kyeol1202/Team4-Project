@@ -210,7 +210,7 @@ function Main() {
             </div>
 
             <footer className="footer">
-                <button onClick={() => navigate("/customer")}>🎧</button>
+                <button onClick={() => navigate("/service")}>🎧</button>
                 <button>🤖</button>
             </footer>
         </div>
