@@ -117,8 +117,8 @@ function Main() {
                     <ul className="dropdown">
                         <li className="dropdownlist" type="button" onClick={() => navigate("/category")}>베스트셀러</li>
                         <li className="dropdownlist" type="button" onClick={() => navigate("/category2")}>전체상품</li>
-                        <li className="dropdownlist" type="button" onClick={() => navigate("/category3")}>남성향수</li>
-                        <li className="dropdownlist" type="button" onClick={() => navigate("/category4")}>여성향수</li>
+                        <li className="dropdownlist" type="button" onClick={() => navigate("/category3")}>여성향수</li>
+                        <li className="dropdownlist" type="button" onClick={() => navigate("/category4")}>남성향수</li>
                     </ul>
                 </div>
 
