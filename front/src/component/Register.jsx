@@ -28,13 +28,13 @@ function Register() {
     //     return;
     // }
 
-    const response = await fetch("http://192.168.0.224:5173/register", {
+    const response = fetch("http://192.168.0.224:5173/register", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })
     });
 
-    const res = await response.json(); // 🔥 중요
+    const res = response.json(); // 🔥 중요
 
     if (res.exists) {
         alert("중복된 아이디입니다.");
@@ -197,6 +197,5 @@ return (
         </div>
     </>
 )
-
 }
 export default Register;
