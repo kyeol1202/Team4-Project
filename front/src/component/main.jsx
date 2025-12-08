@@ -14,6 +14,9 @@ function Main() {
     const { addToCart } = useCart();
     const { addToWish } = useWish();
     const [open, setOpen] = useState(false);
+    const [p_name, setP_name] = useState("");
+    const [p_price, setP_price] = useState("");
+    const [p_category, setP_category] = useState("");
 
     // 로그인 입력값
     const [userId, setUserId] = useState('');
@@ -58,6 +61,22 @@ function Main() {
             return prev - 1;
         });
     };
+
+    async function product(){
+
+        const userData = {
+            name : p_name ,
+            price : p_price ,
+            category_id : p_category ,
+        };
+
+    const response = await fetch("http://192.168.0.224:8080/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData)
+    })
+
+};
 
     // -------------------------
     // 🔥 로그인 함수(백엔드 연결)
@@ -133,7 +152,27 @@ function Main() {
                                 <button className="popup-close" onClick={() => setOpen(false)}>X</button>
 
                                 <h3 className="popup-title">상품 목록</h3>
-                                <p className="popup-text">여기다가 원하는 기능 추가하면 됩니다.</p>
+                                
+                                <input 
+                                className="popup-item" 
+                                type="text"
+                                 placeholder="상품명 입력"
+                                 onChange={(e) => setP_name(e.target.value)} />
+
+                                <input 
+                                className="popup-item" 
+                                type="text" 
+                                placeholder="가격 입력" 
+                                onChange={(e) => setP_price(e.target.value)} />
+
+                                <input 
+                                className="popup-item" 
+                                type="text" 
+                                placeholder="카테고리 입력" 
+                                onChange={(e) => setP_category(e.target.value)} />
+
+                                <input className="popup-item" type="file" placeholder="이미지 등록" />
+                                <button className="popup-item" onClick={product}>상품 등록하기</button>
                             </div>
                         </div>
                     )}
