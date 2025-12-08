@@ -54,6 +54,17 @@ function Main() {
         }
     }, []);
 
+    const [categoryList, setCategoryList] = useState([]);
+
+    useEffect(() => {
+        async function getCategory() {
+            const res = await fetch("http://192.168.0.224:8080/api/category");
+            const data = await res.json();
+            if (data.success) setCategoryList(data.data);
+        }
+        getCategory();
+    }, []);
+
     const slideRight = () => {
         setIndex((prev) => {
             if (prev >= products.length - visibleCount) return 0;
@@ -68,29 +79,29 @@ function Main() {
         });
     };
 
-    async function product(){
+    async function product() {
 
         const userData = {
-            name : p_name ,
-            price : p_price ,
-            category_id : p_category ,
+            name: p_name,
+            price: p_price,
+            category_id: p_category,
         };
 
-    const response = await fetch("http://192.168.0.224:8080/api/productadd", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userData)
-    })
+        const response = await fetch("http://192.168.0.224:8080/api/productadd", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData)
+        })
 
-    const result = await response.json();
-    if (result.success) {
-        alert("🎉 상품 등록 성공!");
-        navigate('/main');
-    } else {
-        alert("❌ 상품 등록 실패: " + result.message);
-    }
+        const result = await response.json();
+        if (result.success) {
+            alert("🎉 상품 등록 성공!");
+            navigate('/main');
+        } else {
+            alert("❌ 상품 등록 실패: " + result.message);
+        }
 
-};
+    };
 
     // -------------------------
     // 🔥 로그인 함수(백엔드 연결)
@@ -166,24 +177,30 @@ function Main() {
                                 <button className="popup-close" onClick={() => setOpen(false)}>X</button>
 
                                 <h3 className="popup-title">상품 목록</h3>
-                                
-                                <input 
-                                className="popup-item" 
-                                type="text"
-                                 placeholder="상품명 입력"
-                                 onChange={(e) => setP_name(e.target.value)} />
 
-                                <input 
-                                className="popup-item" 
-                                type="text" 
-                                placeholder="가격 입력" 
-                                onChange={(e) => setP_price(e.target.value)} />
+                                <input
+                                    className="popup-item"
+                                    type="text"
+                                    placeholder="상품명 입력"
+                                    onChange={(e) => setP_name(e.target.value)} />
 
-                                <input 
-                                className="popup-item" 
-                                type="text" 
-                                placeholder="카테고리 입력" 
-                                onChange={(e) => setP_category(e.target.value)} />
+                                <input
+                                    className="popup-item"
+                                    type="text"
+                                    placeholder="가격 입력"
+                                    onChange={(e) => setP_price(e.target.value)} />
+
+                                <select
+                                    className="popup-item"
+                                    onChange={(e) => setP_category(e.target.value)}
+                                >
+                                    <option value="">카테고리 선택</option>
+                                    {categoryList.map((item) => (
+                                        <option key={item.category_id} value={item.category_id}>
+                                            {item.name}
+                                        </option>
+                                    ))}
+                                </select>
 
                                 <input className="popup-item" type="file" placeholder="이미지 등록" />
                                 <button className="popup-item" onClick={product}>상품 등록하기</button>
