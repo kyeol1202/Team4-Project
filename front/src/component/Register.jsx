@@ -39,13 +39,13 @@ function Register() {
 
             const res = await response.json();
 
-            if (res.exists) {
-                alert("중복된 아이디입니다.");
-                setIdChecked(false);
-            } else {
-                alert("사용 가능한 아이디입니다.");
-                setIdChecked(true);
-            }
+            // if (res.exists) {
+            //     alert("중복된 아이디입니다.");
+            //     setIdChecked(false);
+            // } else {
+            //     alert("사용 가능한 아이디입니다.");
+            //     setIdChecked(true);
+            // }
         } catch (error) {
             console.error("중복확인 오류:", error);
             alert("서버 오류가 발생했습니다.");
@@ -65,11 +65,11 @@ function Register() {
             return;
         }
 
-        // 아이디 중복확인 체크
-        if (!idChecked) {
-            alert("아이디 중복확인을 해주세요!");
-            return;
-        }
+        // // 아이디 중복확인 체크
+        // if (!idChecked) {
+        //     alert("아이디 중복확인을 해주세요!");
+        //     return;
+        // }
 
         // 비밀번호 일치 확인
         if (pw !== pwCheck) {
@@ -111,7 +111,7 @@ function Register() {
                             setIdChecked(false); // 아이디 변경 시 중복확인 초기화
                         }}
                     />
-                    <button onClick={IdChecked}>중복확인</button>
+                    {/* <button onClick={IdChecked}>중복확인</button> */}
                 </div>
             </div>
 
