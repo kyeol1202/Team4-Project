@@ -13,6 +13,7 @@ function Main() {
     const navigate = useNavigate();
     const { addToCart } = useCart();
     const { addToWish } = useWish();
+    const [open, setOpen] = useState(false);
 
     // 로그인 입력값
     const [userId, setUserId] = useState('');
@@ -33,9 +34,9 @@ function Main() {
 
     // 자동 슬라이드
     useEffect(() => {
-  const timer = setInterval(slideRight, 3000);
-  return () => clearInterval(timer);
-}, []); 
+        const timer = setInterval(slideRight, 3000);
+        return () => clearInterval(timer);
+    }, []);
 
     useEffect(() => {
         const saved = localStorage.getItem("login");
@@ -124,6 +125,18 @@ function Main() {
                 <div className="header-title">Aura</div>
 
                 <div className="header-right">
+                    <button className="open-btn" onClick={() => setOpen(true)}>상품 등록</button>
+
+                    {open && (
+                        <div className="popup-bg">
+                            <div className="popup-box">
+                                <button className="popup-close" onClick={() => setOpen(false)}>X</button>
+
+                                <h3 className="popup-title">상품 목록</h3>
+                                <p className="popup-text">여기다가 원하는 기능 추가하면 됩니다.</p>
+                            </div>
+                        </div>
+                    )}
                     <button
                         onClick={() => {
                             if (login) navigate("/wish");
@@ -209,11 +222,13 @@ function Main() {
             </div>
 
             <footer className="footer">
-                <button onClick={() => navigate("/customer")}>🎧</button>
+                <button onClick={() => navigate("/service")}>🎧</button>
                 <button>🤖</button>
             </footer>
         </div>
     );
+
+
 }
 
 export default Main;
