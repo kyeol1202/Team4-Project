@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useWish } from "../context/WishContext";
-import Game from "./Game";
-import ShootingGame from "./ShootingGame";
+// import Game from "./Game";
+// import ShootingGame from "./ShootingGame";
 
 
 
@@ -96,7 +96,7 @@ function Main() {
         const result = await response.json();
         if (result.success) {
             alert("🎉 상품 등록 성공!");
-            navigate('/main');
+            setOpen(false);
         } else {
             alert("❌ 상품 등록 실패: " + result.message);
         }
