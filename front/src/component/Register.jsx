@@ -28,7 +28,7 @@ function Register() {
             return;
         }
 
-        const res = await fetch("http://192.168.0.224:5173/register", {
+        const res = await fetch("http://192.168.0.224:8080/register", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: id, pw: pw, name:name , email:email , address:address , hbd:hbd})
