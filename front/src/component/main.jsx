@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useWish } from "../context/WishContext";
+import Game from "./Game";
+import ShootingGame from "./ShootingGame";
 
 
 
@@ -13,6 +15,10 @@ function Main() {
     const navigate = useNavigate();
     const { addToCart } = useCart();
     const { addToWish } = useWish();
+
+    //게임
+    const [gameOpen, setGameOpen] = useState(false);
+    const [shootOpen, setShootOpen] = useState(false);
 
     // 로그인 입력값
     const [userId, setUserId] = useState('');
@@ -33,9 +39,9 @@ function Main() {
 
     // 자동 슬라이드
     useEffect(() => {
-  const timer = setInterval(slideRight, 3000);
-  return () => clearInterval(timer);
-}, []); 
+        const timer = setInterval(slideRight, 3000);
+        return () => clearInterval(timer);
+    }, []);
 
     useEffect(() => {
         const saved = localStorage.getItem("login");
@@ -207,11 +213,30 @@ function Main() {
 
                 <button className="login-btn" onClick={Login}>로그인</button>
                 <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
+
+                {gameOpen && (
+                    <div className="game-overlay" onClick={() => setGameOpen(false)}>
+                        <div className="game-popup" onClick={(e) => e.stopPropagation()}>
+                            <Game />
+                            <button onClick={() => setGameOpen(false)}>닫기</button>
+                        </div>
+                    </div>
+                )}
+                {shootOpen && (
+                    <div className="game-overlay" onClick={() => setShootOpen(false)}>
+                        <div className="game-popup" onClick={(e) => e.stopPropagation()}>
+                            <ShootingGame />
+                            <button onClick={() => setShootOpen(false)}>닫기</button>
+                        </div>
+                    </div>
+                )}
             </div>
 
             <footer className="footer">
                 <button onClick={() => navigate("/service")}>🎧</button>
                 <button>🤖</button>
+                <button onClick={() => setGameOpen(true)}>🎮</button>
+                <button onClick={() => setShootOpen(true)}>🎯</button>
             </footer>
         </div>
     );
