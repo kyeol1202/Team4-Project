@@ -2,10 +2,10 @@ import React from 'react';
 
 function ManPerfume() {
   const products = [
-    { id: 1, name: "AuRa Noctivale", img: "https://images.unsplash.com/photo-1588405748880-12d1d2a59d75?w=400&h=400&fit=crop" },
-    { id: 2, name: "AuRa Solivane", img: "https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=400&h=400&fit=crop" },
-    { id: 3, name: "AuRa Freesia", img: "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&h=400&fit=crop" },
-    { id: 4, name: "AuRa Blue", img: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=400&fit=crop" },
+    { id: 1, name: "AuRa ClairVent", img: "/image/AuRa_ClairVent_man.png" },
+    { id: 2, name: "AuRa Noctivale", img: "/image/AuRa_Noctivale_man.png" },
+    { id: 3, name: "AuRa Silvaron", img: "/image/AuRa_Silvaron_man.png" },
+    { id: 4, name: "AuRa Solivane", img: "/image/AuRa_Solivane_man.jpeg" },
   ];
 
   const handleClick = (id) => {
