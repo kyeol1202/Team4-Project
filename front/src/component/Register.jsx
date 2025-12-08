@@ -23,27 +23,26 @@ function Register() {
 
     //아이디중복확인
     const IdChecked = async () => {
-        if (!id) {
-            alert("아이디를 입력해주세요!");
-            return;
-        }
-
-        const res = await fetch("http://192.168.0.224:8080/register", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: id, pw: pw, name:name , email:email , address:address , hbd:hbd})
-        });
-    };
-
-
-    if (res.data.exists) {
-        alert(res.data.message); // "중복된 아이디입니다."
-    } else {
-        alert(res.data.message); // "사용 가능한 아이디입니다."
+    if (!id) {
+        alert("아이디를 입력해주세요!");
+        return;
     }
 
+    const response = await fetch("http://192.168.0.224:5173/register", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+    });
 
+    const res = await response.json(); // 🔥 중요
 
+    if (res.exists) {
+        alert("중복된 아이디입니다.");
+        setIdChecked(false);
+    } else {
+        alert("사용 가능한 아이디입니다.");
+        setIdChecked(true);
+    }
 };
 
 
@@ -56,10 +55,10 @@ function register() {
         alert("필수항목을 입력해주세요");
         return;
     }
-    if (!idChecked) {
-        alert("아이디 중복확인을 해주세요!");
-        return;
-    }
+    // if (!idChecked) {
+    //     alert("아이디 중복확인을 해주세요!");
+    //     return;
+    // }
     if (pw !== pwCheck) {
         alert("비밀번호가 일치하지 않습니다");
         return;
@@ -90,7 +89,7 @@ return (
             <div>아이디</div>
             <div style={{ display: "flex", gap: "10px" }}>
                 <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
-                <button onClick={IdChecked}>중복확인</button>
+                {/* <button onClick={IdChecked}>중복확인</button> */}
             </div>
         </div>
         <div>
@@ -195,5 +194,5 @@ return (
     </>
 )
 
-
+}
 export default Register;

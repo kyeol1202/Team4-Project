@@ -21,6 +21,12 @@ function Main() {
         { id: 6, img: "image/gam" },
     ];
 
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
+
+
+    const products = ["제품 1", "제품 2", "제품 3", "제품 4", "제품 5", "제품 6"];
+
     const visibleCount = 3;
     const cardWidth = 330;
     const gap = 20;
@@ -54,52 +60,9 @@ function Main() {
         });
     };
 
-    // -------------------------
-    // 🔥 로그인 함수(백엔드 연결)
-    // -------------------------
-    async function Login() {
-        if (!userId || !password) {
-            return alert("아이디와 비밀번호를 입력하세요!");
-        }
+    function login() {
 
-        try {
-            const res = await fetch("http://192.168.0.224:8080/api/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    username: userId,
-                    password: password
-                })
-            });
 
-            const data = await res.json();
-            console.log("로그인 응답:", data);
-
-            if (!data.success) {
-                return alert(data.message || "로그인 실패");
-            }
-
-            alert(`${data.user.name}님 환영합니다!`);
-
-            // 로그인 성공 처리
-            localStorage.setItem("login", "true");
-            localStorage.setItem("user", JSON.stringify(data.user));
-
-            setLogin(true);
-            setLoginOpen(false);
-
-            setUserId("");
-            setPassword("");
-
-        } catch (err) {
-            console.error("로그인 오류:", err);
-            alert("서버 오류 발생");
-        }
-    }
-
-    function search() {
-        if (!surcharge.trim()) return alert("검색어를 입력하세요!");
-        navigate(`/search?keyword=${surcharge}`);
     }
 
     return (
@@ -110,15 +73,15 @@ function Main() {
                 <div className="header-left">
                     MENU
                     <ul className="dropdown">
-                        <li className="dropdownlist" type="button" onClick={() => navigate("/category")}>베스트셀러</li>
-                        <li className="dropdownlist" type="button" onClick={() => navigate("/category2")}>전체상품</li>
-                        <li className="dropdownlist" type="button" onClick={() => navigate("/category3")}>남성향수</li>
-                        <li className="dropdownlist" type="button" onClick={() => navigate("/category4")}>여성향수</li>
-                        <li className="dropdownlist" type="button" onClick={() => navigate("/category5")}>향수 기프트 세트</li>
+                        <li className="dropdownlist" type="button">베스트셀러</li>
+                        <li className="dropdownlist" type="button">전체상품</li>
+                        <li className="dropdownlist" type="button">남성향수</li>
+                        <li className="dropdownlist" type="button">여성향수</li>
+                        <li className="dropdownlist" type="button">향수 기프트 세트</li>
                     </ul>
                 </div>
 
-                <div className="header-title">Aura</div>
+                <div className="header-title">AuRa</div>
 
                 <div className="header-right">
                     <button
@@ -186,23 +149,9 @@ function Main() {
                     ✕
                 </button>
                 <h2>Login</h2>
-
-                {/* 🔥 id + Password 입력 */}
-                <input
-                    type="text"
-                    placeholder="ID"
-                    value={userId}
-                    onChange={(e) => setUserId(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-
-                <button className="login-btn" onClick={Login}>로그인</button>
-                <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
+                <input type="text" placeholder="ID" />
+                <input type="password" placeholder="Password" />
+                <button className="login-btn">로그인</button>
             </div>
 
             <footer className="footer">

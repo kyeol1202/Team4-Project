@@ -147,21 +147,21 @@
 
 .slider {
   width: 100%;
-  /* overflow 제거 - 이게 문제였습니다! */
 }
 
-/* 전체 슬라이드 (여자 + 남자 = 2페이지) */
+/* 🔥 전체 슬라이드 (여자 + 남자 = 2페이지) */
 .slider-inner {
   display: flex;
   width: 200%;
   transition: transform 0.7s ease-in-out;
 }
 
-/* 각 페이지 */
+/* 🔥 각 페이지 (중복 제거 후 최종본) */
 .slide {
   width: 100%;
   flex-shrink: 0;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
   min-height: 330px;

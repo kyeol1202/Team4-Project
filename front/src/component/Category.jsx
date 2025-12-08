@@ -91,7 +91,9 @@ function Category() {
                 {index === 0 ? "WOMAN BEST SELLERS" : "MAN BEST SELLERS"}
             </h1>
 
-            {/* 슬라이더 */}
+            {/* =========================== */}
+            {/* 🔥 슬라이더 구조 수정된 부분 */}
+            {/* =========================== */}
             <div className="slider-wrapper">
 
                 <span className="arrow left" onClick={slideLeft}>‹</span>
@@ -100,17 +102,38 @@ function Category() {
                     <div
                         className="slider-inner"
                         style={{
-                            transform: `translateX(-${index * 50}%)`,
+                            transform: `translateX(-${index * 100}%)`,
+                            width: "200%",
+                            display: "flex",
+                            transition: "0.5s ease"
                         }}
                     >
-                        {/* 여자 + 남자 향수 카드 */}
-                        <div className="slide">
+
+                        {/* 페이지 1 : WOMAN */}
+                        <div className="slide-page"
+                            style={{
+                                width: "100%",
+                                display: "flex",
+                                justifyContent: "center",
+                                gap: "20px"
+                            }}
+                        >
                             {woman.map(item => (
                                 <button className="product-card" key={item.product_id}>
                                     <img src={item.img} alt="" className="product-img" />
                                 </button>
                             ))}
+                        </div>
 
+                        {/* 페이지 2 : MAN */}
+                        <div className="slide-page"
+                            style={{
+                                width: "100%",
+                                display: "flex",
+                                justifyContent: "center",
+                                gap: "20px"
+                            }}
+                        >
                             {man.map(item => (
                                 <button className="product-card" key={item.product_id}>
                                     <img src={item.img} alt="" className="product-img" />
@@ -124,8 +147,12 @@ function Category() {
                 <span className="arrow right" onClick={slideRight}>›</span>
 
             </div>
+            {/* =========================== */}
+            {/* 🔥 슬라이더 수정 끝 */}
+            {/* =========================== */}
 
             {loginOpen && <div className="overlay" onClick={() => setLoginOpen(false)} />}
+
         </div>
     );
 }
