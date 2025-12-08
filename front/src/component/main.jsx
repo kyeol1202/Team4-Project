@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useWish } from "../context/WishContext";
+// import Game from "./Game";
+// import ShootingGame from "./ShootingGame";
 
 
 
@@ -14,6 +16,13 @@ function Main() {
     const { addToCart } = useCart();
     const { addToWish } = useWish();
     const [open, setOpen] = useState(false);
+    const [p_name, setP_name] = useState("");
+    const [p_price, setP_price] = useState("");
+    const [p_category, setP_category] = useState("");
+
+    //게임
+    const [gameOpen, setGameOpen] = useState(false);
+    const [shootOpen, setShootOpen] = useState(false);
 
     // 로그인 입력값
     const [userId, setUserId] = useState('');
@@ -45,6 +54,17 @@ function Main() {
         }
     }, []);
 
+    const [categoryList, setCategoryList] = useState([]);
+
+    useEffect(() => {
+        async function getCategory() {
+            const res = await fetch("http://192.168.0.224:8080/api/category");
+            const data = await res.json();
+            if (data.success) setCategoryList(data.data);
+        }
+        getCategory();
+    }, []);
+
     const slideRight = () => {
         setIndex((prev) => {
             if (prev >= products.length - visibleCount) return 0;
@@ -57,6 +77,30 @@ function Main() {
             if (prev === 0) return products.length - visibleCount;
             return prev - 1;
         });
+    };
+
+    async function product() {
+
+        const userData = {
+            name: p_name,
+            price: p_price,
+            category_id: p_category,
+        };
+
+        const response = await fetch("http://192.168.0.224:8080/api/productadd", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData)
+        })
+
+        const result = await response.json();
+        if (result.success) {
+            alert("🎉 상품 등록 성공!");
+            setOpen(false);
+        } else {
+            alert("❌ 상품 등록 실패: " + result.message);
+        }
+
     };
 
     // -------------------------
@@ -133,7 +177,33 @@ function Main() {
                                 <button className="popup-close" onClick={() => setOpen(false)}>X</button>
 
                                 <h3 className="popup-title">상품 목록</h3>
-                                <p className="popup-text">여기다가 원하는 기능 추가하면 됩니다.</p>
+
+                                <input
+                                    className="popup-item"
+                                    type="text"
+                                    placeholder="상품명 입력"
+                                    onChange={(e) => setP_name(e.target.value)} />
+
+                                <input
+                                    className="popup-item"
+                                    type="text"
+                                    placeholder="가격 입력"
+                                    onChange={(e) => setP_price(e.target.value)} />
+
+                                <select
+                                    className="popup-item"
+                                    onChange={(e) => setP_category(e.target.value)}
+                                >
+                                    <option value="">카테고리 선택</option>
+                                    {categoryList.map((item) => (
+                                        <option key={item.category_id} value={item.category_id}>
+                                            {item.name}
+                                        </option>
+                                    ))}
+                                </select>
+
+                                <input className="popup-item" type="file" placeholder="이미지 등록" />
+                                <button className="popup-item" onClick={product}>상품 등록하기</button>
                             </div>
                         </div>
                     )}
@@ -219,11 +289,30 @@ function Main() {
 
                 <button className="login-btn" onClick={Login}>로그인</button>
                 <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
+
+                {gameOpen && (
+                    <div className="game-overlay" onClick={() => setGameOpen(false)}>
+                        <div className="game-popup" onClick={(e) => e.stopPropagation()}>
+                            <Game />
+                            <button onClick={() => setGameOpen(false)}>닫기</button>
+                        </div>
+                    </div>
+                )}
+                {shootOpen && (
+                    <div className="game-overlay" onClick={() => setShootOpen(false)}>
+                        <div className="game-popup" onClick={(e) => e.stopPropagation()}>
+                            <ShootingGame />
+                            <button onClick={() => setShootOpen(false)}>닫기</button>
+                        </div>
+                    </div>
+                )}
             </div>
 
             <footer className="footer">
                 <button onClick={() => navigate("/service")}>🎧</button>
                 <button>🤖</button>
+                <button onClick={() => setGameOpen(true)}>🎮</button>
+                <button onClick={() => setShootOpen(true)}>🎯</button>
             </footer>
         </div>
     );
