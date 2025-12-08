@@ -60,7 +60,7 @@
         return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
       }
 
-      const user = rows[0];
+      const user = rows;
 
       return res.json({
         success: true,
