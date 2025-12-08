@@ -28,22 +28,28 @@ function Register() {
         return;
     }
 
-    const response = await fetch("http://192.168.0.224:5173/register", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id })
-    });
+    try {
+        const response = await fetch("http://192.168.0.224:8080/register", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: id, pw: pw, name:name , email:email , address:address , hbd:hbd })
+        });
 
-    const res = await response.json(); // 🔥 중요
+        const res = await response.json(); // 🔥 fetch는 이렇게 읽어야 함
 
-    if (res.exists) {
-        alert("중복된 아이디입니다.");
-        setIdChecked(false);
-    } else {
-        alert("사용 가능한 아이디입니다.");
-        setIdChecked(true);
+        if (res.exists) {
+            alert(res.message); // "중복된 아이디입니다."
+            // setIdChecked(false);
+        } else {
+            alert(res.message); // "사용 가능한 아이디입니다."
+            // setIdChecked(true);
+        }
+
+    } catch (error) {
+        console.error("중복확인 에러:", error);
     }
 };
+
 
 
 const number3Ref = useRef(null);
