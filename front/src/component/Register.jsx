@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
+
 function Register() {
     const navigate = useNavigate();
     const [id, setId] = useState('');
@@ -18,12 +19,9 @@ function Register() {
         month: "",
         day: ""
     });
+    //hbd >> 생년월일
 
-    const number3Ref = useRef(null);
-
-    // ============================
-    // 🔥 아이디 중복확인 함수 (제대로 위치)
-    // ============================
+    //아이디중복확인
     const IdChecked = async () => {
     if (!id) {
         alert("아이디를 입력해주세요!");
@@ -99,67 +97,64 @@ return (
                 <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
                 {/* <button onClick={IdChecked}>중복확인</button> */}
             </div>
+        </div>
+        <div>
+            <div>비밀번호</div>
+            <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} />
+        </div>
+        <div>
+            <div>비밀번호 확인</div>
+            <input type="password" value={pwCheck} onChange={(e) => setPwCheck(e.target.value)} />
+        </div>
+        <div>
+            <div>성함</div>
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        </div>
+        <div>
+            <div>이메일</div>
+            <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </div>
+        <div>
+            <div>주소</div>
+            <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
+        </div>
 
-            <div>
-                <div>비밀번호</div>
-                <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} />
-            </div>
+        <div>
+            <div>전화번호</div>
+            <div style={{ display: "flex", gap: "5px" }}>
+                <input
+                    type="text"
+                    value={number1}
+                    readOnly
+                    style={{ width: "60px", textAlign: "center" }}
+                />
+                <span>-</span>
 
-            <div>
-                <div>비밀번호 확인</div>
-                <input type="password" value={pwCheck} onChange={(e) => setPwCheck(e.target.value)} />
-            </div>
 
-            <div>
-                <div>성함</div>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-            </div>
+                <input
+                    type="text"
+                    value={number2}
+                    maxLength={4}
+                    onChange={(e) => {
+                        const val = e.target.value.replace(/[^0-9]/g, '');
+                        setNumber2(val);
 
-            <div>
-                <div>이메일</div>
-                <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
-            </div>
+                        if (val.length === 4) {
+                            number3Ref.current?.focus();
+                        }
+                    }}
+                    style={{ width: "80px", textAlign: "center" }}
+                />
+                <span>-</span>
 
-            <div>
-                <div>주소</div>
-                <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
-            </div>
-
-            <div>
-                <div>전화번호</div>
-                <div style={{ display: "flex", gap: "5px" }}>
-                    <input
-                        type="text"
-                        value={number1}
-                        readOnly
-                        style={{ width: "60px", textAlign: "center" }}
-                    />
-                    <span>-</span>
-
-                    <input
-                        type="text"
-                        value={number2}
-                        maxLength={4}
-                        onChange={(e) => {
-                            const val = e.target.value.replace(/[^0-9]/g, '');
-                            setNumber2(val);
-                            if (val.length === 4) {
-                                number3Ref.current?.focus();
-                            }
-                        }}
-                        style={{ width: "80px", textAlign: "center" }}
-                    />
-                    <span>-</span>
-
-                    <input
-                        type="text"
-                        value={number3}
-                        ref={number3Ref}
-                        onChange={(e) => setNumber3(e.target.value.replace(/[^0-9]/g, ''))}
-                        maxLength={4}
-                        style={{ width: "80px", textAlign: "center" }}
-                    />
-                </div>
+                <input
+                    type="text"
+                    value={number3}
+                    ref={number3Ref}
+                    onChange={(e) => setNumber3(e.target.value.replace(/[^0-9]/g, ''))}
+                    maxLength={4}
+                    style={{ width: "80px", textAlign: "center" }}
+                />
             </div>
 
             <div>
@@ -199,19 +194,11 @@ return (
                     </select>
                 </div>
             </div>
-
             <button onClick={() => navigate("/")}>🏡</button>
             <button onClick={register}>회원가입</button>
-<<<<<<< HEAD
-        </>
-    );
-}
-
-=======
         </div>
     </>
 )
 
 }
->>>>>>> develop
 export default Register;
