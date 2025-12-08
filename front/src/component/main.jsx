@@ -76,11 +76,19 @@ function Main() {
             category_id : p_category ,
         };
 
-    const response = await fetch("http://192.168.0.224:8080/api/register", {
+    const response = await fetch("http://192.168.0.224:8080/api/productadd", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData)
     })
+
+    const result = await response.json();
+    if (result.success) {
+        alert("🎉 상품 등록 성공!");
+        navigate('/main');
+    } else {
+        alert("❌ 상품 등록 실패: " + result.message);
+    }
 
 };
 
