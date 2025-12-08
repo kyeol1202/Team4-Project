@@ -8,7 +8,7 @@ import Cart from "./component/Cart";
 import Payment from "./component/Payment";
 import Register from "./component/Register";
 import Wish from "./component/Wish";
-import CustomerService from "./component/CustomerService";
+import Service from "./component/Service";
 import Category from "./component/Category";
 import Category2 from "./component/Category2";
 import Category3 from "./component/Category3";
@@ -46,7 +46,7 @@ function App() {
           <Route path="/payment" element={<Payment />} />{/* 결제 페이지 */}
           <Route path="/register" element={<Register />} />{/* 회원가입 페이지 */}
           <Route path="/wish" element={<Wish />} />{/* 찜 목록 페이지 */}
-          <Route path="/customerservice" element={<CustomerService />} />{/* 고객센터 페이지 */}
+          <Route path="/service" element={<Service />} />{/* 고객센터 페이지 */}
           <Route path="/mypage" element={<Mypage />} />{/* 마이페이지 */}
           <Route path="/orderdetail" element={<OrderDetail />} />{/* 주문상세페이지 */}
           <Route path="/edituserinfo" element={<EditUserInfo />} />{/* 회원정보수정페이지 */}   
