@@ -55,7 +55,10 @@ function Category2() {
           <img src={products[4].img} alt={products[4].name} style={styles.circleImg} />
         </div>
         
-        <div style={styles.titleBox}>
+        <div 
+          style={styles.titleBox}
+          onClick={() => window.location.href = '/'}
+        >
           <h1 style={styles.allTitle}>Perfume</h1>
         </div>
         
@@ -124,6 +127,8 @@ const styles = {
     backgroundColor: '#e8e8e8',
     padding: '30px 60px',
     borderRadius: '8px',
+    cursor: 'pointer',
+    transition: '0.3s',
   },
   allTitle: {
     fontSize: '36px',
