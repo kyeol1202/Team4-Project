@@ -125,14 +125,14 @@ function Main() {
                 <div className="header-title">Aura</div>
 
                 <div className="header-right">
-                    <button className="open-btn" onClick={() => setOpen(true)}>팝업 열기</button>
+                    <button className="open-btn" onClick={() => setOpen(true)}>상품 등록</button>
 
                     {open && (
                         <div className="popup-bg">
                             <div className="popup-box">
                                 <button className="popup-close" onClick={() => setOpen(false)}>X</button>
 
-                                <h3 className="popup-title">팝업창입니다 👍</h3>
+                                <h3 className="popup-title">상품 목록</h3>
                                 <p className="popup-text">여기다가 원하는 기능 추가하면 됩니다.</p>
                             </div>
                         </div>

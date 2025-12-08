@@ -414,11 +414,11 @@
   cursor: pointer;
   border: none;
   background-color: #2196f3;
-  color: #fff;
+  color: #4b4b4b;
   font-size: 15px;
 }
 
 .open-btn:hover {
-  background-color: #0f7ad0;
+  background-color: #ffffff;
 }
   
