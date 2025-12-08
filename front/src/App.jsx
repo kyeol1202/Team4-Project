@@ -47,7 +47,6 @@ function App() {
               <Route path="/service" element={<Service />} />
               <Route path="/qna" element={<QnaPage />} />
               <Route path="/mypage" element={<Mypage />} />
-
               <Route path="/orderdetail" element={<OrderDetail />} />
               <Route path="/edituserinfo" element={<EditUserInfo />} />
               <Route path="/product/:id" element={<ProductDetail />} />
