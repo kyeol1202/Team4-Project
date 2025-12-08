@@ -138,15 +138,33 @@ function Layout() {
       </header>
 
       {/* 로그인 drawer */}
-      {loginOpen && (
-        <div className="login-drawer open">
-          <button onClick={() => setLoginOpen(false)}>닫기</button>
-          <input type="text" placeholder="ID" value={userId} onChange={(e) => setUserId(e.target.value)} />
-          <input type="password" placeholder="PW" value={password} onChange={(e) => setPassword(e.target.value)} />
-          <button onClick={Login}>로그인</button>
-          <button onClick={() => navigate("/register")}>회원가입</button>
-        </div>
-      )}
+      {/* 🔥 로그인 배경 */}
+            {loginOpen && (
+                <div className="overlay" onClick={() => setLoginOpen(false)}></div>
+            )}
+
+            {/* 🔥 로그인 drawer */}
+            <div className={`login-drawer ${loginOpen ? "open" : ""}`}>
+                <button className="close-btn" onClick={() => setLoginOpen(false)}>✕</button>
+                <h2>Login</h2>
+
+                <input
+                    type="text"
+                    placeholder="ID"
+                    value={userId}
+                    onChange={(e) => setUserId(e.target.value)}
+                />
+
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+
+                <button className="login-btn" onClick={Login}>로그인</button>
+                <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
+            </div>
 
       {/* 페이지 내용 바뀌는 부분 */}
       <Outlet />
