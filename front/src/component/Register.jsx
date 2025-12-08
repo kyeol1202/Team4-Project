@@ -39,13 +39,13 @@ function Register() {
 
             const res = await response.json();
 
-            // if (res.exists) {
-            //     alert("중복된 아이디입니다.");
-            //     setIdChecked(false);
-            // } else {
-            //     alert("사용 가능한 아이디입니다.");
-            //     setIdChecked(true);
-            // }
+            if (res.exists) {
+                alert("중복된 아이디입니다.");
+                setIdChecked(false);
+            } else {
+                alert("사용 가능한 아이디입니다.");
+                setIdChecked(true);
+            }
         } catch (error) {
             console.error("중복확인 오류:", error);
             alert("서버 오류가 발생했습니다.");
@@ -55,7 +55,7 @@ function Register() {
     // ============================
     // 🔥 회원가입 함수
     // ============================
-    function register() {
+    async function register() {
         const fullNumber = `${number1}${number2}${number3}`;
 
         // 필수항목 체크 (생년월일 제대로 확인)
@@ -76,6 +76,7 @@ function Register() {
             alert("비밀번호가 일치하지 않습니다");
             return;
         }
+        const birth = `${hbd.year}-${String(hbd.month).padStart(2, '0')}-${String(hbd.day).padStart(2,'0')}`;
 
         // 회원정보 저장
         const userData = {
@@ -85,14 +86,24 @@ function Register() {
             email: email,
             address: address,
             number: fullNumber,
-            hbd: hbd
+            hbd: birth
         };
 
-        localStorage.setItem("user", JSON.stringify(userData));
-        alert("회원가입 완료");
-        navigate('/main');
-    }
+        const response = await fetch("http://192.168.0.224:8080/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData)
+        });
 
+        const result = await response.json();
+
+        if (result.success) {
+            alert("🎉회원가입 성공!");
+            navigate('/main');
+        } else {
+            alert("❌회원가입 실패: " + result.message);
+        }
+    
     // ============================
     // JSX 반환
     // ============================
@@ -111,7 +122,7 @@ function Register() {
                             setIdChecked(false); // 아이디 변경 시 중복확인 초기화
                         }}
                     />
-                    {/* <button onClick={IdChecked}>중복확인</button> */}
+                    <button onClick={IdChecked}>중복확인</button>
                 </div>
             </div>
 
@@ -220,5 +231,5 @@ function Register() {
         </>
     );
 }
-
+}
 export default Register;
