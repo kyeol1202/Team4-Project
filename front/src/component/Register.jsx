@@ -25,6 +25,7 @@ function Register() {
     // 🔥 아이디 중복확인 함수 (제대로 위치)
     // ============================
     const IdChecked = async () => {
+<<<<<<< HEAD
         if (!id) {
             alert("아이디를 입력해주세요!");
             return;
@@ -113,6 +114,81 @@ function Register() {
                     />
                     <button onClick={IdChecked}>중복확인</button>
                 </div>
+=======
+    if (!id) {
+        alert("아이디를 입력해주세요!");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://192.168.0.224:8080/register", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: id, pw: pw, name:name , email:email , address:address , hbd:hbd })
+        });
+
+        const res = await response.json(); // 🔥 fetch는 이렇게 읽어야 함
+
+        if (res.exists) {
+            alert(res.message); // "중복된 아이디입니다."
+            // setIdChecked(false);
+        } else {
+            alert(res.message); // "사용 가능한 아이디입니다."
+            // setIdChecked(true);
+        }
+
+    } catch (error) {
+        console.error("중복확인 에러:", error);
+    }
+};
+
+
+
+const number3Ref = useRef(null);
+
+function register() {
+
+    const fullNumber = `${number1}${number2}${number3}`;
+    if (!id || !pw || !name || !email || !address || !number2 || !number3 || !hbd) { //필수항목이 비어있을 때
+        alert("필수항목을 입력해주세요");
+        return;
+    }
+    // if (!idChecked) {
+    //     alert("아이디 중복확인을 해주세요!");
+    //     return;
+    // }
+    if (pw !== pwCheck) {
+        alert("비밀번호가 일치하지 않습니다");
+        return;
+    }
+
+    //LocalStorage에 저장
+    localStorage.setItem('id', id);
+    localStorage.setItem('pw', pw);
+    localStorage.setItem('name', name);
+    localStorage.setItem('email', email);
+    localStorage.setItem('address', address);
+    localStorage.setItem('number', fullNumber);
+    localStorage.setItem('hbd', hbd);
+
+    alert("회원가입 완료")
+
+    //회원가입 후 메인페이지로 이동
+    navigate('/main');
+}
+
+
+//회원가입
+return (
+    <>
+        <h2>회원가입</h2>
+
+        <div>
+            <div>아이디</div>
+            <div style={{ display: "flex", gap: "10px" }}>
+                <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
+                {/* <button onClick={IdChecked}>중복확인</button> */}
+>>>>>>> develop
             </div>
 
             <div>
@@ -217,8 +293,16 @@ function Register() {
 
             <button onClick={() => navigate("/")}>🏡</button>
             <button onClick={register}>회원가입</button>
+<<<<<<< HEAD
         </>
     );
 }
 
+=======
+        </div>
+    </>
+)
+
+}
+>>>>>>> develop
 export default Register;
