@@ -87,6 +87,19 @@
   color: white;
   transform: translateY(-50%) scale(1.1);
 }
+.product-name {
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.product-desc {
+  font-size: 14px;
+  color: #555;
+  margin-top: 6px;
+}
+
+
 
 .arrow.left  { left: 15px; }
 .arrow.right { right: 15px; }
