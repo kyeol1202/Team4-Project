@@ -188,16 +188,24 @@ app.get("/api/products/man", async (req, res) => {
   }
 });
 
-// 🔥 상품 상세
+// 🔥 상품 상세 (단 하나만 존재해야 함)
 app.get("/api/products/:id", async (req, res) => {
-  const { id } = req.params;
+  const id = req.params.id;
 
   try {
-    const rows = await pool.query("SELECT * FROM product WHERE product_id=?", [id]);
-    res.json({ success: true, data: rows[0] });
+    const rows = await pool.query(
+      "SELECT * FROM product WHERE product_id = ?",
+      [id]
+    );
+
+    if (rows[0].length === 0) {
+      return res.json({ success: false, message: "상품 없음" });
+    }
+
+    res.json({ success: true, data: rows[0][0] }); // << 여기!
   } catch (err) {
-    console.error("상품 상세 오류:", err.message);
-    res.status(500).json({ success: false });
+    console.error(err);
+    res.status(500).json({ success: false, message: "DB 오류" });
   }
 });
 
