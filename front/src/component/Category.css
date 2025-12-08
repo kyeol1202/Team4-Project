@@ -1,210 +1,92 @@
-/* 기본 글꼴 Dior 스타일 */
-* {
-  font-family: "Didot", "Playfair Display", serif;
-  letter-spacing: 0.5px;
-  box-sizing: border-box;
-}
-
-.page {
-  background: #ffffff;
-  color: #000000;
-}
-
-/* HEADER */
-.header {
-  height: 110px;
-  background: #ffffff;
-  border-bottom: 1px solid #e6e6e6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-/* MENU 버튼 */
-.header-left {
-  position: absolute;
-  top: 30px;
-  left: 10px;
-  padding: 20px 25px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 300;
-  transition: 0.3s;
-}
-.header-left:hover {
-  background: #f1f1f1;
-}
-
-/* 드롭다운 메뉴 */
-.dropdown {
-  position: absolute;
-  top: 42px;
-  left: 0;
-  width: 180px;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 12px 0;
-  list-style: none;
-
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(10px);
-  pointer-events: none;
-
-  transition: 0.35s;
-}
-
-.header-left:hover .dropdown {
-  max-height: 350px;
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.dropdownlist {
-  padding: 10px 18px;
-  margin-top: 10px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: 0.25s;
-}
-.dropdownlist:hover {
-  background: #f3f3f3;
-}
-
-/* 브랜드 로고 */
-.header-title {
-  font-size: 42px;
-  font-weight: 300;
-  letter-spacing: 5px;
-}
-
-/* Icons */
-.header-right {
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  display: flex;
-  gap: 16px;
-}
-.header-right button {
-  background: none;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-}
-.header-right button:hover {
-  opacity: 0.6;
-}
-
-/* 검색창 */
-.search-box {
-  width: 330px;
-  margin: 30px auto 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.search-box input {
-  width: 85%;
-  padding: 12px 15px;
-  border-radius: 6px;
-  border: 1px solid #dcdcdc;
-  background: #fafafa;
-}
-.search-box input:focus {
-  border-color: #000;
-}
-.search-box button.search {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-/* SECTION TITLE */
-.section-title {
-  text-align: center;
-  margin-top: 60px;
-  font-size: 30px;
-  letter-spacing: 2px;
-}
-
-/* 🎯 슬라이더 */
+/* 슬라이더 전체 */
 .slider-wrapper {
   width: 100%;
-  max-width: 1100px;
-  margin: 40px auto;
+  max-width: 1200px;        /* 조금 더 넉넉하게 */
+  margin: 60px auto;
   position: relative;
-  overflow: hidden;
-  min-height: 350px;
+  overflow: hidden;         /* 이게 핵심1 */
+  padding: 0 50px;          /* 좌우 여유 공간 → 화살표랑 이미지 안 잘림 */
+  box-sizing: border-box;
 }
 
 .slider {
   width: 100%;
+  overflow: hidden;         /* 이게 핵심2 */
 }
 
-/* 🔥 전체 슬라이드 (여자 + 남자 = 2페이지) */
+/* 너가 쓰는 그대로 유지 */
 .slider-inner {
   display: flex;
   width: 200%;
   transition: transform 0.7s ease-in-out;
-}
+  /* transform은 JS에서 index * 53%로 그대로 써도 됨 */
+} 
 
-/* 🔥 각 페이지 (중복 제거 후 최종본) */
-.slide {
-  width: 100%;
+/* 각 페이지 */
+.slide-page {
+  width: 50%;               /* 200% 중 절반 = 한 페이지 */
   flex-shrink: 0;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  min-height: 330px;
+  justify-content: center;  /* 진짜 정중앙 */
+  align-items: center;
+  gap: 35px;                /* 20px → 35px로 살짝 넉넉히 */
+  padding: 20px 0;
 }
 
 /* 카드 */
 .product-card {
-  width: 280px;
-  height: 330px;
-  border: 1px solid #e3e3e3;
+  width: 290px;             /* 살짝 키워서 여유롭게 */
+  height: 390px;
   background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  overflow: hidden;         /* 이미지 삐져나감 방지 */
   cursor: pointer;
-  transition: 0.3s;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: all 0.4s ease;
+  flex-shrink: 0;           /* 이거 추가 필수! */
 }
 
 .product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.09);
 }
 
+/* 이미지 – 이게 진짜 핵심 */
 .product-card img {
   width: 100%;
-  height: 240px;
-  min-height: 240px;
-  object-fit: cover;
-  background: #f7f7f7;
-  display: block;
+  height: 100%;
+  object-fit: contain;           /* 비율 유지 + 통째로 보임 */
+  object-position: center;
+  background: #fdfdfd;
+  padding: 30px;                 /* 안쪽 여백 → 더 고급스러워 보이고 절대 안 잘림 */
+  box-sizing: border-box;
 }
 
-/* 화살표 */
+/* 화살표 (이제 안 잘리고 예쁘게 보임) */
 .arrow {
   position: absolute;
-  top: 45%;
-  font-size: 36px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: 0.3s;
-  z-index: 10;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.12);
 }
-.arrow.left { left: -40px; }
-.arrow.right { right: -40px; }
-.arrow:hover { opacity: 0.5; }
 
+.arrow:hover {
+  background: #000;
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.arrow.left  { left: 15px; }
+.arrow.right { right: 15px; }
