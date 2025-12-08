@@ -14,27 +14,36 @@ function Category() {
     }, []);
 
     // ============================
-    // 🔥 woman, man을 state로 변경
+    // 🔥 테스트용 이미지 데이터 (베스트 3개씩)
     // ============================
-    const [woman, setWoman] = useState([]);
-    const [man, setMan] = useState([]);
+    const [woman, setWoman] = useState([
+        { product_id: 1, name: "AuRa Primeveil", img: "/image/per1.jpeg" },
+        { product_id: 2, name: "AuRa Elenique", img: "/image/per2.jpeg" },
+        { product_id: 3, name: "AuRa Vorelle", img: "/image/per3.jpeg" },
+    ]);
+
+    const [man, setMan] = useState([
+        { product_id: 5, name: "AuRa Noctivale", img: "/image/per5.jpeg" },
+        { product_id: 6, name: "AuRa Solivane", img: "/image/per6.jpeg" },
+        { product_id: 7, name: "AuRa Freesia", img: "/image/per7.jpeg" },
+    ]);
 
     // ============================
-    // 🔥 DB에서 데이터 가져오는 useEffect 추가
+    // 🔥 DB 연동이 필요하면 아래 주석 해제
     // ============================
-    useEffect(() => {
-        fetch("http://192.168.0.224:8080/api/products/woman")
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) setWoman(data.data);
-            });
+    // useEffect(() => {
+    //     fetch("http://192.168.0.224:8080/api/products/woman")
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             if (data.success) setWoman(data.data);
+    //         });
 
-        fetch("http://192.168.0.224:8080/api/products/man")
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) setMan(data.data);
-            });
-    }, []);
+    //     fetch("http://192.168.0.224:8080/api/products/man")
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             if (data.success) setMan(data.data);
+    //         });
+    // }, []);
 
     // 페이지 2개 (여자 / 남자)
     const slides = [woman, man];
@@ -91,9 +100,7 @@ function Category() {
                 {index === 0 ? "WOMAN BEST SELLERS" : "MAN BEST SELLERS"}
             </h1>
 
-            {/* =========================== */}
-            {/* 🔥 슬라이더 구조 수정된 부분 */}
-            {/* =========================== */}
+            {/* 슬라이더 */}
             <div className="slider-wrapper">
 
                 <span className="arrow left" onClick={slideLeft}>‹</span>
@@ -119,8 +126,12 @@ function Category() {
                             }}
                         >
                             {woman.map(item => (
-                                <button className="product-card" key={item.product_id}>
-                                    <img src={item.img} alt="" className="product-img" />
+                                <button 
+                                    className="product-card" 
+                                    key={item.product_id}
+                                    onClick={() => navigate(`/product/${item.product_id}`)}
+                                >
+                                    <img src={item.img} alt={item.name} className="product-img" />
                                 </button>
                             ))}
                         </div>
@@ -135,8 +146,12 @@ function Category() {
                             }}
                         >
                             {man.map(item => (
-                                <button className="product-card" key={item.product_id}>
-                                    <img src={item.img} alt="" className="product-img" />
+                                <button 
+                                    className="product-card" 
+                                    key={item.product_id}
+                                    onClick={() => navigate(`/product/${item.product_id}`)}
+                                >
+                                    <img src={item.img} alt={item.name} className="product-img" />
                                 </button>
                             ))}
                         </div>
@@ -147,9 +162,6 @@ function Category() {
                 <span className="arrow right" onClick={slideRight}>›</span>
 
             </div>
-            {/* =========================== */}
-            {/* 🔥 슬라이더 수정 끝 */}
-            {/* =========================== */}
 
             {loginOpen && <div className="overlay" onClick={() => setLoginOpen(false)} />}
 
