@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 function Category2() {
+  const navigate = useNavigate();
   const products = [
     { id: 1, name: "AuRa Noverin", img: "/image/AuRa_Noverin_woman.png" },
     { id: 2, name: "AuRa Velese", img: "/image/AuRa_Velese_woman.png" },
@@ -13,7 +15,7 @@ function Category2() {
     { id: 9, name: "AuRa Solivane", img: "/image/AuRa_Solivane_man.jpeg" },
   ];
 
-  const handleClick = (id) => {
+ const handleClick = (id) => {
     alert(`Product ${id} clicked! (Navigation would happen here)`);
   };
 
