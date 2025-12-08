@@ -25,96 +25,6 @@ function Register() {
     // 🔥 아이디 중복확인 함수 (제대로 위치)
     // ============================
     const IdChecked = async () => {
-<<<<<<< HEAD
-        if (!id) {
-            alert("아이디를 입력해주세요!");
-            return;
-        }
-
-        try {
-            const response = await fetch("http://192.168.0.224:8080/api/check-id", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id })
-            });
-
-            const res = await response.json();
-
-            if (res.exists) {
-                alert("중복된 아이디입니다.");
-                setIdChecked(false);
-            } else {
-                alert("사용 가능한 아이디입니다.");
-                setIdChecked(true);
-            }
-        } catch (error) {
-            console.error("중복확인 오류:", error);
-            alert("서버 오류가 발생했습니다.");
-        }
-    };
-
-    // ============================
-    // 🔥 회원가입 함수
-    // ============================
-    function register() {
-        const fullNumber = `${number1}${number2}${number3}`;
-        
-        // 필수항목 체크 (생년월일 제대로 확인)
-        if (!id || !pw || !name || !email || !address || !number2 || !number3 
-            || !hbd.year || !hbd.month || !hbd.day) {
-            alert("필수항목을 입력해주세요");
-            return;
-        }
-
-        // 아이디 중복확인 체크
-        if (!idChecked) {
-            alert("아이디 중복확인을 해주세요!");
-            return;
-        }
-
-        // 비밀번호 일치 확인
-        if (pw !== pwCheck) {
-            alert("비밀번호가 일치하지 않습니다");
-            return;
-        }
-
-        // 회원정보 저장
-        const userData = {
-            id: id,
-            pw: pw,
-            name: name,
-            email: email,
-            address: address,
-            number: fullNumber,
-            hbd: hbd
-        };
-
-        localStorage.setItem("user", JSON.stringify(userData));
-        alert("회원가입 완료");
-        navigate('/main');
-    }
-
-    // ============================
-    // JSX 반환
-    // ============================
-    return (
-        <>
-            <h2>회원가입</h2>
-
-            <div>
-                <div>아이디</div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <input 
-                        type="text" 
-                        value={id} 
-                        onChange={(e) => {
-                            setId(e.target.value);
-                            setIdChecked(false); // 아이디 변경 시 중복확인 초기화
-                        }} 
-                    />
-                    <button onClick={IdChecked}>중복확인</button>
-                </div>
-=======
     if (!id) {
         alert("아이디를 입력해주세요!");
         return;
@@ -188,7 +98,6 @@ return (
             <div style={{ display: "flex", gap: "10px" }}>
                 <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
                 {/* <button onClick={IdChecked}>중복확인</button> */}
->>>>>>> develop
             </div>
 
             <div>

@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-// import { useCart } from "../context/CartContext";
-// import { useWish } from "../context/WishContext";
-=======
 import { useCart } from "../context/CartContext";
 import { useWish } from "../context/WishContext";
->>>>>>> develop
 
 
 
@@ -16,13 +11,8 @@ function Main() {
     const [index, setIndex] = useState(0);
     const [surcharge, setSurcharge] = useState('');
     const navigate = useNavigate();
-<<<<<<< HEAD
-    // const { addToCart } = useCart();
-    // const { addToWish } = useWish();
-=======
     const { addToCart } = useCart();
     const { addToWish } = useWish();
->>>>>>> develop
 
     // 로그인 입력값
     const [userId, setUserId] = useState('');
