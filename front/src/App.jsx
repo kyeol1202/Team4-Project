@@ -20,6 +20,7 @@ import Mypage from "./component/Mypage";
 import Search from "./component/search/search";
 import OrderDetail from "./component/OrderDetail";
 import EditUserInfo from "./component/EditUserInfo";
+import ProductDetail from "./component/ProductDetail";
 
 function App() {
   return (
