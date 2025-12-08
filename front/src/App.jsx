@@ -19,6 +19,7 @@ import OrderDetail from "./component/OrderDetail";
 import EditUserInfo from "./component/EditUserInfo";
 
 
+
 function App() {
   return (
 
@@ -49,7 +50,7 @@ function App() {
           <Route path="/service" element={<Service />} />{/* 고객센터 페이지 */}
           <Route path="/mypage" element={<Mypage />} />{/* 마이페이지 */}
           <Route path="/orderdetail" element={<OrderDetail />} />{/* 주문상세페이지 */}
-          <Route path="/edituserinfo" element={<EditUserInfo />} />{/* 회원정보수정페이지 */}   
+          <Route path="/edituserinfo" element={<EditUserInfo />} />{/* 회원정보수정페이지 */}  
         </Routes>
       </BrowserRouter>
       </WishProvider>

@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 function Category2() {
+  const navigate = useNavigate();
   const products = [
     { id: 1, name: "AuRa Primeveil", img: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=400&fit=crop" },
     { id: 2, name: "AuRa Elenique", img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&h=400&fit=crop" },
@@ -13,7 +15,7 @@ function Category2() {
     { id: 9, name: "AuRa Rose", img: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=400&h=400&fit=crop" },
   ];
 
-  const handleClick = (id) => {
+ const handleClick = (id) => {
     alert(`Product ${id} clicked! (Navigation would happen here)`);
   };
 
