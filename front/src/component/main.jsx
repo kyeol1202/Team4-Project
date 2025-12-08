@@ -15,6 +15,10 @@ function Main() {
     const navigate = useNavigate();
     const { addToCart } = useCart();
     const { addToWish } = useWish();
+    const [open, setOpen] = useState(false);
+    const [p_name, setP_name] = useState("");
+    const [p_price, setP_price] = useState("");
+    const [p_category, setP_category] = useState("");
 
     //게임
     const [gameOpen, setGameOpen] = useState(false);
@@ -63,6 +67,22 @@ function Main() {
             return prev - 1;
         });
     };
+
+    async function product(){
+
+        const userData = {
+            name : p_name ,
+            price : p_price ,
+            category_id : p_category ,
+        };
+
+    const response = await fetch("http://192.168.0.224:8080/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData)
+    })
+
+};
 
     // -------------------------
     // 🔥 로그인 함수(백엔드 연결)
@@ -124,13 +144,44 @@ function Main() {
                         <li className="dropdownlist" type="button" onClick={() => navigate("/category2")}>전체상품</li>
                         <li className="dropdownlist" type="button" onClick={() => navigate("/category3")}>남성향수</li>
                         <li className="dropdownlist" type="button" onClick={() => navigate("/category4")}>여성향수</li>
-                        <li className="dropdownlist" type="button" onClick={() => navigate("/category5")}>향수 기프트 세트</li>
                     </ul>
                 </div>
 
                 <div className="header-title">Aura</div>
 
                 <div className="header-right">
+                    <button className="open-btn" onClick={() => setOpen(true)}>상품 등록</button>
+
+                    {open && (
+                        <div className="popup-bg">
+                            <div className="popup-box">
+                                <button className="popup-close" onClick={() => setOpen(false)}>X</button>
+
+                                <h3 className="popup-title">상품 목록</h3>
+                                
+                                <input 
+                                className="popup-item" 
+                                type="text"
+                                 placeholder="상품명 입력"
+                                 onChange={(e) => setP_name(e.target.value)} />
+
+                                <input 
+                                className="popup-item" 
+                                type="text" 
+                                placeholder="가격 입력" 
+                                onChange={(e) => setP_price(e.target.value)} />
+
+                                <input 
+                                className="popup-item" 
+                                type="text" 
+                                placeholder="카테고리 입력" 
+                                onChange={(e) => setP_category(e.target.value)} />
+
+                                <input className="popup-item" type="file" placeholder="이미지 등록" />
+                                <button className="popup-item" onClick={product}>상품 등록하기</button>
+                            </div>
+                        </div>
+                    )}
                     <button
                         onClick={() => {
                             if (login) navigate("/wish");
@@ -240,6 +291,8 @@ function Main() {
             </footer>
         </div>
     );
+
+
 }
 
 export default Main;

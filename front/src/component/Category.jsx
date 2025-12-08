@@ -19,7 +19,7 @@ function Category() {
     // 🔥 테스트용 이미지 데이터 (베스트 3개씩)
     // ============================
     const [woman, setWoman] = useState([
-        { product_id: 1, name: "AuRa Primeveil", img: "/image/jumg2.jpg" },
+        { product_id: 1, name: "AuRa Primeveil", img: "/image/AuRa Elenque.jpeg" },
         { product_id: 2, name: "AuRa Elenique", img: "/image/per2.jpeg" },
         { product_id: 3, name: "AuRa Vorelle", img: "/image/per3.jpeg" },
     ]);
@@ -70,7 +70,6 @@ function Category() {
                         <li className="dropdownlist" onClick={() => navigate("/category2")}>전체상품</li>
                         <li className="dropdownlist" onClick={() => navigate("/category3")}>남성향수</li>
                         <li className="dropdownlist" onClick={() => navigate("/category4")}>여성향수</li>
-                        <li className="dropdownlist" onClick={() => navigate("/category5")}>향수 기프트 세트</li>
                     </ul>
                 </div>
 
