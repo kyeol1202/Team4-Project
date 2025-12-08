@@ -1,56 +1,75 @@
 import { useCart } from "../context/CartContext";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const { cart, removeFromCart, updateQty } = useCart();
+  const navigate = useNavigate();
+
+  // 선택 상태 저장
+  const [selected, setSelected] = useState([]);
+
+  const toggleSelect = (id) => {
+    setSelected(prev =>
+      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+    );
+  };
 
   const total = useMemo(
-    () => cart.reduce((sum, item) => sum + item.price * item.qty, 0),
-    [cart]
+    () => cart
+      .filter(item => selected.includes(item.id))
+      .reduce((sum, item) => sum + item.price * item.qty, 0),
+    [cart, selected]
   );
 
-  const handleQtyChange = (id, value) => {
-    const qty = Math.max(1, Number(value) || 1); // 최소 1, NaN 방지
-    updateQty(id, qty);
+  const handleCheckout = () => {
+    if (!selected.length) return alert("구매할 상품을 선택하세요.");
+
+    const selectedItems = cart.filter(item => selected.includes(item.id));
+    navigate("/payment", { state: { items: selectedItems, total } });
   };
 
   return (
     <div>
       <h1>장바구니</h1>
+
       {cart.length === 0 && <p>장바구니가 비어 있습니다.</p>}
 
+      <button onClick={() => setSelected(cart.map(item => item.id))}>전체 선택</button>
+      <button onClick={() => setSelected([])}>전체 해제</button>
+
       {cart.map(item => (
-        <div key={item.id}>
-          <h3>{item.name}</h3>
-          <p>{item.price.toLocaleString()}원</p>
-
-          <button onClick={() => updateQty(item.id, item.qty - 1)} disabled={item.qty <= 1}>
-            -
-          </button>
-
+        <div key={item.id} style={{ display:"flex", alignItems:"center", gap:"10px", border:"1px solid #ddd", padding:"10px", margin:"10px 0" }}>
           <input
-            type="number"
-            value={item.qty}
-            min="1"
-            onChange={e => handleQtyChange(item.id, e.target.value)}
-            style={{ width: "50px", textAlign: "center" }}
+            type="checkbox"
+            checked={selected.includes(item.id)}
+            onChange={() => toggleSelect(item.id)}
           />
 
-          <button onClick={() => updateQty(item.id, item.qty + 1)}>+</button>
+          <div style={{ flex:1 }}>
+            <h3>{item.name}</h3>
+            <p>{item.price.toLocaleString()}원</p>
+          </div>
 
-          <button onClick={() => confirm("삭제할까요?") && removeFromCart(item.id)}>
-            삭제
-          </button>
+          <div>
+            <button onClick={() => updateQty(item.id, item.qty - 1)} disabled={item.qty <= 1}>-</button>
+            <span>{item.qty}</span>
+            <button onClick={() => updateQty(item.id, item.qty + 1)}>+</button>
+          </div>
+
+          <button onClick={() => removeFromCart(item.id)}>삭제</button>
         </div>
       ))}
 
-      <h2>총 금액: {total.toLocaleString()}원</h2>
-      <button disabled={!cart.length} onClick={() => alert("결제 페이지 이동!")}>
-        결제하기
-      </button>
+      <h2>선택 총 금액: {total.toLocaleString()}원</h2>
+
+      <button onClick={() => navigate("/shop")}>계속 쇼핑하기</button>
+      <button onClick={handleCheckout}>선택 상품 결제하기</button>
     </div>
   );
 }
 
 export default Cart;
+
+
 
