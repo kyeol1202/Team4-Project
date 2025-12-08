@@ -21,12 +21,12 @@ function Register() {
     });
     //hbd >> 생년월일
 
-    //아이디중복확인
-    const IdChecked = async () => {
-    if (!id) {
-        alert("아이디를 입력해주세요!");
-        return;
-    }
+    // //아이디중복확인
+    // const IdChecked = async () => {
+    // if (!id) {
+    //     alert("아이디를 입력해주세요!");
+    //     return;
+    // }
 
     const response = await fetch("http://192.168.0.224:5173/register", {
         method: 'POST',
@@ -64,14 +64,18 @@ function register() {
         return;
     }
 
-    //LocalStorage에 저장
-    localStorage.setItem('id', id);
-    localStorage.setItem('pw', pw);
-    localStorage.setItem('name', name);
-    localStorage.setItem('email', email);
-    localStorage.setItem('address', address);
-    localStorage.setItem('number', fullNumber);
-    localStorage.setItem('hbd', hbd);
+    // LocalStorage에 객체로 저장
+    const userData = {
+    id : id,
+    pw : pw,
+    name : name,
+    email : email,
+    address : address,
+    number: fullNumber,
+    hbd : hbd
+};
+
+localStorage.setItem("user", JSON.stringify(userData));
 
     alert("회원가입 완료")
 
