@@ -11,7 +11,7 @@ export function CartProvider({ children }) {
     }
   });
 
-  // 저장 과도 호출 방지 (200~300ms debounce 추천)
+  // debounce로 localStorage 저장
   useEffect(() => {
     const timer = setTimeout(() => {
       localStorage.setItem("cart", JSON.stringify(cart));
@@ -36,11 +36,11 @@ export function CartProvider({ children }) {
   };
 
   const updateQty = (id, qty) => {
-    setCart(prev => {
-      return prev
+    setCart(prev =>
+      prev
         .map(item => item.id === id ? { ...item, qty } : item)
-        .filter(item => item.qty >= 1); // 0 이하 입력 시 자동 삭제
-    });
+        .filter(item => item.qty >= 1)
+    );
   };
 
   return (
@@ -51,5 +51,6 @@ export function CartProvider({ children }) {
 }
 
 export function useCart() {
-  return useContext(CCartContext);
+  return useContext(CartContext);
 }
+
