@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 function Mypage() {
   const navigate = useNavigate();
-  const { isLogin, logout, user } = useAuth();
+  // const { isLogin, logout, user } = useAuth();
 
   const [orders, setOrders] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -14,15 +14,15 @@ function Mypage() {
   const [openQuestionList, setOpenQuestionList] = useState(false);
 
   // 로그인 체크 및 데이터 로드
-  useEffect(() => {
-    if (!isLogin) {
-      navigate("/", { replace: true }); // 로그인 안 됐으면 홈 이동
-    } else {
-      setOrders(JSON.parse(localStorage.getItem("orders")) || []);
-      setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
-      setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
-    }
-  }, [isLogin, navigate]);
+  // useEffect(() => {
+  //   if (!isLogin) {
+  //     navigate("/", { replace: true }); // 로그인 안 됐으면 홈 이동
+  //   } else {
+  //     setOrders(JSON.parse(localStorage.getItem("orders")) || []);
+  //     setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
+  //     setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
+  //   }
+  // }, [isLogin, navigate]);
 
   // 로그아웃
   const handleLogout = () => {
