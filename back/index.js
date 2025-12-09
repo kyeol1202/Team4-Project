@@ -162,16 +162,17 @@ app.get("/api/products/:id", async (req, res) => {
       [id]
     );
 
-    const data = rows[0][0]; // <-- 핵심
+    const data = rows[0]; // ✔ 수정된 부분
 
     if (!data)
       return res.json({ success: false, message: "상품 없음" });
 
     return res.json({ success: true, data });
   } catch (err) {
-    return res.status(500).json({ success: false, message: "DB 오류" });
+    return res.status(500).json({ success: false, message: "DB 오류", error: err.message });
   }
 });
+
 
 // =========================
 // 서버 실행
