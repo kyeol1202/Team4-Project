@@ -18,7 +18,7 @@ function Mypage() {
   useEffect(() => {
     if (!isLogin) {
       alert("로그인이 필요합니다.");
-      navigate("/login", { replace: true });
+      navigate("/", { replace: true });
     } else {
       try {
         setOrders(JSON.parse(localStorage.getItem("orders")) || []);

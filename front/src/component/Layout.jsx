@@ -17,7 +17,7 @@ function Layout() {
   const [p_name, setP_name] = useState("");
   const [p_price, setP_price] = useState("");
   const [p_category, setP_category] = useState("");
-      const [surcharge, setSurcharge] = useState('');
+  const [surcharge, setSurcharge] = useState('');
   const [categoryList, setCategoryList] = useState([]);
   const [gameOpen, setGameOpen] = useState(false);
 
@@ -89,6 +89,7 @@ function Layout() {
     setUserId("");
     setPassword("");
   }
+  
   function search() {
         if (!surcharge.trim()) return alert("검색어를 입력하세요!");
         navigate(`/search?keyword=${surcharge}`);
