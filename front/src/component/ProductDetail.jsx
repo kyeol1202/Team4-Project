@@ -10,7 +10,7 @@
 
     // 상품 상세 불러오기
     useEffect(() => {
-      fetch(`http://192.168.0.224:8080/api/products/${id}`)
+      fetch(`http://localhost:8080/api/products/${id}`)
         .then((res) => res.json())
         .then((data) => {
           console.log("📌 상품 상세 응답:", data);  // 디버그용
