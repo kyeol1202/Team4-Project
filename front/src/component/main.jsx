@@ -80,6 +80,14 @@ function Main() {
         playsInline
     />         
         </div>
+        
+         <div className="page2">
+    <img
+        className="perfume-detail"
+        src="image/image.png"
+        
+       
+    />         </div>
 
     
 
