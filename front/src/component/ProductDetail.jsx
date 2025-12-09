@@ -112,7 +112,7 @@ console.log("IMAGE PATH:", product.img);
         <h2 style={styles.sectionTitle}>향수 스펙</h2>
 
         {/* 🔥 type → perfume_ty 수정 */}
-        <p><strong>타입:</strong> {product.perfume_ty}</p>
+        <p><strong>타입:</strong> {product.perfume_type }</p>
 
         <p><strong>용량:</strong> {product.volume}mL</p>
         <p><strong>지속력 (Longevity):</strong> {product.longevity}/10</p>
