@@ -7,7 +7,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-<<<<<<< HEAD
 app.use("/uploads", express.static("uploads"));
 
 // =========================
@@ -16,12 +15,6 @@ app.use("/uploads", express.static("uploads"));
 
 // 회원 목록 확인
 
-=======
-
-// ==================================
-// 이미지 업로드 (multer)
-// ==================================
->>>>>>> aee9cbf18df507dbd288f8fbe47b180a97238abe
 const multer = require("multer");
 const path = require("path");
 
