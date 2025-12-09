@@ -7,14 +7,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/uploads", express.static("uploads"));
 
-// =========================
-// 1. 사용자 관련 API
-// =========================
-
-// 회원 목록 확인
-
+// ==================================
+// 이미지 업로드 (multer)
+// ==================================
 const multer = require("multer");
 const path = require("path");
 
@@ -30,6 +26,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+
+// =========================
+// 1. 사용자 관련 API
+// =========================
+
+// 회원 목록 확인
 app.get("/api/check-users", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM member");
@@ -263,7 +265,6 @@ app.post("/game", async (req, res) => {
 // =========================
 // 서버 실행
 // =========================
-
 app.listen(8080, "0.0.0.0", () => {
   console.log("🚀 서버 실행 중: http://0.0.0.0:8080");
 });
