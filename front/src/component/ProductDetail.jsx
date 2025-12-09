@@ -26,10 +26,7 @@
 
     return (
       <div style={styles.container}>
-        {/* 뒤로가기 */}
-        <button style={styles.backBtn} onClick={() => navigate(-1)}>
-          ← Back
-        </button>
+    
 
         {/* 상품 이미지 */}
         <img src={product.img} alt={product.name} style={styles.image} />
