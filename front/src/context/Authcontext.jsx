@@ -3,27 +3,28 @@ import { createContext, useContext, useState, useEffect } from "react";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [isLogin, setIsLogin] = useState(() => {
-    return JSON.parse(localStorage.getItem("isLogin")) || false;
-  });
+  const [isLogin, setIsLogin] = useState(false);
+  const [user, setUser] = useState(null);
 
-  const [user, setUser] = useState(() => {
-    return JSON.parse(localStorage.getItem("user")) || null;
-  });
-
+  // 초기 로컬스토리지 체크
   useEffect(() => {
-    localStorage.setItem("isLogin", JSON.stringify(isLogin));
-    localStorage.setItem("user", JSON.stringify(user));
-  }, [isLogin, user]);
+    const storedUser = JSON.parse(localStorage.getItem("loginUser"));
+    if (storedUser) {
+      setIsLogin(true);
+      setUser(storedUser);
+    }
+  }, []);
 
   const login = (userData) => {
+    localStorage.setItem("loginUser", JSON.stringify(userData));
     setIsLogin(true);
     setUser(userData);
   };
 
   const logout = () => {
-  localStorage.removeItem("loginUser");
-  setIsLogin(false);
+    localStorage.removeItem("loginUser");
+    setIsLogin(false);
+    setUser(null);
   };
 
   return (

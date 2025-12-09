@@ -14,16 +14,16 @@ function Mypage() {
   const [openReviewList, setOpenReviewList] = useState(false);
   const [openQuestionList, setOpenQuestionList] = useState(false);
 
- // 로그인 체크 및 데이터 로드
+  // 로그인 체크 및 데이터 로드
   useEffect(() => {
     if (!isLogin) {
       navigate("/", { replace: true }); // 로그인 안 됐으면 홈 이동
-     return; 
+      return;
     }
-     setOrders(JSON.parse(localStorage.getItem("orders")) || []);
-     setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
-     setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
-    }, [isLogin, navigate]);
+    setOrders(JSON.parse(localStorage.getItem("orders")) || []);
+    setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
+    setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
+  }, [isLogin, navigate]);
 
   // 로그아웃
   const handleLogout = () => {
@@ -60,7 +60,7 @@ function Mypage() {
     localStorage.setItem("reviews", JSON.stringify(updatedReviews));
   };
 
-  // 리뷰 수정 (alert, 추후 모달/페이지 확장 가능)
+  // 리뷰 수정 
   const handleEditReview = (review) => {
     alert(`리뷰 수정 준비중: ${review.productName}`);
   };
@@ -117,8 +117,8 @@ function Mypage() {
                                 order.status === "배송완료"
                                   ? "green"
                                   : order.status === "배송중"
-                                  ? "orange"
-                                  : "gray",
+                                    ? "orange"
+                                    : "gray",
                               fontWeight: "bold",
                             }}
                           >
@@ -133,8 +133,8 @@ function Mypage() {
                                 item.returnStatus === "교환신청중"
                                   ? "blue"
                                   : item.returnStatus === "반품신청중"
-                                  ? "red"
-                                  : "gray",
+                                    ? "red"
+                                    : "gray",
                               fontWeight: "bold",
                             }}
                           >
