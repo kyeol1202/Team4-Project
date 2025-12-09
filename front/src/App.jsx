@@ -4,6 +4,7 @@ import { WishProvider } from "./context/WishContext";
 import { AuthProvider } from "./context/AuthContext";
 import "./App.css";
 import "./Search.css";
+import './component/Category.css';
 
 import Layout from "./component/Layout";
 import Main from "./component/main";
@@ -13,7 +14,6 @@ import Register from "./component/Register";
 import Wish from "./component/Wish";
 import Service from "./component/Service";
 import QnaPage from "./component/QnaPage";
-import Category from "./component/Category";
 import Category2 from "./component/Category2";
 import Category3 from "./component/Category3";
 import Category4 from "./component/Category4";
@@ -39,7 +39,6 @@ function App() {
               <Route path="/main" element={<Main />} />
 
               <Route path="/search" element={<Search />} />
-              <Route path="/category" element={<Category />} />
               <Route path="/category2" element={<Category2 />} />
               <Route path="/category3" element={<Category3 />} />
               <Route path="/category4" element={<Category4 />} />
