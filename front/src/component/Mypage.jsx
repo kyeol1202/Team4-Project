@@ -14,7 +14,7 @@ function Mypage() {
   const [openReviewList, setOpenReviewList] = useState(false);
   const [openQuestionList, setOpenQuestionList] = useState(false);
 
-  // 로그인 체크 및 데이터 로드
+ // 로그인 체크 및 데이터 로드
   useEffect(() => {
     if (!isLogin) {
       navigate("/", { replace: true }); // 로그인 안 됐으면 홈 이동
