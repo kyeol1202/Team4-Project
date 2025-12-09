@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 
 function WomanPerfume() {
   const products = [
-    { id: 1, name: "AuRa Elenique", img: "/image/AuRa_Elenique_woman.jpeg" },
-    { id: 2, name: "AuRa Etherlune", img: "/image/AuRa_Etherlune_woman.png" },
-    { id: 3, name: "AuRa Noverin", img: "/image/AuRa_Noverin_woman.png" },
-    { id: 4, name: "AuRa Primeveil", img: "/image/AuRa_Primeveil_woman.png" },
-    { id: 5, name: "AuRa Velese", img: "/image/AuRa_Velese_woman.png" },
+    { id: 1, name: "AuRa Elenique", img: "http://192.168.0.224:8080/uploads/AuRa_Elenique_woman.jpeg" },
+    { id: 2, name: "AuRa Etherlune", img: "http://192.168.0.224:8080/uploads/AuRa_Etherlune_woman.png" },
+    { id: 3, name: "AuRa Noverin", img: "http://192.168.0.224:8080/uploads/AuRa_Noverin_woman.png" },
+    { id: 4, name: "AuRa Primeveil", img: "http://192.168.0.224:8080/uploads/AuRa_Primeveil_woman.png" },
+    { id: 5, name: "AuRa Velese", img: "http://192.168.0.224:8080/uploads/AuRa_Velese_woman.png" },
   ];
 
  const handleClick = (id) => {

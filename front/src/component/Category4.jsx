@@ -2,10 +2,10 @@ import React from 'react';
 
 function ManPerfume() {
   const products = [
-    { id: 1, name: "AuRa ClairVent", img: "/image/AuRa_ClairVent_man.png" },
-    { id: 2, name: "AuRa Noctivale", img: "/image/AuRa_Noctivale_man.png" },
-    { id: 3, name: "AuRa Silvaron", img: "/image/AuRa_Silvaron_man.png" },
-    { id: 4, name: "AuRa Solivane", img: "/image/AuRa_Solivane_man.jpeg" },
+    { id: 1, name: "AuRa ClairVent", img: "http://192.168.0.224:8080/uploads/AuRa_ClairVent_man.png" },
+    { id: 2, name: "AuRa Noctivale", img: "http://192.168.0.224:8080/uploads/AuRa_Noctivale_man.png" },
+    { id: 3, name: "AuRa Silvaron", img: "http://192.168.0.224:8080/uploads/AuRa_Silvaron_man.png" },
+    { id: 4, name: "AuRa Solivane", img: "http://192.168.0.224:8080/uploads/AuRa_Solivane_man.jpeg" },
   ];
 
   const handleClick = (id) => {

@@ -58,7 +58,7 @@ function Search() {
                 {products.map((item) => (
                     <div className="product-card" key={item.product_id}>
                         <button onClick={() => navigate(`/product/${item.product_id}`)}>
-                            <img src={item.img} alt={item.name} className="product-img" />
+                            <img src={`http://192.168.0.224:8080${item.img}`} alt={item.name} className="product-img" />
                         </button>
 
                         {/* 🔥 텍스트 추가 부분 */}
