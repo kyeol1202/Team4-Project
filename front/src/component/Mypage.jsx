@@ -27,7 +27,9 @@ function Mypage() {
   // 로그아웃
   const handleLogout = () => {
     logout();
-    navigate("/", { replace: true });
+    localStorage.setItem("login", "false");
+    localStorage.setItem("user", JSON.stringify(null));
+    navigate("/main", { replace: true });
   };
 
   // 주문 상세보기

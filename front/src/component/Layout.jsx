@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import { useWish } from "../context/WishContext";
 import Game from "./Game";
+import Game2 from "./Game2";
 
 
 function Layout() {
@@ -22,6 +23,7 @@ function Layout() {
   const [surcharge, setSurcharge] = useState('');
   const [categoryList, setCategoryList] = useState([]);
   const [gameOpen, setGameOpen] = useState(false);
+  const [gameOpen2, setGame2Open] = useState(false);
 
   // 로그인 상태 가져오기
   useEffect(() => {
@@ -234,12 +236,21 @@ function Layout() {
           </div>
         </div>
       )}
+      {gameOpen2 && (
+        <div className="game-overlay" onClick={() => setGame2Open(false)}>
+          <div className="game-popup" onClick={(e) => e.stopPropagation()}>
+            <Game2 />
+            <button onClick={() => setGame2Open(false)}>닫기</button>
+          </div>
+        </div>
+      )}
 
       {/* FOOTER */}
       <footer className="footer">
         <button onClick={() => navigate("/service")}>🎧</button>
         <button>🤖</button>
         <button onClick={() => setGameOpen(true)}>🎮</button>
+        <button onClick={() => setGame2Open(true)}>🎮</button>
       </footer>
     </>
   );
