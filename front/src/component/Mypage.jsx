@@ -15,21 +15,30 @@ function Mypage() {
   const [openReviewList, setOpenReviewList] = useState(false);
   const [openQuestionList, setOpenQuestionList] = useState(false);
 
+
+ // 로그인 체크 및 데이터 로드
   // useEffect(() => {
   //   if (!isLogin) {
-  //     navigate("/", { replace: true });
-  //   } else {
-  //     setOrders(JSON.parse(localStorage.getItem(`${userId}_orders`)) || []);
-  //     setReviews(JSON.parse(localStorage.getItem(`${userId}_reviews`)) || []);
-  //     setQuestions(JSON.parse(localStorage.getItem(`${userId}_questions`)) || []);
+  //     navigate("/", { replace: true }); // 로그인 안 됐으면 홈 이동
+  //    return; 
   //   }
-  // }, [isLogin, navigate]);
- // 로그인 체크 및 데이터 로드
+  //    setOrders(JSON.parse(localStorage.getItem("orders")) || []);
+  //    setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
+  //    setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
+  //   }, [isLogin, navigate]);
 
-  const handleLogout = () => {
-    //logout();
-    navigate("/", { replace: true });
-  };
+  // 로그아웃
+ function handleLogout(){
+  localStorage.setItem("login", "false");
+  localStorage.setItem("user", JSON.stringify(null));
+
+  alert(`로그아웃 되었습니다.`);
+
+  // 🔥 여기서 setLogin은 필요 없음
+  // Layout이 자동으로 감지함
+  
+  navigate("/main");
+}
 
   const handleOrderClick = (orderId) => navigate(`/order/${orderId}`);
 

@@ -59,11 +59,6 @@ app.post("/api/register", async (req, res) => {
       [id, pw, name, email, adderss, number, hbd]
     );
 
-    await pool.query(
-      "INSERT INTO category (name) VALUES (?)",
-      [name]
-    );
-
     res.json({ success: true, message: "회원가입 성공!" });
   } catch (err) {
     console.log("❌회원가입 실패:", err);
