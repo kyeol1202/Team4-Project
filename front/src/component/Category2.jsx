@@ -5,15 +5,15 @@ function Category2() {
   const navigate = useNavigate();
 
   const products = [
-    { id: 1, name: "AuRa Noverin", img: "/image/AuRa_Noverin_woman.png" },
-    { id: 2, name: "AuRa Velese", img: "/image/AuRa_Velese_woman.png" },
-    { id: 3, name: "AuRa ClairVent", img: "/image/AuRa_ClairVent_man.png" },
-    { id: 4, name: "AuRa Elenique", img: "/image/AuRa_Elenique_woman.jpeg" },
-    { id: 5, name: "AuRa Etherlune", img: "/image/AuRa_Etherlune_woman.png" },
-    { id: 6, name: "AuRa Noctivale", img: "/image/AuRa_Noctivale_man.png" },
-    { id: 7, name: "AuRa Primeveil", img: "/image/AuRa_Primeveil_woman.png" },
-    { id: 8, name: "AuRa Silvaron", img: "/image/AuRa_Silvaron_man.png" },
-    { id: 9, name: "AuRa Solivane", img: "/image/AuRa_Solivane_man.jpeg" },
+    { id: 1, name: "AuRa Noverin", img: "/uploads/AuRa_Noverin_woman.png" },
+    { id: 2, name: "AuRa Velese", img: "/uploads/AuRa_Velese_woman.png" },
+    { id: 3, name: "AuRa ClairVent", img: "/uploads/AuRa_ClairVent_man.png" },
+    { id: 4, name: "AuRa Elenique", img: "/uploads/AuRa_Elenique_woman.jpeg" },
+    { id: 5, name: "AuRa Etherlune", img: "/uploads/AuRa_Etherlune_woman.png" },
+    { id: 6, name: "AuRa Noctivale", img: "/uploads/AuRa_Noctivale_man.png" },
+    { id: 7, name: "AuRa Primeveil", img: "/uploads/AuRa_Primeveil_woman.png" },
+    { id: 8, name: "AuRa Silvaron", img: "/uploads/AuRa_Silvaron_man.png" },
+    { id: 9, name: "AuRa Solivane", img: "/uploads/AuRa_Solivane_man.jpeg" },
   ];
 
   const handleClick = (id) => {
