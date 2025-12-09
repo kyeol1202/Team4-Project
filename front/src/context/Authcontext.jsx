@@ -3,27 +3,27 @@ import { createContext, useContext, useState, useEffect } from "react";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [isLogin, setIsLogin] = useState(() => {
-    return JSON.parse(localStorage.getItem("isLogin")) || false;
-  });
-
-  const [user, setUser] = useState(() => {
-    return JSON.parse(localStorage.getItem("user")) || null;
-  });
+  const [isLogin, setIsLogin] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("isLogin", JSON.stringify(isLogin));
-    localStorage.setItem("user", JSON.stringify(user));
-  }, [isLogin, user]);
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+      setIsLogin(true);
+    }
+  }, []);
 
   const login = (userData) => {
-    setIsLogin(true);
     setUser(userData);
+    setIsLogin(true);
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   const logout = () => {
-  localStorage.removeItem("loginUser");
-  setIsLogin(false);
+    setUser(null);
+    setIsLogin(false);
+    localStorage.removeItem("user");
   };
 
   return (
@@ -34,5 +34,6 @@ export function AuthProvider({ children }) {
 }
 
 export const useAuth = () => useContext(AuthContext);
+
 
 
