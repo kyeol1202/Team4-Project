@@ -57,6 +57,54 @@ function Layout() {
             <button className="search" onClick={search}>🔍</button>
           </div>
 
+    <button onClick={() => setOpen(true)}>상품 등록</button>
+    <button onClick={() => login ? navigate("/wish") : setLoginOpen(true)}>♡</button>
+    <button onClick={() => navigate("/cart")}>🛒</button>
+    <button onClick={() => login ? navigate("/mypage") : setLoginOpen(true)}>👤</button>
+    {open && (
+  <div className="popup-bg">
+    <div className="popup-box">
+
+      <button 
+        className="popup-close"
+        onClick={() => setOpen(false)}
+      >
+        X
+      </button>
+
+      <h3>상품 등록</h3>
+
+      <input
+        type="text"
+        placeholder="상품명"
+        onChange={(e) => setP_name(e.target.value)}
+      />
+
+      <input
+        type="text"
+        placeholder="가격"
+        onChange={(e) => setP_price(e.target.value)}
+      />
+
+      <select onChange={(e) => setP_category(e.target.value)}>
+        <option value="">카테고리 선택</option>
+
+        {categoryList.map((item) => (
+          <option
+            key={item.category_id}
+            value={item.category_id}
+          >
+            {item.name}
+          </option>
+        ))}
+      </select>
+
+      <button onClick={product}>등록하기</button>
+    </div>
+  </div>
+)}
+  </div>
+</header>
           <button onClick={() => setOpen(true)}>상품 등록</button>
           <button onClick={() => isLogin ? navigate("/wish") : navigate("/login")}>♡</button>
           <button onClick={() => navigate("/cart")}>🛒</button>
