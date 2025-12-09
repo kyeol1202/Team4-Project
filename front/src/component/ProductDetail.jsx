@@ -101,13 +101,19 @@ console.log("IMAGE PATH:", product.img);
       <div style={styles.sectionBox}>
         <h2 style={styles.sectionTitle}>향 구성 (Notes)</h2>
         <p><strong>Top Notes:</strong> {product.top_notes}</p>
-        <p><strong>Middle Notes:</strong> {product.middle_notes}</p>
+
+        {/* 🔥 middle_notes → middle_not 수정 */}
+        <p><strong>Middle Notes:</strong> {product.middle_not}</p>
+
         <p><strong>Base Notes:</strong> {product.base_notes}</p>
       </div>
 
       <div style={styles.sectionBox}>
         <h2 style={styles.sectionTitle}>향수 스펙</h2>
-        <p><strong>타입:</strong> {product.type}</p>
+
+        {/* 🔥 type → perfume_ty 수정 */}
+        <p><strong>타입:</strong> {product.perfume_type }</p>
+
         <p><strong>용량:</strong> {product.volume}mL</p>
         <p><strong>지속력 (Longevity):</strong> {product.longevity}/10</p>
         <p><strong>잔향 (Sillage):</strong> {product.sillage}</p>
