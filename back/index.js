@@ -164,17 +164,16 @@ app.get("/api/category", async (req, res) => {
 
 
 // 상품 등록
-app.post("/api/productadd", upload.single("img"), async (req, res) => {
-  const { name, price, category_id } = req.body;
-  const imgPath = "/uploads/" + req.file.filename;
+app.post("/api/productadd", async (req, res) => {
+  const { name, price, category_id, description, img, gender } = req.body;
 
   try {
     await pool.query(
       `
-      INSERT INTO product (name, price, category_id, img)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO product (name, price, category_id, description, img, gender)
+      VALUES (?, ?, ?, ?, ?, ?)
       `,
-      [name, price, category_id, imgPath]
+      [name, price, category_id, description, img, gender]
     );
 
     res.json({ success: true, message: "상품 등록 성공!!" });
@@ -256,7 +255,7 @@ app.post("/game", async (req, res) => {
   } catch (err) {
     console.error("❌랭킹등록 실패:", err);
     return res.json({ success: false, message: "DB 오류 발생" });
-  }
+ㅋ  }
 });
 
 
