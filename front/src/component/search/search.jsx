@@ -56,9 +56,14 @@ function Search() {
 
             <div className="product-grid">
                 {products.map((item) => (
-                    <div key={item.product_id} className="product-card2">
-                        <h3>{item.name}</h3>
-                        <p>{item.price} 원</p>
+                    <div className="product-card" key={item.product_id}>
+                        <button onClick={() => navigate(`/product/${item.product_id}`)}>
+                            <img src={`http://192.168.0.224:8080${item.img}`} alt={item.name} className="product-img" />
+                        </button>
+
+                        {/* 🔥 텍스트 추가 부분 */}
+                        <h3 className="product-name">{item.name}</h3>
+                        <p className="product-desc">{item.desc}</p>
                     </div>
                 ))}
             </div>

@@ -1,61 +1,63 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CartProvider } from "./context/CartContext";
 import { WishProvider } from "./context/WishContext";
+import { AuthProvider } from "./context/AuthContext";
+
 import "./App.css";
 import "./Search.css";
-import Main from "./component/main"
+import './component/Category.css';
+
+import Layout from "./component/Layout";
+import Main from "./component/main";
 import Cart from "./component/Cart";
 import Payment from "./component/Payment";
 import Register from "./component/Register";
 import Wish from "./component/Wish";
 import Service from "./component/Service";
-import Category from "./component/Category";
+import QnaPage from "./component/QnaPage";
 import Category2 from "./component/Category2";
 import Category3 from "./component/Category3";
 import Category4 from "./component/Category4";
-import Category5 from "./component/Category5";
 import Mypage from "./component/Mypage";
 import Search from "./component/search/search";
-
+import OrderDetail from "./component/OrderDetail";
+import EditUserInfo from "./component/EditUserInfo";
+import ProductDetail from "./component/ProductDetail";
 
 function App() {
   return (
+    <AuthProvider>
+      <CartProvider>
+        <WishProvider> 
+          <BrowserRouter>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route path="/" element={<Main />} />
+                <Route path="/main" element={<Main />} />
 
-    <>
-      {/*
-    네비게이터 연결부분
-    Main = 메인화면
-    */}
-    <CartProvider>
-      <WishProvider>
-      <BrowserRouter>
-      {/* <nav style={{ display: "flex", gap: "20px" }}>
-        <Link to="/">메인</Link>
-        <Link to="/cart">장바구니</Link>
-      </nav> */}
-        <Routes>
-          <Route path="/search" element={<Search />} />{/* 검색 페이지 */}
-          <Route path="/" element={<Main />} />{/* 메인 페이지 */}
-          <Route path="/main" element={<Main />} />{/* 메인 페이지 */}
-          <Route path="/cart" element={<Cart />} /> {/* 장바구니 페이지 */}
-          <Route path="/category" element={<Category />} />{/* 카테고리 페이지 */}
-          <Route path="/category2" element={<Category2 />} />{/* 카테고리 페이지 */}
-          <Route path="/category3" element={<Category3 />} />{/* 카테고리 페이지 */}
-          <Route path="/category4" element={<Category4 />} />{/* 카테고리 페이지 */}
-          <Route path="/category5" element={<Category5 />} />{/* 카테고리 페이지 */}
-          <Route path="/payment" element={<Payment />} />{/* 결제 페이지 */}
-          <Route path="/register" element={<Register />} />{/* 회원가입 페이지 */}
-          <Route path="/wish" element={<Wish />} />{/* 찜 목록 페이지 */}
-          <Route path="/service" element={<Service />} />{/* 고객센터 페이지 */}
-          <Route path="/mypage" element={<Mypage />} />{/* 마이페이지 */}
-        </Routes>
-      </BrowserRouter>
-      </WishProvider>
-    </CartProvider>
-    </>
+                <Route path="/search" element={<Search />} />
+                <Route path="/category2" element={<Category2 />} />
+                <Route path="/category3" element={<Category3 />} />
+                <Route path="/category4" element={<Category4 />} />
 
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/payment" element={<Payment />} />
+
+                <Route path="/wish" element={<Wish />} />
+                <Route path="/service" element={<Service />} />
+                <Route path="/qna" element={<QnaPage />} />
+                <Route path="/mypage" element={<Mypage />} />
+                <Route path="/orderdetail" element={<OrderDetail />} />
+                <Route path="/edituserinfo" element={<EditUserInfo />} />
+                <Route path="/product/:id" element={<ProductDetail />} />
+                <Route path="/register" element={<Register />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </WishProvider>
+      </CartProvider>
+    </AuthProvider>
   );
-
-
 }
-export default App; 
+
+export default App;

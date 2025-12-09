@@ -1,0 +1,105 @@
+/* 슬라이더 전체 */
+.slider-wrapper {
+  width: 100%;
+  max-width: 1200px;        /* 조금 더 넉넉하게 */
+  margin: 60px auto;
+  position: relative;
+  overflow: hidden;         /* 이게 핵심1 */
+  padding: 0 50px;          /* 좌우 여유 공간 → 화살표랑 이미지 안 잘림 */
+  box-sizing: border-box;
+}
+
+.slider {
+  width: 100%;
+  overflow: hidden;         /* 이게 핵심2 */
+}
+
+/* 너가 쓰는 그대로 유지 */
+.slider-inner {
+  display: flex;
+  width: 200%;
+  transition: transform 0.7s ease-in-out;
+  /* transform은 JS에서 index * 53%로 그대로 써도 됨 */
+} 
+
+/* 각 페이지 */
+.slide-page {
+  width: 50%;               /* 200% 중 절반 = 한 페이지 */
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;  /* 진짜 정중앙 */
+  align-items: center;
+  gap: 35px;                /* 20px → 35px로 살짝 넉넉히 */
+  padding: 20px 0;
+}
+
+/* 카드 */
+.product-card {
+  width: 290px;             /* 살짝 키워서 여유롭게 */
+  height: 390px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  overflow: hidden;         /* 이미지 삐져나감 방지 */
+  cursor: pointer;
+  transition: all 0.4s ease;
+  flex-shrink: 0;           /* 이거 추가 필수! */
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.09);
+}
+
+/* 이미지 – 이게 진짜 핵심 */
+.product-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;           /* 비율 유지 + 통째로 보임 */
+  object-position: center;
+  background: #fdfdfd;
+  padding: 30px;                 /* 안쪽 여백 → 더 고급스러워 보이고 절대 안 잘림 */
+  box-sizing: border-box;
+}
+
+/* 화살표 (이제 안 잘리고 예쁘게 보임) */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+}
+
+.arrow:hover {
+  background: #000;
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+.product-name {
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.product-desc {
+  font-size: 14px;
+  color: #555;
+  margin-top: 6px;
+}
+
+
+
+.arrow.left  { left: 15px; }
+.arrow.right { right: 15px; }

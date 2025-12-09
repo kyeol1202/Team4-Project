@@ -7,7 +7,45 @@
 
 .page {
   background: #ffffff;
-  color: #000000;
+  color: #000000d0;
+}
+
+
+.page1{
+
+  width: 1000px;
+  height: 500px;
+  overflow: hidden;
+  position: relative;
+  margin: auto;
+  background-color: #928888;
+}
+
+.page2{
+
+  width: 1000px;
+  height: 500px;
+  margin: auto;
+
+
+}
+.main-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  /* 화면 꽉 채우기 */
+}
+.perfume-detail{
+  width:300px;
+  height:400px;
+  float: left;
+  margin-top:100px;
+}
+
+.textbox{
+  width: 200px;
+  height: 200px;
+  float: left;
+  margin-top:100px;
 }
 
 /* HEADER 1*/
@@ -106,7 +144,7 @@
 /* Icons */
 .header-right {
   position: absolute;
-  top: 30px;
+  top: 40px;
   right: 30px;
   display: flex;
   gap: 16px;
@@ -167,12 +205,13 @@
 
 /* 검색창 */
 .search-box {
-  width: 330px;
-  margin: 30px auto 0;
+  width: 350px;
+  margin: 0 auto;
+  display: flex;
 }
 
 .search-box input {
-  width: 85%;
+  width: 100%;
   flex: 1;                 /* 입력창이 남은 공간 전체 차지 */
   padding: 12px 15px;
   border-radius: 6px;
@@ -289,6 +328,7 @@
   margin-right: 0;
 }
 
+
 .overlay {
     position: fixed;
     inset: 0;
@@ -339,3 +379,86 @@
   cursor: pointer;
 }
 
+/* ===== 팝업 전체 배경 ===== */
+.popup-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+/* ===== 팝업 박스 ===== */
+.popup-box {
+  width: 350px;
+  min-height: 180px;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.25);
+  animation: popupShow 0.25s ease;
+}
+
+/* ===== 팝업 오픈 애니메이션 ===== */
+@keyframes popupShow {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===== 닫기 버튼 ===== */
+.popup-close {
+  position: absolute;
+  right: 12px;
+  top: 8px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.popup-close:hover {
+  color: red;
+}
+
+/* ===== 제목 ===== */
+.popup-title {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 20px;
+}
+
+/* ===== 내용 텍스트 ===== */
+.popup-text {
+  margin-top: 10px;
+  text-align: center;
+  color: #444;
+}
+
+/* ===== 팝업 열기 버튼 ===== */
+.open-btn {
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  background-color: #2196f3;
+  color: #4b4b4b;
+  font-size: 15px;
+}
+
+.open-btn:hover {
+  background-color: #ffffff;
+}
+  
