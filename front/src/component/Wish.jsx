@@ -1,5 +1,6 @@
 import { useWish } from "../context/WishContext";
 import { useNavigate } from "react-router-dom";
+import "./Wish.css";
 
 function Wish() {
     const navigate = useNavigate();
