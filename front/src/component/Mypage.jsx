@@ -59,13 +59,6 @@ function Mypage() {
     localStorage.setItem(`${userId}_reviews`, JSON.stringify(updatedReviews));
   };
 
-  // 리뷰 삭제
-  const handleDeleteReview = (reviewId) => {
-    if (!window.confirm("리뷰를 삭제하시겠습니까?")) return;
-    const updatedReviews = reviews.filter((r) => r.id !== reviewId);
-    setReviews(updatedReviews);
-    localStorage.setItem("reviews", JSON.stringify(updatedReviews));
-  };
 
   // 리뷰 수정 (alert, 추후 모달/페이지 확장 가능)
   const handleEditReview = (review) => {
