@@ -76,9 +76,13 @@ function ProductDetail() {
 
   return (
     <div style={styles.container}>
-      
+
       {/* 이미지 */}
-      <img src={product.img} alt={product.name} style={styles.image} />
+      <img
+        src={`http://192.168.0.224:8080${product.img}`}
+        alt={product.name}
+        style={styles.image}
+      />
 
       {/* 상품 기본 정보 */}
       <h1 style={styles.name}>{product.name}</h1>
@@ -199,7 +203,7 @@ const styles = {
 
   backBtn: {
     marginTop: "40px",
-    fontSize: "17px", 
+    fontSize: "17px",
     color: "#444",
     textDecoration: "underline",
     background: "none",
