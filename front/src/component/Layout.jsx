@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import { useWish } from "../context/WishContext";
 import { useAuth } from "../context/AuthContext";
-import Game from "../components/Game";
+
 
 function Layout() {
   const navigate = useNavigate();
@@ -81,7 +81,10 @@ function Layout() {
       setLoginOpen(false);
       setUserId("");
       setPassword("");
-    };
+    } catch (err) {
+      console.error("로그인 실패:", err);
+      alert("로그인 중 오류가 발생했습니다.");
+    }
   }
 
   // 검색
