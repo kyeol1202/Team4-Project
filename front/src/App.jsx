@@ -3,6 +3,10 @@ import { CartProvider } from "./context/CartContext";
 import { WishProvider } from "./context/WishContext";
 import { AuthProvider } from "./context/AuthContext";
 
+import "./App.css";
+import "./Search.css";
+import './component/Category.css';
+
 import Layout from "./component/Layout";
 import Main from "./component/main";
 import Cart from "./component/Cart";
