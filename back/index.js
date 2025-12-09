@@ -164,8 +164,9 @@ app.get("/api/category", async (req, res) => {
 
 
 // 상품 등록
-app.post("/api/productadd", async (req, res) => {
-  const { name, price, category_id, description, img, gender } = req.body;
+app.post("/api/productadd", upload.single("img"), async (req, res) => {
+  const { name, price, category_id, description, gender } = req.body;
+  const imgPath = req.file ? "/uploads/" + req.file.filename : null;
 
   try {
     await pool.query(
@@ -173,11 +174,12 @@ app.post("/api/productadd", async (req, res) => {
       INSERT INTO product (name, price, category_id, description, img, gender)
       VALUES (?, ?, ?, ?, ?, ?)
       `,
-      [name, price, category_id, description, img, gender]
+      [name, price, category_id, description, imgPath, gender]
     );
 
     res.json({ success: true, message: "상품 등록 성공!!" });
   } catch (err) {
+    console.log("상품 등록 실패", err);
     res.json({ success: false, message: "DB 오류 발생" });
   }
 });
