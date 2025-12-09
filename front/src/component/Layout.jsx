@@ -84,6 +84,9 @@ function Layout() {
     localStorage.setItem("login", "true");
     localStorage.setItem("user", JSON.stringify(data.user));
 
+    // ⭐⭐⭐ 가장 중요한 추가된 1줄 (user_id 저장!) ⭐⭐⭐
+    localStorage.setItem("user_id", data.user.member_id);
+
     setLogin(true);
     setLoginOpen(false);
     setUserId("");
@@ -91,14 +94,14 @@ function Layout() {
   }
   
   function search() {
-        if (!surcharge.trim()) return alert("검색어를 입력하세요!");
-        navigate(`/search?keyword=${surcharge}`);
-    }
+    if (!surcharge.trim()) return alert("검색어를 입력하세요!");
+    navigate(`/search?keyword=${surcharge}`);
+  }
 
   return (
     <>
       {/* HEADER */}
-     <header className="header">
+      <header className="header">
 
   <div className="header-left">
     MENU
@@ -130,58 +133,57 @@ function Layout() {
     <button onClick={() => login ? navigate("/wish") : setLoginOpen(true)}>♡</button>
     <button onClick={() => navigate("/cart")}>🛒</button>
     <button onClick={() => login ? navigate("/mypage") : setLoginOpen(true)}>👤</button>
+
     {open && (
-  <div className="popup-bg">
-    <div className="popup-box">
+      <div className="popup-bg">
+        <div className="popup-box">
 
-      <button 
-        className="popup-close"
-        onClick={() => setOpen(false)}
-      >
-        X
-      </button>
-
-      <h3>상품 등록</h3>
-
-      <input
-        type="text"
-        placeholder="상품명"
-        onChange={(e) => setP_name(e.target.value)}
-      />
-
-      <input
-        type="text"
-        placeholder="가격"
-        onChange={(e) => setP_price(e.target.value)}
-      />
-
-      <select onChange={(e) => setP_category(e.target.value)}>
-        <option value="">카테고리 선택</option>
-
-        {categoryList.map((item) => (
-          <option
-            key={item.category_id}
-            value={item.category_id}
+          <button 
+            className="popup-close"
+            onClick={() => setOpen(false)}
           >
-            {item.name}
-          </option>
-        ))}
-      </select>
+            X
+          </button>
 
-      <button onClick={product}>등록하기</button>
-    </div>
-  </div>
-)}
+          <h3>상품 등록</h3>
+
+          <input
+            type="text"
+            placeholder="상품명"
+            onChange={(e) => setP_name(e.target.value)}
+          />
+
+          <input
+            type="text"
+            placeholder="가격"
+            onChange={(e) => setP_price(e.target.value)}
+          />
+
+          <select onChange={(e) => setP_category(e.target.value)}>
+            <option value="">카테고리 선택</option>
+
+            {categoryList.map((item) => (
+              <option
+                key={item.category_id}
+                value={item.category_id}
+              >
+                {item.name}
+              </option>
+            ))}
+          </select>
+
+          <button onClick={product}>등록하기</button>
+        </div>
+      </div>
+    )}
   </div>
 </header>
 
       {/* 로그인 drawer */} 
-      {/* 🔥 로그인 배경 */}
       {loginOpen && (
         <div className="overlay" onClick={() => setLoginOpen(false)}></div>
       )}
 
-      {/* 🔥 로그인 drawer */}
       <div className={`login-drawer ${loginOpen ? "open" : ""}`}>
         <button className="close-btn" onClick={() => setLoginOpen(false)}>✕</button>
         <h2>Login</h2>
@@ -204,10 +206,9 @@ function Layout() {
         <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
       </div>
 
-      
-
-      {/* 페이지 내용 바뀌는 부분 */}
+      {/* 페이지 내용 */}
       <Outlet />
+
       {gameOpen && (
         <div className="game-overlay" onClick={() => setGameOpen(false)}>
           <div className="game-popup" onClick={(e) => e.stopPropagation()}>
