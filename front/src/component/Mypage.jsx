@@ -18,17 +18,17 @@ function Mypage() {
   useEffect(() => {
     if (!isLogin) {
       navigate("/", { replace: true }); // 로그인 안 됐으면 홈 이동
-    } else {
-      setOrders(JSON.parse(localStorage.getItem("orders")) || []);
-      setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
-      setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
+     return; 
     }
-  }, [isLogin, navigate]);
+     setOrders(JSON.parse(localStorage.getItem("orders")) || []);
+     setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
+     setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
+    }, [isLogin, navigate]);
 
   // 로그아웃
   const handleLogout = () => {
     logout();
-    navigate("/", { replace: true });
+
   };
 
   // 주문 상세보기
