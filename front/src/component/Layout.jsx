@@ -216,7 +216,7 @@ function Layout() {
         />
 
         <button className="login-btn" onClick={Login}>로그인</button>
-        <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
+        <button className="login-btn" onClick={() => { navigate("/register"); setLoginOpen(false); }}>회원가입</button>
       </div>
 
       {/* 페이지 내용 */}
