@@ -1,0 +1,59 @@
+.game2 {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+.board2 {
+  position: relative;
+  margin: 0 auto;
+  background: #dfd8d8;
+  border: 4px solid #444;
+}
+
+.player2 {
+  width: 20px;
+  height: 20px;
+  background: #00d5ff;
+  position: absolute;
+  border-radius: 4px;
+  transition: transform 0.07s linear;
+}
+
+.enemy2 {
+  width: 20px;
+  height: 20px;
+  background: orange;
+  position: absolute;
+  border-radius: 4px;
+  transition: transform 0.07s linear;
+}
+
+.game-over-box2 {
+  margin-top: 10px;
+}
+
+.restart-btn2 {
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.score-box2 {
+  margin-top: 10px;
+  color: rgb(53, 53, 53);
+  font-size: 18px;
+}
+
+.ranking-box2 {
+  margin-top: 20px;
+  background: #222;
+  padding: 10px;
+  border-radius: 6px;
+}
+.ranking-box2 h3 {
+  margin: 0;
+}
+.ranking-box2 li {
+  list-style: none;
+  color: #ffffff;
+}
