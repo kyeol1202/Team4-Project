@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import { useWish } from "../context/WishContext";
+import Game from "../components/Game";
 
 
 function Layout() {
@@ -30,9 +31,13 @@ function Layout() {
   // 카테고리 불러오기
   useEffect(() => {
     async function getCategory() {
+      try {
       const res = await fetch("http://192.168.0.224:8080/api/category");
       const data = await res.json();
       if (data.success) setCategoryList(data.data);
+    } catch (error) {
+      console.error("카테고리 불러오기 실패:", error);
+    }
     }
     getCategory();
   }, []);
@@ -67,13 +72,14 @@ function Layout() {
   async function Login() {
     if (!userId || !password) return alert("아이디와 비밀번호를 입력하세요!");
 
+   try {
     const res = await fetch("http://192.168.0.224:8080/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username: userId,
         password: password
-      })
+      }),
     });
 
     const data = await res.json();
@@ -88,6 +94,10 @@ function Layout() {
     setLoginOpen(false);
     setUserId("");
     setPassword("");
+  } catch (error) {
+    console.error("로그인 실패:", error);
+    alert("로그인 중 오류가 발생했습니다.");
+  }
   }
   
   function search() {
@@ -150,7 +160,7 @@ function Layout() {
       />
 
       <input
-        type="text"
+        type="number"
         placeholder="가격"
         onChange={(e) => setP_price(e.target.value)}
       />
