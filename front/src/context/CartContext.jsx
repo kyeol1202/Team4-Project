@@ -29,8 +29,12 @@ export function CartProvider({ children }) {
     setCart(prev => prev.map(item => item.id === id ? { ...item, qty } : item).filter(item => item.qty >= 1));
   };
 
-  return <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQty }}>{children}</CartContext.Provider>;
-}
+  return (
+  <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQty }}>
+    {children}
+  </CartContext.Provider>
+)};
+
 
 export function useCart() {
   return useContext(CartContext);
