@@ -9,7 +9,7 @@ function Layout() {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { addToWish } = useWish();
-  const { isLogin, login } = useAuth();
+  
 
   const [loginOpen, setLoginOpen] = useState(false);
   const [gameOpen, setGameOpen] = useState(false);
@@ -81,10 +81,7 @@ function Layout() {
       setLoginOpen(false);
       setUserId("");
       setPassword("");
-    } catch (err) {
-      console.error(err);
-      alert("로그인 중 오류가 발생했습니다.");
-    }
+    };
   }
 
   // 검색
