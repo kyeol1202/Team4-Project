@@ -9,10 +9,7 @@ export function CartProvider({ children }) {
   });
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      localStorage.setItem("cart", JSON.stringify(cart));
-    }, 250);
-    return () => clearTimeout(timer);
+    localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
   const addToCart = (product) => {
@@ -26,16 +23,15 @@ export function CartProvider({ children }) {
   const removeFromCart = (id) => setCart(prev => prev.filter(item => item.id !== id));
 
   const updateQty = (id, qty) => {
-    setCart(prev => prev.map(item => item.id === id ? { ...item, qty } : item).filter(item => item.qty >= 1));
+    setCart(prev => prev.map(item => item.id === id ? { ...item, qty: Math.max(qty, 1) } : item));
   };
 
   return (
-  <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQty }}>
-    {children}
-  </CartContext.Provider>
-)};
-
-
-export function useCart() {
-  return useContext(CartContext);
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQty }}>
+      {children}
+    </CartContext.Provider>
+  );
 }
+
+export const useCart = () => useContext(CartContext);
+
