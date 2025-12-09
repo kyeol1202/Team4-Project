@@ -10,7 +10,7 @@ function WomanPerfume() {
 
   // 🔥 DB에서 여성향수 불러오는 useEffect
   useEffect(() => {
-    fetch("http://localhost:8080/api/products/woman")
+    fetch("http://192.168.0.224:8080/api/products/woman")
       .then(res => res.json())
       .then(data => {
         if (data.success) {
