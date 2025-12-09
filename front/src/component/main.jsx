@@ -19,19 +19,19 @@ function Main() {
     
     const [woman, setWoman] = useState([
         { 
-            product_id: 1, 
+            product_id: 7, 
             name: "AuRa Primeveil",
             desc: "전 세계 333병 한정 로맨틱 플로럴 향기",
             img: "/image/AuRa_Primeveil_woman.png"
         },
         { 
-            product_id: 2, 
+            product_id: 4, 
             name: "AuRa Elenique",
             desc: "고급스러운 우아함이 부드럽게 퍼지는 향",
             img: "/image/AuRa_Elenique_woman.jpeg" 
         },
         { 
-            product_id: 3, 
+            product_id: 5, 
             name: "AuRa Etherlune",
             desc: "달빛이 감싸는 몽환적인 향기",
             img: "/image/AuRa_Etherlune_woman.png" 
@@ -40,7 +40,7 @@ function Main() {
 
     const [man, setMan] = useState([
         { 
-            product_id: 5, 
+            product_id: 8, 
             name: "AuRa Silvaron",
             desc: "시원하고 고급스러운 우디 머스크 향",
             img: "/image/AuRa_Silvaron_man.png" 
@@ -52,7 +52,7 @@ function Main() {
             img: "/image/AuRa_Noctivale_man.png" 
         },
         { 
-            product_id: 7, 
+            product_id: 9, 
             name: "AuRa Solivane",
             desc: "바람처럼 은은하게 감기는 잔향",
             img: "/image/AuRa_Solivane_man.jpeg" 
