@@ -64,7 +64,7 @@ app.post("/api/auth/login", async (req, res) => {
     if (rows.length === 0)
       return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
 
-    const user = rows[0];
+    const user = rows;
 
     res.json({
       success: true,
