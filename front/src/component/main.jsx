@@ -16,6 +16,7 @@ function Main() {
     // }, []);
 
     // 🔥 설명 추가된 데이터
+    
     const [woman, setWoman] = useState([
         { 
             product_id: 1, 
@@ -68,6 +69,20 @@ function Main() {
     
 
     return (
+        <>
+        <div className="page1">
+    <video 
+        className="main-video"
+        src="image/향수광고영상.mp4"
+        autoPlay 
+        loop 
+        muted 
+        playsInline
+    />         
+        </div>
+
+    
+
         <div className="page">
 
 
@@ -119,8 +134,9 @@ function Main() {
                 <span className="arrow right" onClick={slideRight}>›</span>
             </div>
 
-
+                            
         </div>
+        </>
     );
 }
 

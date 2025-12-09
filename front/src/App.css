@@ -10,6 +10,23 @@
   color: #000000d0;
 }
 
+
+.page1{
+
+  width: 1000px;
+  height: 500px;
+  overflow: hidden;
+  position: relative;
+  margin: auto;
+  background-color: #928888;
+}
+.main-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  /* 화면 꽉 채우기 */
+}
+
+
 /* HEADER 1*/
 .header {
   height: 110px;
