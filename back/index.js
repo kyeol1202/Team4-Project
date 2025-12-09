@@ -1,4 +1,4 @@
-// server.js (또는 index.js)
+// server.js 또는 index.js
 const express = require('express');
 const cors = require('cors');
 const pool = require('./db');
@@ -8,12 +8,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// =========================
-// 1. 사용자 관련 API
-// =========================
-
-// 회원 목록 확인
-
+// ==================================
+// 이미지 업로드 (multer)
+// ==================================
 const multer = require("multer");
 const path = require("path");
 
@@ -29,6 +26,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+
+// =========================
+// 1. 사용자 관련 API
+// =========================
+
+// 회원 목록 확인
 app.get("/api/check-users", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM member");
@@ -52,20 +55,16 @@ app.post("/api/register", async (req, res) => {
       [id, pw, name, email, adderss, number, hbd]
     );
 
-    await pool.query(
-      "INSERT INTO category (name) VALUES (?)",
-      [name]
-    );
+    await pool.query("INSERT INTO category (name) VALUES (?)", [name]);
 
     res.json({ success: true, message: "회원가입 성공!" });
   } catch (err) {
-    console.log("❌회원가입 실패:", err);
     res.json({ success: false, message: "DB 오류발생" });
   }
 });
 
 // ===============================
-//  ✔✔ 수정된 로그인 API
+//  ✔ 수정된 로그인 API
 // ===============================
 app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
@@ -82,7 +81,7 @@ app.post("/api/auth/login", async (req, res) => {
     if (rows.length === 0)
       return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
 
-    const user = rows[0]; // ⭐ 반드시 배열에서 한 줄만 꺼낸다.
+    const user = rows[0]; // ★ 반드시 0번 요소만 사용
 
     res.json({
       success: true,
@@ -98,6 +97,7 @@ app.post("/api/auth/login", async (req, res) => {
     res.status(500).json({ success: false, message: "서버 오류" });
   }
 });
+
 
 // =========================
 // 2. 상품 관련 API
@@ -128,7 +128,7 @@ app.get("/api/products/all", async (req, res) => {
   }
 });
 
-// 여성향수
+// 여
 app.get("/api/products/woman", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM product WHERE gender='여성'");
@@ -138,7 +138,7 @@ app.get("/api/products/woman", async (req, res) => {
   }
 });
 
-// 남성향수
+// 남
 app.get("/api/products/man", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM product WHERE gender='남성'");
@@ -177,8 +177,9 @@ app.post("/api/productadd", async (req, res) => {
   }
 });
 
+
 // ===============================
-//  ✔✔ 수정된 상품 상세 API
+//  ✔ 수정된 상품 상세 API (핵심)
 // ===============================
 app.get("/api/products/:id", async (req, res) => {
   const id = req.params.id;
@@ -192,16 +193,16 @@ app.get("/api/products/:id", async (req, res) => {
     if (rows.length === 0)
       return res.json({ success: false, message: "상품 없음" });
 
-    return res.json({ success: true, data: rows[0] }); // ⭐ 단일 상품만 전달
+    return res.json({ success: true, data: rows[0] }); // ★ 단일 객체로 보내야 프론트 정상 동작
   } catch (err) {
     return res.status(500).json({ success: false, message: "DB 오류", error: err.message });
   }
 });
 
+
 // =========================
 // 게임 API
 // =========================
-
 app.get("/game", async (req, res) => {
   try {
     const rows = await pool.query(
@@ -247,10 +248,10 @@ app.post("/game", async (req, res) => {
   }
 });
 
+
 // =========================
 // 서버 실행
 // =========================
-
 app.listen(8080, "0.0.0.0", () => {
   console.log("🚀 서버 실행 중: http://0.0.0.0:8080");
 });
