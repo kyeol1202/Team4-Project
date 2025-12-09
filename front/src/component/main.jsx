@@ -88,7 +88,15 @@ function Main() {
                 />
                 <div className="textbox">
 
-                    <p>안녕 안녕</p>
+                    <h3>AuRa — 당신의 느낌을 향으로 기록하다</h3>
+                    <p>
+                        “한 번의 스침, 한 번의 숨결.
+                        AuRa의 향은 당신의 분위기와 어우러져
+                        세상에 단 하나의 잔향을 남깁니다.
+                        <br></br>
+                        지나가는 순간마저 특별하게—
+                        AuRa Perfume.”
+                    </p>
                 </div>
             </div>
             
@@ -115,7 +123,7 @@ function Main() {
                                 {woman.map(item => (
                                     <div className="product-card" key={item.product_id}>
                                         <button onClick={() => navigate(`/product/${item.product_id}`)}>
-                                            <img src={item.img} alt={item.name} className="product-img" />
+                                            <img src={`http://192.168.0.224:8080${item.img}`} alt={item.name} className="product-img" />
                                         </button>
 
                                         {/* 🔥 텍스트 추가 부분 */}

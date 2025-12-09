@@ -9,12 +9,13 @@ function ProductDetail() {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/products/${id}`)
+    fetch(`http://192.168.0.224:8080/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) setProduct(data.data);
       })
       .catch((err) => console.error("상품 상세 오류:", err));
+      
   }, [id]);
 
   if (!product) return <div style={{ padding: 40 }}>Loading...</div>;
@@ -30,7 +31,7 @@ function ProductDetail() {
       return;
     }
 
-    fetch("http://localhost:8080/api/wish/add", {
+    fetch("http://192.168.0.224:8080/api/wish/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -57,7 +58,7 @@ function ProductDetail() {
       return;
     }
 
-    fetch("http://localhost:8080/api/cart/add", {
+    fetch("http://192.168.0.224:8080/api/cart/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -73,12 +74,16 @@ function ProductDetail() {
           : alert("이미 장바구니에 있는 상품입니다.");
       });
   };
-
+console.log("IMAGE PATH:", product.img);
   return (
     <div style={styles.container}>
-      
+
       {/* 이미지 */}
-      <img src={product.img} alt={product.name} style={styles.image} />
+      <img
+        src={`http://192.168.0.224:8080${product.img}`}
+        alt={product.name}
+        style={styles.image}
+      />
 
       {/* 상품 기본 정보 */}
       <h1 style={styles.name}>{product.name}</h1>
@@ -96,13 +101,19 @@ function ProductDetail() {
       <div style={styles.sectionBox}>
         <h2 style={styles.sectionTitle}>향 구성 (Notes)</h2>
         <p><strong>Top Notes:</strong> {product.top_notes}</p>
-        <p><strong>Middle Notes:</strong> {product.middle_notes}</p>
+
+        {/* 🔥 middle_notes → middle_not 수정 */}
+        <p><strong>Middle Notes:</strong> {product.middle_not}</p>
+
         <p><strong>Base Notes:</strong> {product.base_notes}</p>
       </div>
 
       <div style={styles.sectionBox}>
         <h2 style={styles.sectionTitle}>향수 스펙</h2>
-        <p><strong>타입:</strong> {product.type}</p>
+
+        {/* 🔥 type → perfume_ty 수정 */}
+        <p><strong>타입:</strong> {product.perfume_type }</p>
+
         <p><strong>용량:</strong> {product.volume}mL</p>
         <p><strong>지속력 (Longevity):</strong> {product.longevity}/10</p>
         <p><strong>잔향 (Sillage):</strong> {product.sillage}</p>
@@ -199,7 +210,7 @@ const styles = {
 
   backBtn: {
     marginTop: "40px",
-    fontSize: "17px", 
+    fontSize: "17px",
     color: "#444",
     textDecoration: "underline",
     background: "none",
