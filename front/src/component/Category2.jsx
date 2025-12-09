@@ -1,8 +1,9 @@
 import React from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 function Category2() {
   const navigate = useNavigate();
+
   const products = [
     { id: 1, name: "AuRa Noverin", img: "/image/AuRa_Noverin_woman.png" },
     { id: 2, name: "AuRa Velese", img: "/image/AuRa_Velese_woman.png" },
@@ -15,8 +16,8 @@ function Category2() {
     { id: 9, name: "AuRa Solivane", img: "/image/AuRa_Solivane_man.jpeg" },
   ];
 
- const handleClick = (id) => {
-    alert(`Product ${id} clicked! (Navigation would happen here)`);
+  const handleClick = (id) => {
+    navigate(`/product/${id}`);
   };
 
   return (
@@ -40,60 +41,36 @@ function Category2() {
           </div>
         ))}
       </div>
-      
+
       <div style={styles.middleRow}>
         <div
           style={styles.circleItem}
           onClick={() => handleClick(products[4].id)}
-          onMouseEnter={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
-          }}
         >
           <img src={products[4].img} alt={products[4].name} style={styles.circleImg} />
         </div>
-        
-        <div 
+
+        <div
           style={styles.titleBox}
-          onClick={() => window.location.href = '/'}
+          onClick={() => navigate("/")}
         >
           <h1 style={styles.allTitle}>Perfume</h1>
         </div>
-        
+
         <div
           style={styles.circleItem}
           onClick={() => handleClick(products[5].id)}
-          onMouseEnter={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
-          }}
         >
           <img src={products[5].img} alt={products[5].name} style={styles.circleImg} />
         </div>
       </div>
-      
+
       <div style={styles.circleWrapper}>
         {products.slice(6, 9).map((item) => (
           <div
             key={item.id}
             style={styles.circleItem}
             onClick={() => handleClick(item.id)}
-            onMouseEnter={(e) => {
-              e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
-              e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.querySelector('img').style.transform = 'scale(1)';
-              e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
-            }}
           >
             <img src={item.img} alt={item.name} style={styles.circleImg} />
           </div>

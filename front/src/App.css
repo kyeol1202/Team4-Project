@@ -7,14 +7,14 @@
 
 .page {
   background: #ffffff;
-  color: #6f038ad0;
+  color: #000000d0;
 }
 
 /* HEADER 1*/
 .header {
   height: 110px;
   background: #ffffff;
-  border-bottom: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6; 
   display: flex;
   align-items: center;
   justify-content: center;

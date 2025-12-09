@@ -20,6 +20,7 @@ import Mypage from "./component/Mypage";
 import Search from "./component/search/search";
 import OrderDetail from "./component/OrderDetail";
 import EditUserInfo from "./component/EditUserInfo";
+import ProductDetail from "./component/ProductDetail";
 
 function App() {
   return (
@@ -46,10 +47,9 @@ function App() {
               <Route path="/service" element={<Service />} />
               <Route path="/qna" element={<QnaPage />} />
               <Route path="/mypage" element={<Mypage />} />
-
               <Route path="/orderdetail" element={<OrderDetail />} />
               <Route path="/edituserinfo" element={<EditUserInfo />} />
-
+              <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/register" element={<Register />} />
             </Route>
 

@@ -10,10 +10,10 @@ function Category() {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const saved = localStorage.getItem("login");
-        if (saved === "true") setLogin(true);
-    }, []);
+    // useEffect(() => {
+    //     const saved = localStorage.getItem("login");
+    //     if (saved === "true") setLogin(true);
+    // }, []);
 
     // 🔥 설명 추가된 데이터
     const [woman, setWoman] = useState([

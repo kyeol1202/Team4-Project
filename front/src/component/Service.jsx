@@ -58,7 +58,7 @@ const kakaoChat = () => {
                 <button onClick={()=>navigate("/qna")} 
                 className="bg-black text-white px-10 py-4 rounded-none hover:bg-gray-900 text-lg tracking-widest">
                     1:1 문의하기
-                    </button>
+                    </button><br/>
                 </div>
                 {/*카카오톡 채널*/}
                 <div className="fixed bottom-7 right-7 bg-[#FEE500] w-16 h-16 flex items-center justify-center rounded-full shadow-xl cursor-pointer hover:opacity-80" onClick={kakaoChat}>
