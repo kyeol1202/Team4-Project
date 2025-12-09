@@ -13,6 +13,22 @@ app.use(express.urlencoded({ extended: true }));
 // =========================
 
 // 회원 목록 확인
+
+const multer = require("multer");
+const path = require("path");
+
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename(req, file, cb) {
+    const ext = path.extname(file.originalname);
+    cb(null, Date.now() + ext);
+  },
+});
+
+const upload = multer({ storage });
+
 app.get("/api/check-users", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM member");
@@ -148,16 +164,17 @@ app.get("/api/category", async (req, res) => {
 
 
 // 상품 등록
-app.post("/api/productadd", async (req, res) => {
+app.post("/api/productadd", upload.single("img"), async (req, res) => {
   const { name, price, category_id } = req.body;
+  const imgPath = "/uploads/" + req.file.filename;
 
   try {
     await pool.query(
       `
-      INSERT INTO product (name, price, category_id)
-      VALUES (?, ?, ?)
+      INSERT INTO product (name, price, category_id, img)
+      VALUES (?, ?, ?, ?)
       `,
-      [name, price, category_id]
+      [name, price, category_id, imgPath]
     );
 
     res.json({ success: true, message: "상품 등록 성공!!" });
