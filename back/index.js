@@ -154,10 +154,10 @@ app.post("/api/productadd", async (req, res) => {
   try {
     await pool.query(
       `
-      INSERT INTO product (name, price, category_id, description, img, gender)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO product (name, price, category_id)
+      VALUES (?, ?, ?)
       `,
-      [name, price, category_id, description, img, gender]
+      [name, price, category_id]
     );
 
     res.json({ success: true, message: "상품 등록 성공!!" });
