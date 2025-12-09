@@ -1,4 +1,4 @@
-// server.js
+// server.js (또는 index.js)
 const express = require('express');
 const cors = require('cors');
 const pool = require('./db');
@@ -48,7 +48,9 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-// 로그인 API
+// ===============================
+//  ✔✔ 수정된 로그인 API
+// ===============================
 app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -56,7 +58,7 @@ app.post("/api/auth/login", async (req, res) => {
     return res.json({ success: false, message: "아이디와 비밀번호를 입력하세요." });
 
   try {
-    const [rows] = await pool.query(
+    const rows = await pool.query(
       "SELECT * FROM member WHERE username = ? AND password = ?",
       [username, password]
     );
@@ -64,7 +66,7 @@ app.post("/api/auth/login", async (req, res) => {
     if (rows.length === 0)
       return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
 
-    const user = rows;
+    const user = rows[0]; // ⭐ 반드시 배열에서 한 줄만 꺼낸다.
 
     res.json({
       success: true,
@@ -130,22 +132,15 @@ app.get("/api/products/man", async (req, res) => {
   }
 });
 
+// 카테고리
 app.get("/api/category", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM category");
-    res.json({
-      success: true,
-      data: rows
-    });
+    res.json({ success: true, data: rows });
   } catch (err) {
-    console.error("DB 에러:", err.message);
-    res.status(500).json({
-      success: false,
-      error: err.message
-    });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
-
 
 // 상품 등록
 app.post("/api/productadd", async (req, res) => {
@@ -166,10 +161,9 @@ app.post("/api/productadd", async (req, res) => {
   }
 });
 
-// =========================
-// 3. 상품 상세 (여기 1개만 존재해야 함!!!)
-// =========================
-
+// ===============================
+//  ✔✔ 수정된 상품 상세 API
+// ===============================
 app.get("/api/products/:id", async (req, res) => {
   const id = req.params.id;
 
@@ -179,16 +173,18 @@ app.get("/api/products/:id", async (req, res) => {
       [id]
     );
 
-    const data = rows; // ✔ 수정된 부분
-
-    if (!data)
+    if (rows.length === 0)
       return res.json({ success: false, message: "상품 없음" });
 
-    return res.json({ success: true, data });
+    return res.json({ success: true, data: rows[0] }); // ⭐ 단일 상품만 전달
   } catch (err) {
     return res.status(500).json({ success: false, message: "DB 오류", error: err.message });
   }
 });
+
+// =========================
+// 게임 API
+// =========================
 
 app.get("/game", async (req, res) => {
   try {
@@ -197,26 +193,21 @@ app.get("/game", async (req, res) => {
     );
     res.json({ success: true, data: rows });
   } catch (err) {
-    console.error("DB 에러:", err.message);
     res.status(500).json({ success: false, error: err.message });
   }
 });
-
-
-//게임
 
 app.post("/game", async (req, res) => {
   const { name, score } = req.body;
 
   try {
-    // 1) 기존 유저 점수 확인
     const rows = await pool.query(
       "SELECT score FROM game WHERE name=?",
       [name]
     );
-    const user = rows[0]; // 첫 번째 행
 
-    // 2) 없으면 INSERT
+    const user = rows[0];
+
     if (!user) {
       await pool.query(
         "INSERT INTO game (name, score) VALUES (?, ?)",
@@ -225,7 +216,6 @@ app.post("/game", async (req, res) => {
       return res.json({ success: true, message: "신규 등록" });
     }
 
-    // 3) 있으면 최고점 비교 후 UPDATE
     if (score > user.score) {
       await pool.query(
         "UPDATE game SET score=? WHERE name=?",
@@ -237,11 +227,9 @@ app.post("/game", async (req, res) => {
     return res.json({ success: true, message: "기존 점수 유지됨" });
 
   } catch (err) {
-    console.error("❌랭킹등록 실패:", err);
     return res.json({ success: false, message: "DB 오류 발생" });
-ㅋ  }
+  }
 });
-
 
 // =========================
 // 서버 실행
