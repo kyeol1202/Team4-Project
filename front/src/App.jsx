@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CartProvider } from "./context/CartContext";
 import { WishProvider } from "./context/WishContext";
+import { AuthProvider } from "./context/AuthContext";
 import "./App.css";
 import "./Search.css";
 
@@ -24,6 +25,9 @@ import ProductDetail from "./component/ProductDetail";
 
 function App() {
   return (
+    <AuthProvider>
+      <YourRoutesComponent />
+    
     <CartProvider>
       <WishProvider>
         <BrowserRouter>
@@ -57,6 +61,7 @@ function App() {
         </BrowserRouter>
       </WishProvider>
     </CartProvider>
+    </AuthProvider>
   );
 }
 
