@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function WomanPerfume() {
   const products = [
@@ -9,8 +10,8 @@ function WomanPerfume() {
     { id: 5, name: "AuRa Velese", img: "/image/AuRa_Velese_woman.png" },
   ];
 
-  const handleClick = (id) => {
-    alert(`Product ${id} clicked! (Navigation would happen here)`);
+ const handleClick = (id) => {
+    navigate(`/product/${id}`);
   };
 
   return (

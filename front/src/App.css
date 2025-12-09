@@ -14,7 +14,7 @@
 .header {
   height: 110px;
   background: #ffffff;
-  border-bottom: 1px solid #e6e6e6; 
+  border-bottom: 1px solid #e6e6e6;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,7 +106,7 @@
 /* Icons */
 .header-right {
   position: absolute;
-  top: 30px;
+  top: 40px;
   right: 30px;
   display: flex;
   gap: 16px;
@@ -167,12 +167,13 @@
 
 /* 검색창 */
 .search-box {
-  width: 330px;
-  margin: 30px auto 0;
+  width: 350px;
+  margin: 0 auto;
+  display: flex;
 }
 
 .search-box input {
-  width: 85%;
+  width: 100%;
   flex: 1;                 /* 입력창이 남은 공간 전체 차지 */
   padding: 12px 15px;
   border-radius: 6px;
