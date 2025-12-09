@@ -1,12 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 function Mypage() {
   const navigate = useNavigate();
+  const { isLogin, logout } = useAuth();
+
   const [orders, setOrders] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [questions, setQuestions] = useState([]);
-  const [isLogin, setIsLogin] = useState(false);
 
   const [openOrderList, setOpenOrderList] = useState(false);
   const [openReviewList, setOpenReviewList] = useState(false);
@@ -17,26 +19,10 @@ function Mypage() {
       setOrders(JSON.parse(localStorage.getItem("orders")) || []);
       setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
       setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
-
-      // 로그인 상태 확인
-      const loginCheck = localStorage.getItem("login");
-      setIsLogin(!!loginCheck);
     } catch {
       alert("데이터 로드 오류 발생");
     }
   }, []);
-
-  // 로그인/로그아웃 버튼
-  const handleAuthButton = () => {
-    if (isLogin) {
-      localStorage.removeItem("login");
-      localStorage.removeItem("user");
-      alert("로그아웃 되었습니다.");
-      setIsLogin(false); // UI 즉시 변경
-      return;
-    }
-    navigate("/login");
-  };
 
   const handleOrderClick = (orderId) => {
     navigate(`/order/${orderId}`);
@@ -269,12 +255,12 @@ function Mypage() {
 
       {/* 하단 버튼 */}
       <div style={{ marginTop: "30px", display: "flex", gap: "10px" }}>
-        {/* 로그인 ↔ 로그아웃 자동 UI */}
-        <button onClick={handleAuthButton}>
+        {/* 로그인 ↔ 로그아웃 자동 반영 */}
+        <button onClick={isLogin ? logout : () => navigate("/login")}>
           {isLogin ? "로그아웃" : "로그인"}
         </button>
 
-        {/* 로그인 상태일 때만 보임 */}
+        {/* 로그인 시에만 정보수정 보임 */}
         {isLogin && (
           <button onClick={() => navigate("/edituserinfo")}>정보 수정</button>
         )}
@@ -284,4 +270,3 @@ function Mypage() {
 }
 
 export default Mypage;
-
