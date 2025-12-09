@@ -63,9 +63,7 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-// ===============================
-//  ✔ 수정된 로그인 API
-// ===============================
+// 로그인
 app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -81,7 +79,7 @@ app.post("/api/auth/login", async (req, res) => {
     if (rows.length === 0)
       return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
 
-    const user = rows[0]; // ★ 반드시 0번 요소만 사용
+    const user = rows[0];
 
     res.json({
       success: true,
@@ -128,7 +126,7 @@ app.get("/api/products/all", async (req, res) => {
   }
 });
 
-// 여
+// 여성향수
 app.get("/api/products/woman", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM product WHERE gender='여성'");
@@ -138,7 +136,7 @@ app.get("/api/products/woman", async (req, res) => {
   }
 });
 
-// 남
+// 남성향수
 app.get("/api/products/man", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM product WHERE gender='남성'");
@@ -177,10 +175,7 @@ app.post("/api/productadd", async (req, res) => {
   }
 });
 
-
-// ===============================
-//  ✔ 수정된 상품 상세 API (핵심)
-// ===============================
+// 상품 상세
 app.get("/api/products/:id", async (req, res) => {
   const id = req.params.id;
 
@@ -193,9 +188,62 @@ app.get("/api/products/:id", async (req, res) => {
     if (rows.length === 0)
       return res.json({ success: false, message: "상품 없음" });
 
-    return res.json({ success: true, data: rows[0] }); // ★ 단일 객체로 보내야 프론트 정상 동작
+    return res.json({ success: true, data: rows[0] });
   } catch (err) {
-    return res.status(500).json({ success: false, message: "DB 오류", error: err.message });
+    return res.status(500).json({ success: false, message: "DB 오류" });
+  }
+});
+
+
+// ===========================================
+// ⭐⭐⭐ 추가된 위시리스트 API
+// ===========================================
+app.post("/api/wish/add", async (req, res) => {
+  const { user_id, product_id } = req.body;
+
+  try {
+    const rows = await pool.query(
+      "SELECT * FROM wishlist WHERE user_id=? AND product_id=?",
+      [user_id, product_id]
+    );
+
+    if (rows.length > 0)
+      return res.json({ success: false, message: "이미 위시리스트에 있습니다." });
+
+    await pool.query(
+      "INSERT INTO wishlist (user_id, product_id) VALUES (?, ?)",
+      [user_id, product_id]
+    );
+
+    res.json({ success: true, message: "위시리스트 추가 완료!" });
+  } catch (err) {
+    res.json({ success: false, message: "DB 오류" });
+  }
+});
+
+// ===========================================
+// ⭐⭐⭐ 추가된 장바구니 API
+// ===========================================
+app.post("/api/cart/add", async (req, res) => {
+  const { user_id, product_id, count } = req.body;
+
+  try {
+    const rows = await pool.query(
+      "SELECT * FROM cart WHERE user_id=? AND product_id=?",
+      [user_id, product_id]
+    );
+
+    if (rows.length > 0)
+      return res.json({ success: false, message: "이미 장바구니에 있습니다." });
+
+    await pool.query(
+      "INSERT INTO cart (user_id, product_id, count) VALUES (?, ?, ?)",
+      [user_id, product_id, count]
+    );
+
+    res.json({ success: true, message: "장바구니 추가 완료!" });
+  } catch (err) {
+    res.json({ success: false, message: "DB 오류" });
   }
 });
 
