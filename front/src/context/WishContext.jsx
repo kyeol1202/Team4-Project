@@ -4,28 +4,44 @@ import { createContext, useContext, useState, useEffect } from "react";
 const WishContext = createContext();
 
 export function WishProvider({ children }) {
-  const [wish, setWish] = useState(() => JSON.parse(localStorage.getItem("wish")) || []);
+    const [wishList, setWishList] = useState([]);
 
-  useEffect(() => {
-    localStorage.setItem("wish", JSON.stringify(wish));
-  }, [wish]);
+    // 로컬스토리지에서 불러오기
+    useEffect(() => {
+        const storedWish = localStorage.getItem("wishList");
+        if (storedWish) {
+            setWishList(JSON.parse(storedWish));
+        }
+    }, []);
 
-  const addToWish = (product) => {
-    setWish((prev) => {
-      if (!prev.find((item) => item.id === product.id)) return [...prev, product];
-      return prev;
-    });
-  };
+    // 로컬스토리지에 저장
+    useEffect(() => {
+        localStorage.setItem("wishList", JSON.stringify(wishList));
+    }, [wishList]);
 
-  const removeFromWish = (id) => setWish((prev) => prev.filter((item) => item.id !== id));
+    const addToWish = (item) => {
+        if (!wishList.find(w => w.id === item.id)) {
+            setWishList(prev => [...prev, item]);
+        }
+    };
 
-  return (
-    <WishContext.Provider value={{ wish, addToWish, removeFromWish }}>
-      {children}
-    </WishContext.Provider>
-  );
+    const removeFromWish = (id) => {
+        setWishList(prev => prev.filter(item => item.id !== id));
+    };
+
+    const toggleWish = (item) => {
+        if (wishList.find(w => w.id === item.id)) {
+            removeFromWish(item.id);
+        } else {
+            addToWish(item);
+        }
+    };
+
+    return (
+        <WishContext.Provider value={{ wishList, addToWish, removeFromWish, toggleWish }}>
+            {children}
+        </WishContext.Provider>
+    );
 }
 
-export function useWish() {
-  return useContext(WishContext);
-}
+export const useWish = () => useContext(WishContext);
