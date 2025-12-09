@@ -130,6 +130,23 @@ app.get("/api/products/man", async (req, res) => {
   }
 });
 
+app.get("/api/category", async (req, res) => {
+  try {
+    const rows = await pool.query("SELECT * FROM category");
+    res.json({
+      success: true,
+      data: rows
+    });
+  } catch (err) {
+    console.error("DB 에러:", err.message);
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
+  }
+});
+
+
 // 상품 등록
 app.post("/api/productadd", async (req, res) => {
   const { name, price, category_id, description, img, gender } = req.body;
@@ -162,7 +179,7 @@ app.get("/api/products/:id", async (req, res) => {
       [id]
     );
 
-    const data = rows[0]; // ✔ 수정된 부분
+    const data = rows; // ✔ 수정된 부분
 
     if (!data)
       return res.json({ success: false, message: "상품 없음" });
@@ -171,6 +188,58 @@ app.get("/api/products/:id", async (req, res) => {
   } catch (err) {
     return res.status(500).json({ success: false, message: "DB 오류", error: err.message });
   }
+});
+
+app.get("/game", async (req, res) => {
+  try {
+    const rows = await pool.query(
+      "SELECT name, score FROM game ORDER BY score DESC LIMIT 10"
+    );
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error("DB 에러:", err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+
+//게임
+
+app.post("/game", async (req, res) => {
+  const { name, score } = req.body;
+
+  try {
+    // 1) 기존 유저 점수 확인
+    const rows = await pool.query(
+      "SELECT score FROM game WHERE name=?",
+      [name]
+    );
+    const user = rows[0]; // 첫 번째 행
+
+    // 2) 없으면 INSERT
+    if (!user) {
+      await pool.query(
+        "INSERT INTO game (name, score) VALUES (?, ?)",
+        [name, score]
+      );
+      return res.json({ success: true, message: "신규 등록" });
+    }
+
+    // 3) 있으면 최고점 비교 후 UPDATE
+    if (score > user.score) {
+      await pool.query(
+        "UPDATE game SET score=? WHERE name=?",
+        [score, name]
+      );
+      return res.json({ success: true, message: "점수 갱신!" });
+    }
+
+    return res.json({ success: true, message: "기존 점수 유지됨" });
+
+  } catch (err) {
+    console.error("❌랭킹등록 실패:", err);
+    return res.json({ success: false, message: "DB 오류 발생" });
+ㅋ  }
 });
 
 
