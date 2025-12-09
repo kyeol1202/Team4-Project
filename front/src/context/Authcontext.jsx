@@ -14,17 +14,17 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = (userData) => {
-    localStorage.setItem("login", "true");
-    localStorage.setItem("user", JSON.stringify(userData));
     setIsLogin(true);
     setUser(userData);
+    localStorage.setItem("login", "true");
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   const logout = () => {
-    localStorage.removeItem("login");
-    localStorage.removeItem("user");
     setIsLogin(false);
     setUser(null);
+    localStorage.removeItem("login");
+    localStorage.removeItem("user");
   };
 
   return (
@@ -34,10 +34,4 @@ export function AuthProvider({ children }) {
   );
 }
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
-
-
-
-
+export const useAuth = () => useContext(AuthContext);

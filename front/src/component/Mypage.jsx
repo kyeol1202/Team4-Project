@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 
 function Mypage() {
   const navigate = useNavigate();
-  const { isLogin, logout } = useAuth();
+  const { isLogin, logout, user } = useAuth();
 
   const [orders, setOrders] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -17,8 +17,7 @@ function Mypage() {
   // 로그인 체크 및 데이터 로드
   useEffect(() => {
     if (!isLogin) {
-      alert("로그인이 필요합니다.");
-      navigate("/", { replace: true });
+      navigate("/", { replace: true }); // 로그인 안 됐으면 홈 이동
     } else {
       setOrders(JSON.parse(localStorage.getItem("orders")) || []);
       setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
@@ -61,16 +60,16 @@ function Mypage() {
     localStorage.setItem("reviews", JSON.stringify(updatedReviews));
   };
 
-  // 리뷰 수정 (간단 alert, 추후 모달/페이지 확장 가능)
+  // 리뷰 수정 (alert, 추후 모달/페이지 확장 가능)
   const handleEditReview = (review) => {
-    alert(`리뷰 수정 기능 준비중: ${review.productName}`);
+    alert(`리뷰 수정 준비중: ${review.productName}`);
   };
 
   return (
     <div style={{ padding: "40px" }}>
       <h2>마이페이지</h2>
 
-      {/* 하단 버튼 */}
+      {/* 상단 버튼 */}
       <div style={{ marginBottom: "20px" }}>
         <button onClick={handleLogout}>로그아웃</button>
         <button onClick={() => navigate("/edituserinfo")} style={{ marginLeft: "10px" }}>
@@ -92,21 +91,53 @@ function Mypage() {
           ) : (
             <ul style={{ listStyle: "none", padding: 0, marginTop: "10px" }}>
               {orders.map((order) => (
-                <li key={order.id} style={{ borderBottom: "1px solid #ddd", padding: "10px 0", marginBottom: "15px" }}>
+                <li
+                  key={order.id}
+                  style={{ borderBottom: "1px solid #ddd", padding: "10px 0", marginBottom: "15px" }}
+                >
                   <p><strong>주문번호:</strong> {order.id}</p>
                   <div style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
                     {order.items.map((item) => (
-                      <div key={item.productId} style={{ width: "150px", textAlign: "center", border: "1px solid #eee", padding: "10px", borderRadius: "8px" }}>
+                      <div
+                        key={item.productId}
+                        style={{
+                          width: "150px",
+                          textAlign: "center",
+                          border: "1px solid #eee",
+                          padding: "10px",
+                          borderRadius: "8px",
+                        }}
+                      >
                         <p style={{ marginTop: "5px", fontWeight: "bold" }}>{item.productName}</p>
                         <p>
                           <strong>배송:</strong>{" "}
-                          <span style={{ color: order.status === "배송완료" ? "green" : order.status === "배송중" ? "orange" : "gray", fontWeight: "bold" }}>
+                          <span
+                            style={{
+                              color:
+                                order.status === "배송완료"
+                                  ? "green"
+                                  : order.status === "배송중"
+                                  ? "orange"
+                                  : "gray",
+                              fontWeight: "bold",
+                            }}
+                          >
                             {order.status}
                           </span>
                         </p>
                         <p>
                           <strong>교환/반품:</strong>{" "}
-                          <span style={{ color: item.returnStatus === "교환신청중" ? "blue" : item.returnStatus === "반품신청중" ? "red" : "gray", fontWeight: "bold" }}>
+                          <span
+                            style={{
+                              color:
+                                item.returnStatus === "교환신청중"
+                                  ? "blue"
+                                  : item.returnStatus === "반품신청중"
+                                  ? "red"
+                                  : "gray",
+                              fontWeight: "bold",
+                            }}
+                          >
                             {item.returnStatus || "없음"}
                           </span>
                         </p>
