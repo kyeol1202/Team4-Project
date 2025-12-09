@@ -5,7 +5,7 @@ import './Category.css';
 function Category() {
 
     const [index, setIndex] = useState(0);
-    const [surcharge, setSurcharge] = useState("");
+
 
 
     const navigate = useNavigate();
@@ -63,27 +63,13 @@ function Category() {
     const slideRight = () => setIndex((prev) => (prev + 1) % slides.length);
     const slideLeft = () => setIndex((prev) => (prev - 1 + slides.length) % slides.length);
 
-    function search() {
-        if (!surcharge.trim()) return alert("검색어를 입력하세요!");
-        navigate(`/search?keyword=${surcharge}`);
-    }
+
 
     
 
     return (
         <div className="page">
 
-            {/* 검색 */}
-            <div className="search-box">
-                <input
-                    type="text"
-                    placeholder="검색하기"
-                    value={surcharge}
-                    onChange={(e) => setSurcharge(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && search()}
-                />
-                <button className="search" onClick={search}>🔍</button>
-            </div>
 
             {/* 제목 */}
             <h1 className="section-title">

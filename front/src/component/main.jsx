@@ -4,16 +4,15 @@ import { useNavigate } from "react-router-dom";
 function Main() {
 
     const [index, setIndex] = useState(0);
-    const [surcharge, setSurcharge] = useState('');
     const navigate = useNavigate();
 
     const products = [
-        { id: 1, img: "" },
-        { id: 2, img: "" },
-        { id: 3, img: "" },
-        { id: 4, img: "image/gam.png" },
-        { id: 5, img: "" },
-        { id: 6, img: "image/jung1.jpg" },
+        { id: 1, img: "image/AuRa_Primeveil_woman.png" },
+        { id: 2, img: "image/AuRa_Elenique_woman.jpeg" },
+        { id: 3, img: "image/AuRa_Etherlune_woman.png" },
+        { id: 4, img: "image/AuRa_Silvaron_man.png" },
+        { id: 5, img: "image/AuRa_Noctivale_man.png" },
+        { id: 6, img: "image/AuRa_Solivane_man.jpeg" },
     ];
 
     const visibleCount = 3;
@@ -39,25 +38,10 @@ function Main() {
         });
     };
 
-    function search() {
-        if (!surcharge.trim()) return alert("검색어를 입력하세요!");
-        navigate(`/search?keyword=${surcharge}`);
-    }
-
     return (
         <div className="page">
 
             {/* 검색 */}
-            <div className="search-box">
-                <input
-                    type="text"
-                    placeholder="검색하기"
-                    value={surcharge}
-                    onChange={(e) => setSurcharge(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && search()}
-                />
-                <button className="search" onClick={search}>🔍</button>
-            </div>
 
             <h1 className="section-title">BEST SELLERS</h1>
 

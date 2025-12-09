@@ -16,7 +16,7 @@ function Layout() {
   const [p_name, setP_name] = useState("");
   const [p_price, setP_price] = useState("");
   const [p_category, setP_category] = useState("");
-
+      const [surcharge, setSurcharge] = useState('');
   const [categoryList, setCategoryList] = useState([]);
 
   // 로그인 상태 가져오기
@@ -87,57 +87,52 @@ function Layout() {
     setUserId("");
     setPassword("");
   }
-
+  function search() {
+        if (!surcharge.trim()) return alert("검색어를 입력하세요!");
+        navigate(`/search?keyword=${surcharge}`);
+    }
 
   return (
     <>
       {/* HEADER */}
-      <header className="header">
-        <div className="header-left">
-          MENU
-          <ul className="dropdown">
-            <li onClick={() => navigate("/category")}>베스트셀러</li>
-            <li onClick={() => navigate("/category2")}>전체상품</li>
-            <li onClick={() => navigate("/category3")}>여성향수</li>
-            <li onClick={() => navigate("/category4")}>남성향수</li>
-          </ul>
-        </div>
+     <header className="header">
 
-        <div className="header-title" onClick={() => navigate("/")}>Aura</div>
+  <div className="header-left">
+    MENU
+    <ul className="dropdown">
+      <li onClick={() => navigate("/category")}>베스트셀러</li>
+      <li onClick={() => navigate("/category2")}>전체상품</li>
+      <li onClick={() => navigate("/category3")}>여성향수</li>
+      <li onClick={() => navigate("/category4")}>남성향수</li>
+    </ul>
+  </div>
 
-        <div className="header-right">
-          <button onClick={() => setOpen(true)}>상품 등록</button>
+  <div className="header-title" onClick={() => navigate("/")}>
+    Aura
+  </div>
 
-          {open && (
-            <div className="popup-bg">
-              <div className="popup-box">
-                <button className="popup-close" onClick={() => setOpen(false)}>X</button>
-                <h3>상품 등록</h3>
+  <div className="header-right">
 
-                <input type="text" placeholder="상품명" onChange={(e) => setP_name(e.target.value)} />
-                <input type="text" placeholder="가격" onChange={(e) => setP_price(e.target.value)} />
+    <div className="search-box">
+      <input
+        type="text"
+        placeholder="검색하기"
+        value={surcharge}
+        onChange={(e) => setSurcharge(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && search()}
+      />
+      <button className="search" onClick={search}>🔍</button>
+    </div>
 
-                <select onChange={(e) => setP_category(e.target.value)}>
-                  <option value="">카테고리 선택</option>
-                  {categoryList.map((item) => (
-                    <option key={item.category_id} value={item.category_id}>
-                      {item.name}
-                    </option>
-                  ))}
-                </select>
+    <button onClick={() => setOpen(true)}>상품 등록</button>
+    <button onClick={() => login ? navigate("/wish") : setLoginOpen(true)}>♡</button>
+    <button onClick={() => navigate("/cart")}>🛒</button>
+    <button onClick={() => login ? navigate("/mypage") : setLoginOpen(true)}>👤</button>
 
-                <button onClick={product}>등록하기</button>
-              </div>
-            </div>
-          )}
+  </div>
+</header>
 
-          <button onClick={() => login ? navigate("/wish") : setLoginOpen(true)}>♡</button>
-          <button onClick={() => navigate("/cart")}>🛒</button>
-          <button onClick={() => login ? navigate("/mypage") : setLoginOpen(true)}>👤</button>
-        </div>
-      </header>
-
-      {/* 로그인 drawer */}
+      {/* 로그인 drawer */} 
       {/* 🔥 로그인 배경 */}
             {loginOpen && (
                 <div className="overlay" onClick={() => setLoginOpen(false)}></div>
