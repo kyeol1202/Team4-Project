@@ -56,10 +56,10 @@ const kakaoChat = () => {
               {/*1:1 문의*/}
               <div className="text-center mb-10">
                 <button onClick={()=>navigate("/qna")} 
-                className="bg-black text-white px-10 py-4 rounded-none hover:bg-gray-900 text-lg tracking-widest">
+                className="bg-black text-white px-10 py-4 rounded-none hover:bg-gray-900 text-lg tracking-widest mb-5">
                     1:1 문의하기
-                    </button><br/>
-                </div>
+                    </button>                
+                    </div>
                 {/*카카오톡 채널*/}
                 <div className="fixed bottom-7 right-7 bg-[#FEE500] w-16 h-16 flex items-center justify-center rounded-full shadow-xl cursor-pointer hover:opacity-80" onClick={kakaoChat}>
                     <img src="https://developers.kakao.com/tool/resource/static/img/buttonbutton/channel/consult_small_yellow.png" alt="kakao" className="w-10" />
