@@ -28,9 +28,9 @@ function Layout() {
 
   // 로그인 상태 가져오기
   useEffect(() => {
-    const saved = localStorage.getItem("login");
-    if (saved === "true") setLogin(true);
-  }, []);
+  const saved = localStorage.getItem("login");
+  setLogin(saved === "true");
+}, []);
 
   // 카테고리 불러오기
   useEffect(() => {
@@ -97,6 +97,7 @@ function Layout() {
     setLoginOpen(false);
     setUserId("");
     setPassword("");
+    
   }
 
   function search() {
@@ -215,7 +216,7 @@ function Layout() {
         />
 
         <button className="login-btn" onClick={Login}>로그인</button>
-        <button className="login-btn" onClick={() => navigate("/register")}>회원가입</button>
+        <button className="login-btn" onClick={() => { navigate("/register"); setLoginOpen(false); }}>회원가입</button>
       </div>
 
       {/* 페이지 내용 */}
