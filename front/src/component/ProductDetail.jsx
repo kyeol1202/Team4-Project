@@ -19,11 +19,17 @@ function ProductDetail() {
 
   if (!product) return <div style={{ padding: 40 }}>Loading...</div>;
 
+<<<<<<< HEAD
+    return (
+      <div style={styles.container}>
+    
+=======
   // -----------------------------
   // ⭐ 위시리스트 추가 함수
   // -----------------------------
   const addToWish = () => {
     const userId = localStorage.getItem("user_id");
+>>>>>>> 9ec8e5628885f4f1ab8ebbac5eb994982f9d37b8
 
     if (!userId) {
       alert("로그인이 필요합니다!");
