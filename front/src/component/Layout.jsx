@@ -100,7 +100,6 @@ function Layout() {
   <div className="header-left">
     MENU
     <ul className="dropdown">
-      <li onClick={() => navigate("/category")}>베스트셀러</li>
       <li onClick={() => navigate("/category2")}>전체상품</li>
       <li onClick={() => navigate("/category3")}>여성향수</li>
       <li onClick={() => navigate("/category4")}>남성향수</li>
