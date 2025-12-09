@@ -193,12 +193,10 @@ app.get("/api/products/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
-    const rows = await pool.query(
+    const [data] = await pool.query(
       "SELECT * FROM product WHERE product_id = ?",
       [id]
     );
-
-    const data = rows; // ✔ 수정된 부분
 
     if (!data)
       return res.json({ success: false, message: "상품 없음" });
