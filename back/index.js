@@ -1,4 +1,4 @@
-// server.js 또는 index.js
+// server.js
 const express = require('express');
 const cors = require('cors');
 const pool = require('./db');
@@ -7,10 +7,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static("uploads"));
 
-// ==================================
-// 이미지 업로드 (multer)
-// ==================================
+// =========================
+// 1. 사용자 관련 API
+// =========================
+
+// 회원 목록 확인
+
 const multer = require("multer");
 const path = require("path");
 
@@ -26,12 +30,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-
-// =========================
-// 1. 사용자 관련 API
-// =========================
-
-// 회원 목록 확인
 app.get("/api/check-users", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM member");
@@ -55,17 +53,19 @@ app.post("/api/register", async (req, res) => {
       [id, pw, name, email, adderss, number, hbd]
     );
 
-    await pool.query("INSERT INTO category (name) VALUES (?)", [name]);
+    await pool.query(
+      "INSERT INTO category (name) VALUES (?)",
+      [name]
+    );
 
     res.json({ success: true, message: "회원가입 성공!" });
   } catch (err) {
+    console.log("❌회원가입 실패:", err);
     res.json({ success: false, message: "DB 오류발생" });
   }
 });
 
-// ===============================
-//  ✔ 수정된 로그인 API
-// ===============================
+// 로그인 API
 app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -73,7 +73,7 @@ app.post("/api/auth/login", async (req, res) => {
     return res.json({ success: false, message: "아이디와 비밀번호를 입력하세요." });
 
   try {
-    const rows = await pool.query(
+    const [rows] = await pool.query(
       "SELECT * FROM member WHERE username = ? AND password = ?",
       [username, password]
     );
@@ -81,7 +81,7 @@ app.post("/api/auth/login", async (req, res) => {
     if (rows.length === 0)
       return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
 
-    const user = rows[0]; // ★ 반드시 0번 요소만 사용
+    const user = rows;
 
     res.json({
       success: true,
@@ -97,7 +97,6 @@ app.post("/api/auth/login", async (req, res) => {
     res.status(500).json({ success: false, message: "서버 오류" });
   }
 });
-
 
 // =========================
 // 2. 상품 관련 API
@@ -128,7 +127,7 @@ app.get("/api/products/all", async (req, res) => {
   }
 });
 
-// 여
+// 여성향수
 app.get("/api/products/woman", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM product WHERE gender='여성'");
@@ -138,7 +137,7 @@ app.get("/api/products/woman", async (req, res) => {
   }
 });
 
-// 남
+// 남성향수
 app.get("/api/products/man", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM product WHERE gender='남성'");
@@ -148,15 +147,22 @@ app.get("/api/products/man", async (req, res) => {
   }
 });
 
-// 카테고리
 app.get("/api/category", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM category");
-    res.json({ success: true, data: rows });
+    res.json({
+      success: true,
+      data: rows
+    });
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    console.error("DB 에러:", err.message);
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
   }
 });
+
 
 // 상품 등록
 app.post("/api/productadd", upload.single("img"), async (req, res) => {
@@ -179,32 +185,28 @@ app.post("/api/productadd", upload.single("img"), async (req, res) => {
   }
 });
 
+// =========================
+// 3. 상품 상세 (여기 1개만 존재해야 함!!!)
+// =========================
 
-// ===============================
-//  ✔ 수정된 상품 상세 API (핵심)
-// ===============================
 app.get("/api/products/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
-    const rows = await pool.query(
+    const [data] = await pool.query(
       "SELECT * FROM product WHERE product_id = ?",
       [id]
     );
 
-    if (rows.length === 0)
+    if (!data)
       return res.json({ success: false, message: "상품 없음" });
 
-    return res.json({ success: true, data: rows[0] }); // ★ 단일 객체로 보내야 프론트 정상 동작
+    return res.json({ success: true, data });
   } catch (err) {
     return res.status(500).json({ success: false, message: "DB 오류", error: err.message });
   }
 });
 
-
-// =========================
-// 게임 API
-// =========================
 app.get("/game", async (req, res) => {
   try {
     const rows = await pool.query(
@@ -212,21 +214,26 @@ app.get("/game", async (req, res) => {
     );
     res.json({ success: true, data: rows });
   } catch (err) {
+    console.error("DB 에러:", err.message);
     res.status(500).json({ success: false, error: err.message });
   }
 });
+
+
+//게임
 
 app.post("/game", async (req, res) => {
   const { name, score } = req.body;
 
   try {
+    // 1) 기존 유저 점수 확인
     const rows = await pool.query(
       "SELECT score FROM game WHERE name=?",
       [name]
     );
+    const user = rows[0]; // 첫 번째 행
 
-    const user = rows[0];
-
+    // 2) 없으면 INSERT
     if (!user) {
       await pool.query(
         "INSERT INTO game (name, score) VALUES (?, ?)",
@@ -235,6 +242,7 @@ app.post("/game", async (req, res) => {
       return res.json({ success: true, message: "신규 등록" });
     }
 
+    // 3) 있으면 최고점 비교 후 UPDATE
     if (score > user.score) {
       await pool.query(
         "UPDATE game SET score=? WHERE name=?",
@@ -246,6 +254,7 @@ app.post("/game", async (req, res) => {
     return res.json({ success: true, message: "기존 점수 유지됨" });
 
   } catch (err) {
+    console.error("❌랭킹등록 실패:", err);
     return res.json({ success: false, message: "DB 오류 발생" });
   }
 });
@@ -254,6 +263,7 @@ app.post("/game", async (req, res) => {
 // =========================
 // 서버 실행
 // =========================
+
 app.listen(8080, "0.0.0.0", () => {
   console.log("🚀 서버 실행 중: http://0.0.0.0:8080");
 });
