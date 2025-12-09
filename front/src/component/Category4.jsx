@@ -10,7 +10,7 @@ function ManPerfume() {
 
   // 🔥 남성 향수 목록 불러오기
   useEffect(() => {
-    fetch("http://localhost:8080/api/products/man")
+    fetch("http://192.168.0.224:8080/api/products/man")
       .then(res => res.json())
       .then(data => {
         if (data.success) {
