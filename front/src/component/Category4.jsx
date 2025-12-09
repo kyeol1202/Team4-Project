@@ -1,91 +1,87 @@
-import React from 'react';
+// ManPerfume.jsx
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function ManPerfume() {
-  const products = [
-    { id: 1, name: "AuRa ClairVent", img: "/image/AuRa_ClairVent_man.png" },
-    { id: 2, name: "AuRa Noctivale", img: "/image/AuRa_Noctivale_man.png" },
-    { id: 3, name: "AuRa Silvaron", img: "/image/AuRa_Silvaron_man.png" },
-    { id: 4, name: "AuRa Solivane", img: "/image/AuRa_Solivane_man.jpeg" },
-  ];
+  const navigate = useNavigate();
+
+  // 🔥 DB데이터 저장할 state
+  const [products, setProducts] = useState([]);
+
+  // 🔥 남성 향수 목록 불러오기
+  useEffect(() => {
+    fetch("http://localhost:8080/api/products/man")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setProducts(data.data); // DB에서 받은 데이터 저장
+        }
+      })
+      .catch(err => console.error("남성향수 불러오기 오류:", err));
+  }, []);
 
   const handleClick = (id) => {
-    alert(`Product ${id} clicked! (Navigation would happen here)`);
+    navigate(`/product/${id}`);
   };
 
   return (
     <div style={styles.allContainer}>
-      <div style={styles.topRow}>
-        <div
-          style={styles.circleItem}
-          onClick={() => handleClick(products[0].id)}
-          onMouseEnter={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
-          }}
-        >
-          <img src={products[0].img} alt={products[0].name} style={styles.circleImg} />
-        </div>
-        
-        <div
-          style={styles.circleItem}
-          onClick={() => handleClick(products[1].id)}
-          onMouseEnter={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
-          }}
-        >
-          <img src={products[1].img} alt={products[1].name} style={styles.circleImg} />
-        </div>
-      </div>
       
+      {/* 로딩 */}
+      {products.length === 0 && <p>Loading...</p>}
+
+      {/* 상단 2개 */}
+      <div style={styles.topRow}>
+        {products.slice(0, 2).map(item => (
+          <div
+            key={item.product_id}
+            style={styles.circleItem}
+            onClick={() => handleClick(item.product_id)}
+            onMouseEnter={(e) => {
+              e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
+              e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.querySelector('img').style.transform = 'scale(1)';
+              e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
+            }}
+          >
+            <img src={item.img} alt={item.name} style={styles.circleImg} />
+          </div>
+        ))}
+      </div>
+
+      {/* 가운데 타이틀 */}
       <div style={styles.middleRow}>
         <div 
           style={styles.titleBox}
-          onClick={() => window.location.href = '/'}
+          onClick={() => navigate("/")}
         >
           <h1 style={styles.allTitle}>Man's Perfume</h1>
         </div>
       </div>
-      
+
+      {/* 하단 2개 */}
       <div style={styles.bottomRow}>
-        <div
-          style={styles.circleItem}
-          onClick={() => handleClick(products[2].id)}
-          onMouseEnter={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
-          }}
-        >
-          <img src={products[2].img} alt={products[2].name} style={styles.circleImg} />
-        </div>
-        
-        <div
-          style={styles.circleItem}
-          onClick={() => handleClick(products[3].id)}
-          onMouseEnter={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
-          }}
-        >
-          <img src={products[3].img} alt={products[3].name} style={styles.circleImg} />
-        </div>
+        {products.slice(2, 4).map(item => (
+          <div
+            key={item.product_id}
+            style={styles.circleItem}
+            onClick={() => handleClick(item.product_id)}
+            onMouseEnter={(e) => {
+              e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
+              e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.querySelector('img').style.transform = 'scale(1)';
+              e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
+            }}
+          >
+            <img src={item.img} alt={item.name} style={styles.circleImg} />
+          </div>
+        ))}
       </div>
+
     </div>
   );
 }

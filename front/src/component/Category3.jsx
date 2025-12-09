@@ -1,107 +1,84 @@
-import React from 'react';
+// WomanPerfume.jsx
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function WomanPerfume() {
-  const products = [
-    { id: 1, name: "AuRa Elenique", img: "/image/AuRa_Elenique_woman.jpeg" },
-    { id: 2, name: "AuRa Etherlune", img: "/image/AuRa_Etherlune_woman.png" },
-    { id: 3, name: "AuRa Noverin", img: "/image/AuRa_Noverin_woman.png" },
-    { id: 4, name: "AuRa Primeveil", img: "/image/AuRa_Primeveil_woman.png" },
-    { id: 5, name: "AuRa Velese", img: "/image/AuRa_Velese_woman.png" },
-  ];
+  const navigate = useNavigate();
 
- const handleClick = (id) => {
+  // 🔥 DB에서 가져온 여성향수 데이터 저장
+  const [products, setProducts] = useState([]);
+
+  // 🔥 DB에서 여성향수 불러오는 useEffect
+  useEffect(() => {
+    fetch("http://localhost:8080/api/products/woman")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setProducts(data.data); // ✔ DB 데이터를 products에 저장
+        }
+      })
+      .catch(err => console.error("여성향수 불러오기 오류:", err));
+  }, []);
+
+  const handleClick = (id) => {
     navigate(`/product/${id}`);
   };
 
   return (
     <div style={styles.allContainer}>
+      {/* 제품이 DB에서 아직 안 왔을 때 */}
+      {products.length === 0 && <p>Loading...</p>}
+
+      {/*  상단 3개 배치 */}
       <div style={styles.topRow}>
-        <div
-          style={styles.circleItem}
-          onClick={() => handleClick(products[0].id)}
-          onMouseEnter={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
-          }}
-        >
-          <img src={products[0].img} alt={products[0].name} style={styles.circleImg} />
-        </div>
-        
-        <div
-          style={styles.circleItemTop}
-          onClick={() => handleClick(products[1].id)}
-          onMouseEnter={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
-          }}
-        >
-          <img src={products[1].img} alt={products[1].name} style={styles.circleImg} />
-        </div>
-        
-        <div
-          style={styles.circleItem}
-          onClick={() => handleClick(products[2].id)}
-          onMouseEnter={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
-          }}
-        >
-          <img src={products[2].img} alt={products[2].name} style={styles.circleImg} />
-        </div>
+        {products.slice(0, 3).map((item, index) => (
+          <div
+            key={item.product_id}
+            style={index === 1 ? styles.circleItemTop : styles.circleItem}
+            onClick={() => handleClick(item.product_id)}
+            onMouseEnter={(e) => {
+              e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
+              e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.querySelector('img').style.transform = 'scale(1)';
+              e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
+            }}
+          >
+            <img src={item.img} alt={item.name} style={styles.circleImg} />
+          </div>
+        ))}
       </div>
-      
+
+      {/* 타이틀 */}
       <div style={styles.middleRow}>
         <div 
           style={styles.titleBox}
-          onClick={() => window.location.href = '/'}
+          onClick={() => navigate("/")}
         >
           <h1 style={styles.allTitle}>Woman's Perfume</h1>
         </div>
       </div>
-      
+
+      {/* 하단 2개 배치 */}
       <div style={styles.bottomRow}>
-        <div
-          style={styles.circleItem}
-          onClick={() => handleClick(products[3].id)}
-          onMouseEnter={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
-          }}
-        >
-          <img src={products[3].img} alt={products[3].name} style={styles.circleImg} />
-        </div>
-        
-        <div
-          style={styles.circleItem}
-          onClick={() => handleClick(products[4].id)}
-          onMouseEnter={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.querySelector('img').style.transform = 'scale(1)';
-            e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
-          }}
-        >
-          <img src={products[4].img} alt={products[4].name} style={styles.circleImg} />
-        </div>
+        {products.slice(3, 5).map(item => (
+          <div
+            key={item.product_id}
+            style={styles.circleItem}
+            onClick={() => handleClick(item.product_id)}
+            onMouseEnter={(e) => {
+              e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
+              e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.querySelector('img').style.transform = 'scale(1)';
+              e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
+            }}
+          >
+            <img src={item.img} alt={item.name} style={styles.circleImg} />
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -155,7 +132,7 @@ const styles = {
     transition: '0.3s',
   },
   circleItemTop: {
-    width: '160px',
+    width: '160px', 
     cursor: 'pointer',
     transition: '0.3s',
     marginBottom: '40px',
