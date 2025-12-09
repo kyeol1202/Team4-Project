@@ -10,6 +10,43 @@
   color: #000000d0;
 }
 
+
+.page1{
+
+  width: 1000px;
+  height: 500px;
+  overflow: hidden;
+  position: relative;
+  margin: auto;
+  background-color: #928888;
+}
+
+.page2{
+
+  width: 1000px;
+  height: 500px;
+  margin: auto;
+
+
+}
+.main-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  /* 화면 꽉 채우기 */
+}
+.perfume-detail{
+  width:300px;
+  height:400px;
+  float: left;
+}
+
+.textbox{
+
+  width: 200px;
+  height: 200px;
+  float: left;
+}
+
 /* HEADER 1*/
 .header {
   height: 110px;
