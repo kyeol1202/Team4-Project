@@ -42,7 +42,7 @@ function Game() {
       if (data.success) setRanking(data.data);
     }
     getRank();
-  }, []);
+  }, [ranking]);
 
   function restart() {
     setSnake([{ x: 5, y: 5 }]);
