@@ -130,6 +130,23 @@ app.get("/api/products/man", async (req, res) => {
   }
 });
 
+app.get("/api/category", async (req, res) => {
+  try {
+    const rows = await pool.query("SELECT * FROM category");
+    res.json({
+      success: true,
+      data: rows
+    });
+  } catch (err) {
+    console.error("DB 에러:", err.message);
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
+  }
+});
+
+
 // 상품 등록
 app.post("/api/productadd", async (req, res) => {
   const { name, price, category_id } = req.body;
