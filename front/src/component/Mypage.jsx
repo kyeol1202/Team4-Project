@@ -155,7 +155,7 @@ function Mypage() {
 
       {/* 하단 버튼 */}
       <div style={{ marginTop: "30px", display: "flex", gap: "10px" }}>
-        <button onClick={isLogin ? logout : () => navigate("/login")}>
+        <button onClick={isLogin ? logout : () => navigate("/Layout")}>
           {isLogin ? "로그아웃" : "로그인"}
         </button>
         {isLogin && <button onClick={() => navigate("/edituserinfo")}>정보 수정</button>}
