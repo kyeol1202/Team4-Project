@@ -9,12 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
 
-// =========================
-// 1. 사용자 관련 API
-// =========================
-
-// 회원 목록 확인
-
+// ==================================
 const multer = require("multer");
 const path = require("path");
 
@@ -30,12 +25,11 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-
 // =========================
 // 1. 사용자 관련 API
 // =========================
 
-// 회원 목록 확인
+// 회원 목록
 app.get("/api/check-users", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM member");
@@ -59,19 +53,15 @@ app.post("/api/register", async (req, res) => {
       [id, pw, name, email, adderss, number, hbd]
     );
 
-    await pool.query(
-      "INSERT INTO category (name) VALUES (?)",
-      [name]
-    );
+    await pool.query("INSERT INTO category (name) VALUES (?)", [name]);
 
     res.json({ success: true, message: "회원가입 성공!" });
   } catch (err) {
-    console.log("❌회원가입 실패:", err);
     res.json({ success: false, message: "DB 오류발생" });
   }
 });
 
-// 로그인 API
+// 로그인 ✅ 수정
 app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -79,7 +69,7 @@ app.post("/api/auth/login", async (req, res) => {
     return res.json({ success: false, message: "아이디와 비밀번호를 입력하세요." });
 
   try {
-    const [rows] = await pool.query(
+    const rows = await pool.query(
       "SELECT * FROM member WHERE username = ? AND password = ?",
       [username, password]
     );
@@ -87,7 +77,7 @@ app.post("/api/auth/login", async (req, res) => {
     if (rows.length === 0)
       return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
 
-    const user = rows;
+    const user = rows[0];
 
     res.json({
       success: true,
@@ -108,7 +98,6 @@ app.post("/api/auth/login", async (req, res) => {
 // 2. 상품 관련 API
 // =========================
 
-// 키워드 검색
 app.get("/api/products", async (req, res) => {
   const keyword = req.query.keyword || "";
 
@@ -153,22 +142,15 @@ app.get("/api/products/man", async (req, res) => {
   }
 });
 
+// 카테고리
 app.get("/api/category", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM category");
-    res.json({
-      success: true,
-      data: rows
-    });
+    res.json({ success: true, data: rows });
   } catch (err) {
-    console.error("DB 에러:", err.message);
-    res.status(500).json({
-      success: false,
-      error: err.message
-    });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
-
 
 // 상품 등록
 app.post("/api/productadd", upload.single("img"), async (req, res) => {
@@ -186,137 +168,126 @@ app.post("/api/productadd", upload.single("img"), async (req, res) => {
 
     res.json({ success: true, message: "상품 등록 성공!!" });
   } catch (err) {
-    console.log("상품 등록 실패", err);
     res.json({ success: false, message: "DB 오류 발생" });
   }
 });
 
 // =========================
-// 3. 상품 상세 (여기 1개만 존재해야 함!!!)
+// 3. 상품 상세 ✅ 수정
 // =========================
 
 app.get("/api/products/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
-    const [data] = await pool.query(
+    const rows = await pool.query(
       "SELECT * FROM product WHERE product_id = ?",
       [id]
     );
 
-    if (!data)
+    if (rows.length === 0)
       return res.json({ success: false, message: "상품 없음" });
 
-    return res.json({ success: true, data });
+    return res.json({ success: true, data: rows[0] });
   } catch (err) {
     return res.status(500).json({ success: false, message: "DB 오류", error: err.message });
   }
 });
 
-app.get("/game", async (req, res) => {
+// =========================
+// 4. 위시리스트 API
+// =========================
+
+// 위시리스트 추가
+app.post("/api/wish/add", async (req, res) => {
+  const { user_id, product_id } = req.body;
+
+  try {
+    const exists = await pool.query(
+      "SELECT * FROM wishlist WHERE member_id=? AND product_id=?",
+      [user_id, product_id]
+    );
+
+    if (exists.length > 0)
+      return res.json({ success: false, message: "이미 찜한 상품입니다." });
+
+    await pool.query(
+      "INSERT INTO wishlist (member_id, product_id) VALUES (?, ?)",
+      [user_id, product_id]
+    );
+
+    return res.json({ success: true, message: "위시리스트에 추가되었습니다!" });
+
+  } catch (err) {
+    console.error("❌ wishlist 오류:", err);
+    return res.status(500).json({ success: false, message: "DB 오류" });
+  }
+});
+
+// 위시리스트 조회 ⭐ 이 부분이 있어야 합니다!
+app.get("/api/wish/:userId", async (req, res) => {
+  const userId = req.params.userId;
+
   try {
     const rows = await pool.query(
-      "SELECT name, score FROM game ORDER BY score DESC LIMIT 10"
+      `SELECT w.wishlist_id, w.product_id, p.name, p.price, p.img 
+       FROM wishlist w
+       JOIN product p ON w.product_id = p.product_id
+       WHERE w.member_id = ?`,
+      [userId]
     );
+
     res.json({ success: true, data: rows });
   } catch (err) {
-    console.error("DB 에러:", err.message);
-    res.status(500).json({ success: false, error: err.message });
+    console.error("❌ wishlist 조회 오류:", err);
+    res.status(500).json({ success: false, message: "DB 오류" });
   }
 });
 
-
-//게임
-
-app.post("/game", async (req, res) => {
-  const { name, score } = req.body;
+// 위시리스트 삭제
+app.delete("/api/wish/remove", async (req, res) => {
+  const { user_id, product_id } = req.body;
 
   try {
-    // 1) 기존 유저 점수 확인
-    const rows = await pool.query(
-      "SELECT score FROM game WHERE name=?",
-      [name]
+    await pool.query(
+      "DELETE FROM wishlist WHERE member_id=? AND product_id=?",
+      [user_id, product_id]
     );
-    const user = rows[0]; // 첫 번째 행
 
-    // 2) 없으면 INSERT
-    if (!user) {
-      await pool.query(
-        "INSERT INTO game (name, score) VALUES (?, ?)",
-        [name, score]
-      );
-      return res.json({ success: true, message: "신규 등록" });
-    }
-
-    // 3) 있으면 최고점 비교 후 UPDATE
-    if (score > user.score) {
-      await pool.query(
-        "UPDATE game SET score=? WHERE name=?",
-        [score, name]
-      );
-      return res.json({ success: true, message: "점수 갱신!" });
-    }
-
-    return res.json({ success: true, message: "기존 점수 유지됨" });
-
+    res.json({ success: true, message: "위시리스트에서 제거되었습니다!" });
   } catch (err) {
-    console.error("❌랭킹등록 실패:", err);
-    return res.json({ success: false, message: "DB 오류 발생" });
+    console.error("❌ wishlist 삭제 오류:", err);
+    res.status(500).json({ success: false, message: "DB 오류" });
   }
 });
 
-app.get("/game2", async (req, res) => {
-  try {
-    const rows = await pool.query(
-      "SELECT name, score FROM game2 ORDER BY score DESC LIMIT 10"
-    );
-    res.json({ success: true, data: rows });
-  } catch (err) {
-    console.error("DB 에러:", err.message);
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-
-//게임
-
-app.post("/game2", async (req, res) => {
-  const { name, score } = req.body;
+// =========================
+// 5. 장바구니 API ✅ 수정
+// =========================
+app.post("/api/cart/add", async (req, res) => {
+  const { user_id, product_id, count } = req.body;
 
   try {
-    // 1) 기존 유저 점수 확인
-    const rows = await pool.query(
-      "SELECT score FROM game2 WHERE name=?",
-      [name]
+    const exist = await pool.query(
+      "SELECT * FROM cart WHERE member_id=? AND product_id=?",
+      [user_id, product_id]
     );
-    const user = rows[0]; // 첫 번째 행
 
-    // 2) 없으면 INSERT
-    if (!user) {
-      await pool.query(
-        "INSERT INTO game2 (name, score) VALUES (?, ?)",
-        [name, score]
-      );
-      return res.json({ success: true, message: "신규 등록" });
-    }
+    if (exist.length > 0)
+      return res.json({ success: false, message: "이미 장바구니에 있음" });
 
-    // 3) 있으면 최고점 비교 후 UPDATE
-    if (score > user.score) {
-      await pool.query(
-        "UPDATE game2 SET score=? WHERE name=?",
-        [score, name]
-      );
-      return res.json({ success: true, message: "점수 갱신!" });
-    }
+    await pool.query(
+      "INSERT INTO cart (member_id, product_id, quantity) VALUES (?, ?, ?)",
+      [user_id, product_id, count || 1]
+    );
 
-    return res.json({ success: true, message: "기존 점수 유지됨" });
+    return res.json({ success: true, message: "장바구니 추가 완료!" });
 
   } catch (err) {
-    console.error("❌랭킹등록 실패:", err);
-    return res.json({ success: false, message: "DB 오류 발생" });
+    console.log("❌ cart 오류:", err);
+    return res.status(500).json({ success: false, message: err.message });
   }
-});
-
+}); 
 
 // =========================
 // 서버 실행

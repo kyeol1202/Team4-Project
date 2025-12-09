@@ -1,10 +1,16 @@
 import { useWish } from "../context/WishContext";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import "./Wish.css";
 
 function Wish() {
     const navigate = useNavigate();
-    const { wishList, toggleWish } = useWish();
+    const { wishList, toggleWish, fetchWishList } = useWish();
+
+    // 컴포넌트 마운트 시 위시리스트 새로고침
+    useEffect(() => {
+        fetchWishList();
+    }, []);
 
     return (
         <div style={{ padding: "40px" }}>
@@ -15,15 +21,46 @@ function Wish() {
             ) : (
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", marginTop: "20px" }}>
                     {wishList.map(item => (
-                        <div key={item.id} style={{ border: "1px solid #ddd", padding: "20px", borderRadius: "8px", width: "200px", textAlign: "center" }}>
-                            {item.img && <img src={item.img} alt={item.name} style={{ width: "100%", height: "150px", objectFit: "cover", marginBottom: "10px" }} />}
-                            <h3>{item.name}</h3>
-                            <p>{item.price.toLocaleString()}원</p>
+                        <div 
+                            key={item.product_id || item.wishlist_id} 
+                            style={{ 
+                                border: "1px solid #ddd", 
+                                padding: "20px", 
+                                borderRadius: "8px", 
+                                width: "200px", 
+                                textAlign: "center",
+                                cursor: "pointer"
+                            }}
+                        >
+                            <div onClick={() => navigate(`/product/${item.product_id}`)}>
+                                {item.img && (
+                                    <img 
+                                        src={`http://localhost:8080${item.img}`} 
+                                        alt={item.name} 
+                                        style={{ 
+                                            width: "100%", 
+                                            height: "150px", 
+                                            objectFit: "cover", 
+                                            marginBottom: "10px" 
+                                        }} 
+                                    />
+                                )}
+                                <h3 style={{ fontSize: "16px", marginBottom: "5px" }}>{item.name}</h3>
+                                <p style={{ fontSize: "14px", fontWeight: "bold" }}>{item.price?.toLocaleString()}원</p>
+                            </div>
+                            
                             <button
                                 onClick={() => toggleWish(item)}
-                                style={{ fontSize: "20px", color: "red", border: "none", background: "none", cursor: "pointer", marginTop: "10px" }}
+                                style={{ 
+                                    fontSize: "20px", 
+                                    color: "red", 
+                                    border: "none", 
+                                    background: "none", 
+                                    cursor: "pointer", 
+                                    marginTop: "10px" 
+                                }}
                             >
-                                ❤️
+                                ❤️ 삭제
                             </button>
                         </div>
                     ))}
@@ -33,7 +70,14 @@ function Wish() {
             <div style={{ marginTop: "30px" }}>
                 <button
                     onClick={() => navigate("/")}
-                    style={{ padding: "10px 20px", border: "none", borderRadius: "5px", background: "#000", color: "#fff", cursor: "pointer" }}
+                    style={{ 
+                        padding: "10px 20px", 
+                        border: "none", 
+                        borderRadius: "5px", 
+                        background: "#000", 
+                        color: "#fff", 
+                        cursor: "pointer" 
+                    }}
                 >
                     쇼핑 계속하기
                 </button>
@@ -43,4 +87,3 @@ function Wish() {
 }
 
 export default Wish;
-
