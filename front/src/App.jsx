@@ -26,7 +26,7 @@ import ProductDetail from "./component/ProductDetail";
 function App() {
   return (
     <AuthProvider>
-      <YourRoutesComponent />
+      {/* <YourRoutesComponent /> */}
     
     <CartProvider>
       <WishProvider>
