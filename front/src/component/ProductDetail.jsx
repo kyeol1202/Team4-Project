@@ -14,38 +14,37 @@ function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [isInWish, setIsInWish] = useState(false);
   const [selectedVolume, setSelectedVolume] = useState("");
-  
   const [reviewContent, setReviewContent] = useState("");
-  const [rating, setRating] = useState(0);
+  const [star, setStar] = useState(0); // 별점
+  const [hasPurchased, setHasPurchased] = useState(false);
 
   const userId = localStorage.getItem("member_id");
-  const [hasPurchased, setHasPurchased] = useState(false);
 
   // 상품 상세 불러오기
   useEffect(() => {
     fetch(`${API_URL}/api/products/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
+      .then(res => res.json())
+      .then(data => {
         if (data.success) {
           setProduct(data.data);
-          setIsInWish(wishList.some((item) => item.product_id === data.data.product_id));
+          setIsInWish(wishList.some(item => item.product_id === data.data.product_id));
           if (data.data.volume_options && data.data.volume_options.length > 0) {
             setSelectedVolume(data.data.volume_options[0]);
           }
         }
       })
-      .catch((err) => console.error("상품 상세 오류:", err));
+      .catch(err => console.error("상품 상세 오류:", err));
   }, [id, wishList]);
 
-  // 구매 여부 체크
+  // 구매 여부 확인
   useEffect(() => {
     if (!userId) return;
     fetch(`${API_URL}/api/orders/${userId}/check/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
+      .then(res => res.json())
+      .then(data => {
         if (data.success) setHasPurchased(data.purchased);
       })
-      .catch((err) => console.error("구매 여부 체크 오류:", err));
+      .catch(err => console.error("구매 여부 체크 오류:", err));
   }, [userId, id]);
 
   if (!product) return <div style={{ padding: 40 }}>Loading...</div>;
@@ -61,7 +60,7 @@ function ProductDetail() {
     }
   };
 
-  // 장바구니 담기
+  // 장바구니
   const addToCartHandler = async () => {
     if (!userId) return alert("로그인이 필요합니다!");
     try {
@@ -85,6 +84,7 @@ function ProductDetail() {
   // 리뷰 작성
   const submitReview = async () => {
     if (!reviewContent.trim()) return alert("리뷰 내용을 입력하세요");
+    if (star === 0) return alert("별점을 선택하세요");
     try {
       const res = await fetch(`${API_URL}/api/reviews/add`, {
         method: "POST",
@@ -93,14 +93,14 @@ function ProductDetail() {
           user_id: userId,
           product_id: product.product_id,
           content: reviewContent,
-          rating: rating,
+          star: star,
         }),
       });
       const data = await res.json();
       if (data.success) {
         alert("리뷰가 등록되었습니다!");
         setReviewContent("");
-        setRating(0);
+        setStar(0);
       } else {
         alert(data.message);
       }
@@ -110,68 +110,78 @@ function ProductDetail() {
     }
   };
 
-  const styles = {
-    container: { padding: "40px", fontFamily: "'Noto Sans KR', sans-serif" },
-    image: { width: "320px", height: "320px", objectFit: "contain", marginBottom: "30px" },
-    name: { fontSize: "34px", fontWeight: "600" },
-    price: { fontSize: "22px", marginTop: "5px" },
-    sectionBox: { marginTop: "35px", textAlign: "left", maxWidth: "600px", margin: "35px auto", padding: "20px", borderRadius: "10px", background: "#f7f7f7" },
-    sectionTitle: { fontSize: "20px", fontWeight: "700" },
-    desc: { fontSize: "16px", lineHeight: "1.7", color: "#333", whiteSpace: "pre-line" },
-    btnGroup: { marginTop: "30px", display: "flex", justifyContent: "center", gap: "15px" },
-    wishBtn: { border: "1px solid #aaa", padding: "10px 20px", borderRadius: "8px", background: "white", cursor: "pointer", fontSize: "16px" },
-    cartBtn: { background: "black", color: "white", padding: "10px 22px", borderRadius: "8px", border: "none", fontSize: "16px", cursor: "pointer" },
-    backBtn: { marginTop: "40px", fontSize: "17px", color: "#444", textDecoration: "underline", background: "none", border: "none", cursor: "pointer" },
+  // 스타일
+  const containerStyle = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "40px",
+    fontFamily: "'Noto Sans KR', sans-serif",
   };
 
+  const sectionStyle = {
+    marginTop: "35px",
+    width: "100%",
+    maxWidth: "600px",
+    textAlign: "left",
+    padding: "20px",
+    borderRadius: "10px",
+    background: "#f7f7f7",
+  };
+
+  const sectionTitleStyle = { fontSize: "20px", fontWeight: "700" };
+  const descStyle = { fontSize: "16px", lineHeight: "1.7", color: "#333", whiteSpace: "pre-line" };
+
+  const btnGroupStyle = { marginTop: "30px", display: "flex", justifyContent: "center", gap: "15px" };
+
   return (
-    <div style={styles.container}>
-      <img src={`${API_URL}${product.img}`} alt={product.name} style={styles.image} />
-      <h1 style={styles.name}>{product.name}</h1>
-      <p style={styles.price}>{product.price?.toLocaleString()}원</p>
+    <div style={containerStyle}>
+      <img src={`${API_URL}${product.img}`} alt={product.name} style={{ width: "320px", height: "320px", objectFit: "contain", marginBottom: "30px" }} />
+      <h1 style={{ fontSize: "34px", fontWeight: "600" }}>{product.name}</h1>
+      <p style={{ fontSize: "22px", marginTop: "5px" }}>{product.price?.toLocaleString()}원</p>
 
       {/* 용량 선택 */}
       {product.volume_options && product.volume_options.length > 0 && (
-        <div style={{ marginTop: "10px" }}>
+        <div style={{ marginTop: "20px" }}>
           <label>용량 선택: </label>
           <select value={selectedVolume} onChange={(e) => setSelectedVolume(e.target.value)}>
-            {product.volume_options.map((vol) => (
+            {product.volume_options.map(vol => (
               <option key={vol} value={vol}>{vol}mL</option>
             ))}
           </select>
         </div>
       )}
 
-      {/* 수량 선택 */}
+      {/* 수량 */}
       <div style={{ marginTop: "20px" }}>
         <button onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}>-</button>
         <span style={{ margin: "0 8px" }}>{quantity}</span>
         <button onClick={() => setQuantity(quantity + 1)}>+</button>
       </div>
 
-      {/* 버튼 그룹 */}
-      <div style={styles.btnGroup}>
-        <button style={{ ...styles.wishBtn, color: isInWish ? "red" : "#000" }} onClick={toggleWish}>
+      {/* 버튼 */}
+      <div style={btnGroupStyle}>
+        <button style={{ color: isInWish ? "red" : "#000" }} onClick={toggleWish}>
           {isInWish ? "♥ 위시리스트" : "♡ 위시리스트"}
         </button>
-        <button style={styles.cartBtn} onClick={addToCartHandler}>장바구니 담기 🛒</button>
+        <button onClick={addToCartHandler}>장바구니 담기 🛒</button>
       </div>
 
-      {/* 상세 설명 */}
-      <div style={styles.sectionBox}>
-        <h2 style={styles.sectionTitle}>향수 설명</h2>
-        <p style={styles.desc}>{product.description}</p>
+      {/* 상품 상세 */}
+      <div style={sectionStyle}>
+        <h2 style={sectionTitleStyle}>향수 설명</h2>
+        <p style={descStyle}>{product.description}</p>
       </div>
 
-      <div style={styles.sectionBox}>
-        <h2 style={styles.sectionTitle}>향 구성</h2>
+      <div style={sectionStyle}>
+        <h2 style={sectionTitleStyle}>향 구성</h2>
         <p><strong>Top:</strong> {product.top_notes || "정보 없음"}</p>
         <p><strong>Middle:</strong> {product.middle_notes || "정보 없음"}</p>
         <p><strong>Base:</strong> {product.base_notes || "정보 없음"}</p>
       </div>
 
-      <div style={styles.sectionBox}>
-        <h2 style={styles.sectionTitle}>향수 스펙</h2>
+      <div style={sectionStyle}>
+        <h2 style={sectionTitleStyle}>향수 스펙</h2>
         <p><strong>타입:</strong> {product.perfume_type || "정보 없음"}</p>
         <p><strong>용량:</strong> {product.volume || "정보 없음"}mL</p>
         <p><strong>지속력:</strong> {product.longevity || "정보 없음"}/10</p>
@@ -179,31 +189,18 @@ function ProductDetail() {
       </div>
 
       {/* 리뷰 섹션 */}
-      <div style={styles.sectionBox}>
-        <h2 style={styles.sectionTitle}>고객 리뷰</h2>
+      <div style={sectionStyle}>
+        <h2 style={sectionTitleStyle}>고객 리뷰</h2>
         <p>구매 리뷰를 확인해보세요</p>
         <small>개인정보 처리방침</small>
 
-        {/* 리뷰 목록 틀 */}
-        <div style={{ marginTop: "20px" }}>
-          {[1,2,3,4].map((_, index) => (
-            <div key={index} style={{ padding: "15px", borderBottom: "1px solid #ddd" }}>
-              <p style={{ fontWeight: "600", marginBottom: "5px" }}>닉네임</p>
-              <div style={{ color: "#FFD700", marginBottom: "5px" }}>{"★★★★★"}</div>
-              <p style={{ color: "#333" }}>리뷰 내용이 여기에 표시됩니다.</p>
-              <small style={{ color: "#888" }}>작성일: 2025-12-10</small>
-            </div>
-          ))}
-        </div>
-
-        {/* 리뷰 작성 (구매 고객만) */}
         {userId && hasPurchased ? (
-          <>
-            <h3 style={{ fontWeight: "600", marginTop: "20px" }}>리뷰 작성</h3>
-            <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
-              {[1,2,3,4,5].map(star => (
-                <span key={star} onClick={() => setRating(star)}
-                  style={{ fontSize: "24px", cursor: "pointer", color: star <= rating ? "#FFD700" : "#ccc" }}>
+          <div style={{ marginTop: "20px" }}>
+            <h3>리뷰 작성</h3>
+            {/* 별점 선택 */}
+            <div style={{ marginBottom: "10px" }}>
+              {[1,2,3,4,5].map(n => (
+                <span key={n} style={{ fontSize: "24px", cursor: "pointer", color: star >= n ? "gold" : "#ccc" }} onClick={() => setStar(n)}>
                   ★
                 </span>
               ))}
@@ -219,7 +216,7 @@ function ProductDetail() {
                 작성
               </button>
             </div>
-          </>
+          </div>
         ) : (
           <p style={{ color: "#f00", marginTop: "10px" }}>
             리뷰 작성은 구매 고객만 가능합니다. 로그인 후 구매 내역이 있어야 작성할 수 있습니다.
@@ -228,7 +225,9 @@ function ProductDetail() {
       </div>
 
       {/* 뒤로가기 */}
-      <button style={styles.backBtn} onClick={() => navigate(-1)}>← 뒤로 돌아가기</button>
+      <button style={{ marginTop: "40px", fontSize: "17px", color: "#444", textDecoration: "underline", background: "none", border: "none", cursor: "pointer" }} onClick={() => navigate(-1)}>
+        ← 뒤로 돌아가기
+      </button>
     </div>
   );
 }
