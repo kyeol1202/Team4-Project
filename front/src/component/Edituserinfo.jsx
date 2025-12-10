@@ -12,7 +12,7 @@ function EditUserInfo() {
 
   useEffect(() => {
     if (!isLogin) navigate("/", { replace: true });
-    else setForm(user);
+    else setForm(user||{});
   }, [isLogin, navigate, user]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });

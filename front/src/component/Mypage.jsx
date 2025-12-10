@@ -75,7 +75,7 @@ function Mypage() {
       {/* 상단 버튼 */}
       <div className="mypage-actions">
         <button className="mypage-btn" onClick={handleLogout}>로그아웃</button>
-        <button className="mypage-btn" onClick={() => navigate("/edituserinfo")}>정보 수정</button>
+        <button className="mypage-btn" onClick={() => navigate("/Edituserinfo")}>정보 수정</button>
       </div>
 
       {/* 주문 내역 */}
