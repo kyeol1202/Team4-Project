@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWish } from "../context/WishContext";
-import { useCart } from "../context/CartContext";
+import useCart from "../hooks/useCart";
+
+
+// ⭐ API URL 통일
 
 const API_URL = "http://192.168.0.224:8080";
 
