@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWish } from "../context/WishContext";
+import { useCart } from "../context/CartContext";
+import { Edit } from "react-feather";
 
 const API_URL = "http://192.168.0.224:8080";
 
@@ -150,7 +152,49 @@ function ProductDetail() {
       <h1 style={styles.name}>{product.name}</h1>
       <p style={styles.price}>{product.price?.toLocaleString()}원</p>
 
-      {/* 설명 */}
+      {/* 용량 선택 */}
+      {product.volume_options && product.volume_options.length > 0 && (
+        <div style={styles.optionBox}>
+          <label style={styles.optionLabel}>용량 선택:</label>
+          <select
+            value={selectedVolume}
+            onChange={(e) => setSelectedVolume(e.target.value)}
+            style={styles.select}
+          >
+            {product.volume_options.map((vol) => (
+              <option key={vol} value={vol}>
+                {vol}mL
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {/* 수량 선택 */}
+      {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === null) && (
+      <div style={styles.optionBox}>
+        <label style={styles.optionLabel}>수량:</label>
+        <div style={styles.quantityBox}>
+          <button
+            onClick={() =>
+              setQuantity(quantity > 1 ? quantity - 1 : 1)
+            }
+            style={styles.qtyBtn}
+          >
+            -
+          </button>
+          <span style={styles.qtyNumber}>{quantity}</span>
+          <button
+            onClick={() => setQuantity(quantity + 1)}
+            style={styles.qtyBtn}
+          >
+            +
+          </button>
+        </div>
+      </div>
+      )}
+
+      {/* 상세 설명 */}
       <div style={styles.sectionBox}>
         <h2 style={styles.sectionTitle}>향수 설명</h2>
         <p style={styles.desc}>{product.description}</p>
@@ -164,7 +208,28 @@ function ProductDetail() {
         <p><strong>Base:</strong> {product.base_notes || "정보 없음"}</p>
       </div>
 
-      {/* 버튼 */}
+      <div style={styles.sectionBox}>
+        <h2 style={styles.sectionTitle}>향수 스펙</h2>
+        <p>
+          <strong>타입:</strong>{" "}
+          {product.perfume_type || "정보 없음"}
+        </p>
+        <p>
+          <strong>용량:</strong>{" "}
+          {product.volume || "정보 없음"}mL
+        </p>
+        <p>
+          <strong>지속력 (Longevity):</strong>{" "}
+          {product.longevity || "정보 없음"}/10
+        </p>
+        <p>
+          <strong>잔향 (Sillage):</strong>{" "}
+          {product.sillage || "정보 없음"}
+        </p>
+      </div>
+
+      {/* 버튼 그룹 */}
+      {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === null) && (
       <div style={styles.btnGroup}>
         <button
           style={{
@@ -180,9 +245,26 @@ function ProductDetail() {
           장바구니 담기 🛒
         </button>
       </div>
-
-      <button style={styles.backBtn} onClick={() => navigate(-1)}>
-        ← 뒤로가기
+      )}
+      {localStorage.getItem("role") === "ADMIN"&& (
+      <div style={styles.btnGroup}>
+        
+        <button
+          style={{
+            ...styles.cartBtn,
+            backgroundColor: isInCart ? "#555" : "#000",
+            cursor: isInCart ? "not-allowed" : "pointer",
+          }}
+          onClick={addToCartHandler}
+          disabled={isInCart}
+        >
+          수정하기 ✏️
+        </button>
+      </div>
+      )}
+      {/* 뒤로가기 */}
+      <button style={styles.backBtn} onClick={(Edit)}>
+        ← 뒤로 돌아가기
       </button>
     </div>
   );
