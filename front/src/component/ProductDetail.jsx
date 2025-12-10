@@ -178,58 +178,59 @@ function ProductDetail() {
           ))}
         </div>
 
-       {/* 리뷰 작성폼 (구매 고객만) */}
-{userId && hasPurchased ? (
-  <div style={{ marginTop: "20px", textAlign: "left" }}>
-    <h3 style={{ fontWeight: "600" }}>리뷰 작성</h3>
+        {/* 리뷰 작성폼 (구매 고객만) */}
+      </div>
+      {userId && hasPurchased ? (
+        <div style={{ marginTop: "20px", textAlign: "left" }}>
+          <h3 style={{ fontWeight: "600" }}>리뷰 작성</h3>
 
-    {/* 별점 선택 */}
-    <div style={{ marginBottom: "10px" }}>
-      <label style={{ marginRight: "10px" }}>별점:</label>
-      {[1,2,3,4,5].map((n) => (
-        <span
-          key={n}
-          onClick={() => setReviewStar(n)}
-          style={{
-            cursor: "pointer",
-            color: n <= reviewStar ? "gold" : "#ccc",
-            fontSize: "24px",
-            marginRight: "3px",
-          }}
-        >
-          ★
-        </span>
-      ))}
-    </div>
+          {/* 별점 선택 */}
+          <div style={{ marginBottom: "10px" }}>
+            <label style={{ marginRight: "10px" }}>별점:</label>
+            {[1, 2, 3, 4, 5].map((n) => (
+              <span
+                key={n}
+                onClick={() => setReviewStar(n)}
+                style={{
+                  cursor: "pointer",
+                  color: n <= reviewStar ? "gold" : "#ccc",
+                  fontSize: "24px",
+                  marginRight: "3px",
+                }}
+              >
+                ★
+              </span>
+            ))}
+          </div>
 
-    <textarea
-      placeholder="리뷰 내용을 입력하세요"
-      style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #ccc", minHeight: "80px" }}
-      value={reviewContent}
-      onChange={(e) => setReviewContent(e.target.value)}
-    />
+          <textarea
+            placeholder="리뷰 내용을 입력하세요"
+            style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #ccc", minHeight: "80px" }}
+            value={reviewContent}
+            onChange={(e) => setReviewContent(e.target.value)}
+          />
 
-    <div style={{ marginTop: "10px", textAlign: "right" }}>
-      <button
-        onClick={submitReview}
-        style={{
-          padding: "8px 16px",
-          borderRadius: "5px",
-          border: "none",
-          background: "#000",
-          color: "#fff",
-          cursor: "pointer"
-        }}
-      >
-        작성
-      </button>
-    </div>
-  </div>
-) : (
-  <p style={{ color: "#f00", marginTop: "10px" }}>
-    리뷰 작성은 구매 고객만 가능합니다. 로그인 후 구매 내역이 있어야 작성할 수 있습니다.
-  </p>
-)}
+          <div style={{ marginTop: "10px", textAlign: "right" }}>
+            <button
+              onClick={submitReview}
+              style={{
+                padding: "8px 16px",
+                borderRadius: "5px",
+                border: "none",
+                background: "#000",
+                color: "#fff",
+                cursor: "pointer"
+              }}
+            >
+              작성
+            </button>
+          </div>
+        </div>
+      ) : (
+        <p style={{ color: "#f00", marginTop: "10px" }}>
+          리뷰 작성은 구매 고객만 가능합니다. 로그인 후 구매 내역이 있어야 작성할 수 있습니다.
+        </p>
+      )}
 
 
       {/* 뒤로가기 */}
