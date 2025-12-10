@@ -5,6 +5,7 @@ import { useWish } from "../context/WishContext";
 import Game from "./Game";
 import Game2 from "./Game2";
 
+
 function Layout() {
 
   const navigate = useNavigate();

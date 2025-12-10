@@ -21,6 +21,105 @@
   background-color: #928888;
 }
 
+/* 크리스마스 + 명품 브랜드 느낌 폰트 */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap');
+
+.text-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 100%;
+}
+
+/* 앞/뒤 두 레이어 만들기 */
+.snow-effect::after {
+  animation-duration: 12s;
+  opacity: 0.5;
+}
+
+/* ✨ 골드 움직임 */
+@keyframes goldMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ❄ 눈송이 입자 흩날리는 애니메이션 */
+@keyframes snowMove {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(-20px, 20px) rotate(360deg); }
+}
+
+
+.line1, .line2 {
+  font-family: "Cinzel", serif;        /* 크리스마스 + 고급스러움 */
+  font-size: 3.2rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: #ffffff;                      /* 광고 느낌 더 살리기 (원하면 변경 가능) */
+
+  opacity: 0;
+  transform: translateY(45px);
+  animation: slideUp 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.line2 {
+  animation-delay: 0.38s;              /* 아래 문구는 조금 뒤에 따라 올라옴 */
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(45px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(45px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* 두 번째 줄은 조금 늦게 시작 */
+.line2 {
+  animation-delay: 0.35s;            /* 시간차 */
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(45px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .page2{
 
   width: 1000px;

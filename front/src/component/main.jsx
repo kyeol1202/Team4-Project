@@ -71,6 +71,8 @@ function Main() {
     return (
         <>
             <div className="page1">
+                
+                 <div class="snow-container"></div>
                 <video
                     className="main-video"
                     src="image/향수광고영상.mp4"
@@ -79,6 +81,11 @@ function Main() {
                     muted
                     playsInline
                 />
+            </div>
+
+            <div class="text-wrap">
+            <div class="line1">A good day</div>
+            <div class="line2">to empty the buyer's wallet</div>
             </div>
 
             <div className="page2">
@@ -159,5 +166,6 @@ function Main() {
         </>
     );
 }
+
 
 export default Main;
