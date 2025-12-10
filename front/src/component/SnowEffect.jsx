@@ -1,16 +1,13 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import "./Snow.css";
+
 
 function SnowEffect() {
-
-    const navigate = useNavigate();
 
   useEffect(() => {
     const snowContainer = document.querySelector(".snow-container");
 
     // 눈송이 60개 생성
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 20; i++) {
       const snow = document.createElement("div");
       snow.classList.add("snow");
 
@@ -18,7 +15,7 @@ function SnowEffect() {
       snow.style.left = Math.random() * 100 + "vw";
 
       // 랜덤 크기
-      const size = Math.random() * 6 + 4; 
+      const size = Math.random() * 4 + 2; 
       snow.style.width = size + "px";
       snow.style.height = size + "px";
 

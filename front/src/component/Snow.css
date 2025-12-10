@@ -11,10 +11,10 @@
 .snow {
   position: absolute;
   top: -10px;
-  background: white;
+  background: rgb(218, 237, 255);
   border-radius: 50%;
-  opacity: 0.8;
-  filter: blur(1px);
+  opacity: 0.4;
+  filter: blur(1.5px);
   animation-name: fall;
   animation-timing-function: linear;
   animation-iteration-count: infinite;

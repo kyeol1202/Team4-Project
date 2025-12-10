@@ -1,150 +1,130 @@
 /* 기본 글꼴 Dior 스타일 */
-* {
-  font-family: "Didot", "Playfair Display", serif;
-  letter-spacing: 0.5px;
-  box-sizing: border-box;
+@keyframes smooth-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-.page {
-  background: #ffffff;
-  color: #000000d0;
+.fade-section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s ease, transform 1s ease;
 }
 
+.fade-section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-.page1{
+/* ------------------ 메인 텍스트 ------------------ */
 
+.main-text {
+  font-family: "Cinzel", serif;
+  font-size: 3.8rem;
+  font-weight: 600;
+  animation: smooth-appear 1.5s ease forwards;
+}
+
+.sub-text {
+  font-family: "Cinzel", serif;
+  font-size: 1.7rem;
+  margin-top: 12px;
+  opacity: 0;
+  animation: smooth-appear 1.5s ease forwards;
+  animation-delay: .3s;
+}
+
+/* ------------------ 페이지 기본 ------------------ */
+
+.page1 {
   width: 1000px;
   height: 500px;
-  overflow: hidden;
   position: relative;
   margin: auto;
-  background-color: #928888;
+  overflow: hidden;
 }
 
-/* 크리스마스 + 명품 브랜드 느낌 폰트 */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap');
-
-.text-wrap {
+.page1::after {
+  content: "";
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+  inset: 0;
+  background: rgba(0,0,0,0.18);
+  backdrop-filter: blur(3px);
+}
+
+.main-video {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* 앞/뒤 두 레이어 만들기 */
-.snow-effect::after {
-  animation-duration: 12s;
-  opacity: 0.5;
-}
+/* ------------------ 설명 섹션 ------------------ */
 
-/* ✨ 골드 움직임 */
-@keyframes goldMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* ❄ 눈송이 입자 흩날리는 애니메이션 */
-@keyframes snowMove {
-  0%   { transform: translate(0, 0) rotate(0deg); }
-  100% { transform: translate(-20px, 20px) rotate(360deg); }
-}
-
-
-.line1, .line2 {
-  font-family: "Cinzel", serif;        /* 크리스마스 + 고급스러움 */
-  font-size: 3.2rem;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  color: #ffffff;                      /* 광고 느낌 더 살리기 (원하면 변경 가능) */
-
-  opacity: 0;
-  transform: translateY(45px);
-  animation: slideUp 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.line2 {
-  animation-delay: 0.38s;              /* 아래 문구는 조금 뒤에 따라 올라옴 */
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(45px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(45px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-/* 두 번째 줄은 조금 늦게 시작 */
-.line2 {
-  animation-delay: 0.35s;            /* 시간차 */
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(45px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.page2{
-
+.page2 {
   width: 1000px;
   height: 500px;
   margin: auto;
-
-
 }
-.main-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;  /* 화면 꽉 채우기 */
-}
-.perfume-detail{
-  width:300px;
-  height:400px;
+
+.perfume-detail {
+  width: 300px;
+  height: 400px;
   float: left;
-  margin-top:100px;
+  margin-top: 100px;
 }
 
-.textbox{
+.textbox {
   width: 200px;
   height: 200px;
   float: left;
-  margin-top:100px;
+  margin-top: 100px;
+}
+
+/* ------------------ 슬라이드 ------------------ */
+
+.slider-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 40px;
+}
+
+.slider {
+  width: calc(330px * 3 + 20px * 2);
+  overflow: hidden;
+}
+
+.slider-inner {
+  display: flex;
+  transition: transform 0.8s cubic-bezier(.23,1,.32,1);
+}
+
+.product-card {
+  width: 330px;
+  height: 330px;
+  background: #fff;
+  border: 1px solid #ddd;
+  transition: transform .45s, box-shadow .45s;
+}
+
+.product-card:hover {
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 0 25px 40px rgba(0,0,0,0.18);
+}
+
+/* ------------------ 기타 ------------------ */
+
+.section-title {
+  text-align: center;
+  margin-top: 60px;
+  font-size: 32px;
+  letter-spacing: 2px;
 }
 
 /* HEADER 1*/
@@ -303,34 +283,7 @@
   color: #444;
 }
 
-/* 검색창 */
-.search-box {
-  width: 350px;
-  margin: 0 auto;
-  display: flex;
-}
 
-.search-box input {
-  width: 100%;
-  flex: 1;                 /* 입력창이 남은 공간 전체 차지 */
-  padding: 12px 15px;
-  border-radius: 6px;
-  border: 1px solid #dcdcdc;
-  background: #fafafa;
-  transition: all 0.25s;
-}
-
-.search-box button.search {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.search-box input:focus {
-  outline: none;
-  border-color: #000;
-}
 
 /* SECTION TITLE */
 .section-title {
@@ -373,6 +326,35 @@
 
 .arrow:hover {
   opacity: 0.5;
+}
+
+/* 검색창 */
+.search-box {
+  width: 350px;
+  margin: 0 auto;
+  display: flex;
+}
+
+.search-box input {
+  width: 100%;
+  flex: 1;                 /* 입력창이 남은 공간 전체 차지 */
+  padding: 12px 15px;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  background: #fafafa;
+  transition: all 0.25s;
+}
+
+.search-box button.search {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: #000;
 }
 
 /* FOOTER */
