@@ -191,6 +191,20 @@
 .qna-submit-btn:hover {
     background: #333;
 }
+.inquiry-type-select {
+    /* 폰트 크기를 원하는 만큼 키웁니다. */
+    font-size: 18px; /* 예시: 폰트 크기를 18px로 설정 */
+    
+    /* 패딩(여백)을 추가하여 박스 자체의 높이를 키웁니다. */
+    padding: 10px 15px; 
+    
+    /* 너비를 100%로 설정하여 부모 요소에 맞춥니다. */
+    width: 100%; 
+    
+    /* 기타 스타일 (선택 사항) */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 
 /* =========================
    Footer

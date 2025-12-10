@@ -69,17 +69,28 @@ function QnaPage() {
                 </button>
             </section>
 
-            {/* 문의 유형 */}
-            <section className="service-section">
-                <h3 className="service-section-title">문의 유형</h3>
-                <div className="qna-contact">
-                    <label><input type="radio" name="inquiryType" value="제품 문의" checked={form.inquiryType === "제품 문의"} onChange={handleChange} /> 제품 문의</label>
-                    <label><input type="radio" name="inquiryType" value="주문/결제 문의" checked={form.inquiryType === "주문/결제 문의"} onChange={handleChange} /> 주문/결제 문의</label>
-                    <label><input type="radio" name="inquiryType" value="교환/반품 문의" checked={form.inquiryType === "교환/반품 문의"} onChange={handleChange} /> 교환/반품 문의</label>
-                    <label><input type="radio" name="inquiryType" value="기타 문의" checked={form.inquiryType === "기타 문의"} onChange={handleChange} /> 기타 문의</label>
-                </div>
-            </section>
-
+            {/* 문의 유형 (셀렉트 박스/드롭다운) */}
+<section className="service-section">
+    <h3 className="service-section-title">문의 유형</h3>
+    <div className="qna-contact">
+        <select 
+            name="inquiryType" 
+            value={form.inquiryType} 
+            onChange={handleChange}
+            // CSS 스타일링을 위한 클래스 추가
+            className="inquiry-type-select" 
+        >
+            {/* 첫 번째 옵션은 보통 안내 문구로 사용하며, 실제 값은 공백으로 둡니다. */}
+            <option value="">-- 문의 유형을 선택해 주세요 --</option>
+            
+            {/* 사용자가 선택할 수 있는 실제 옵션들 */}
+            <option value="제품 문의">제품 문의</option>
+            <option value="주문/결제 문의">주문/결제 문의</option>
+            <option value="교환/반품 문의">교환/반품 문의</option>
+            <option value="기타 문의">기타 문의</option>
+        </select>
+    </div>
+</section>
             {/* 문의 내용 */}
             <section className="service-section">
                 <h3 className="service-section-title">문의 내용</h3>
