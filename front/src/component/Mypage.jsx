@@ -24,11 +24,13 @@ function Mypage() {
       return;
     }
 
-  setOrders(JSON.parse(localStorage.getItem("orders")) || []);
-  setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
-  setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
+    setOrders(JSON.parse(localStorage.getItem("orders")) || []);
+    setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
 
-}, []);
+    // 🔹 문의 내역 로컬스토리지에서 가져오기
+    const storedQuestions = JSON.parse(localStorage.getItem("questions")) || [];
+    setQuestions(storedQuestions.filter(q => q.usrId === userId));
+  }, [userId, navigate]);
 
   // 로그아웃
   function handleLogout() {
@@ -183,3 +185,4 @@ function Mypage() {
 }
 
 export default Mypage;
+
