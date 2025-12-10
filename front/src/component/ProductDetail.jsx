@@ -110,7 +110,13 @@ function ProductDetail() {
     }
   };
 
-  // 스타일
+  // 예시 리뷰 목록 (실제 데이터 없이 틀만 표시)
+  const exampleReviews = [
+    { id: 1, name: "사용자1", star: 5, content: "좋아요! 향이 은은하고 오래가요." },
+    { id: 2, name: "사용자2", star: 4, content: "무난하게 좋습니다." },
+    { id: 3, name: "사용자3", star: 5, content: "재구매 의사 있습니다." },
+  ];
+
   const containerStyle = {
     display: "flex",
     flexDirection: "column",
@@ -131,7 +137,6 @@ function ProductDetail() {
 
   const sectionTitleStyle = { fontSize: "20px", fontWeight: "700" };
   const descStyle = { fontSize: "16px", lineHeight: "1.7", color: "#333", whiteSpace: "pre-line" };
-
   const btnGroupStyle = { marginTop: "30px", display: "flex", justifyContent: "center", gap: "15px" };
 
   return (
@@ -194,10 +199,21 @@ function ProductDetail() {
         <p>구매 리뷰를 확인해보세요</p>
         <small>개인정보 처리방침</small>
 
+        {/* 예시 리뷰 표시 */}
+        <div style={{ marginTop: "20px" }}>
+          {exampleReviews.map(review => (
+            <div key={review.id} style={{ borderTop: "1px solid #ccc", padding: "10px 0" }}>
+              <div style={{ fontWeight: "600" }}>{review.name}</div>
+              <div style={{ color: "gold" }}>{'★'.repeat(review.star)}{'☆'.repeat(5 - review.star)}</div>
+              <div>{review.content}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* 리뷰 작성 폼 (구매한 고객만) */}
         {userId && hasPurchased ? (
           <div style={{ marginTop: "20px" }}>
             <h3>리뷰 작성</h3>
-            {/* 별점 선택 */}
             <div style={{ marginBottom: "10px" }}>
               {[1,2,3,4,5].map(n => (
                 <span key={n} style={{ fontSize: "24px", cursor: "pointer", color: star >= n ? "gold" : "#ccc" }} onClick={() => setStar(n)}>
@@ -233,5 +249,3 @@ function ProductDetail() {
 }
 
 export default ProductDetail;
-
-
