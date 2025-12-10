@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "./Mypage.css"; // CSS import
+import { useAuth } from "../context/AuthContext";
+
 
 function Mypage() {
   const navigate = useNavigate();
-  // const { isLogin, logout, user } = useAuth();
+  const { isLogin, logout, user } = useAuth();
   const userId = "user1"; // 예시용, 실제로는 로그인 유저 id 사용
 
   const [orders, setOrders] = useState([]);
@@ -17,15 +18,19 @@ function Mypage() {
 
 
  // 로그인 체크 및 데이터 로드
-  // useEffect(() => {
-  //   if (!isLogin) {
-  //     navigate("/", { replace: true }); // 로그인 안 됐으면 홈 이동
-  //    return; 
-  //   }
-  //    setOrders(JSON.parse(localStorage.getItem("orders")) || []);
-  //    setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
-  //    setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
-  //   }, [isLogin, navigate]);
+  useEffect(() => {
+  const loginCheck = localStorage.getItem("login");
+  
+  if (loginCheck !== "true") {
+    navigate("/", { replace: true });
+    return;
+  }
+
+  setOrders(JSON.parse(localStorage.getItem("orders")) || []);
+  setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
+  setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
+
+}, []);
 
   // 로그아웃
  function handleLogout(){
@@ -38,6 +43,7 @@ function Mypage() {
   // Layout이 자동으로 감지함
   
   navigate("/main");
+  navigate(0);
 }
 
   const handleOrderClick = (orderId) => navigate(`/order/${orderId}`);
@@ -75,7 +81,7 @@ function Mypage() {
       {/* 상단 버튼 */}
       <div className="mypage-actions">
         <button className="mypage-btn" onClick={handleLogout}>로그아웃</button>
-        <button className="mypage-btn" onClick={() => navigate("/Edituserinfo")}>정보 수정</button>
+        <button className="mypage-btn" onClick={() => navigate("/edituserinfo")}>정보 수정</button>
       </div>
 
       {/* 주문 내역 */}

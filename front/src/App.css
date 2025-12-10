@@ -130,8 +130,8 @@
   transition: all 0.25s;
 }
 
-.dropdownlist:hover {
-  background: #f3f3f3;
+.dropdown li:hover {
+  background: #f3efef;
 }
 
 /* 브랜드 로고 */
