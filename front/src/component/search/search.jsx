@@ -34,19 +34,7 @@ function Search() {
         <div className="search-page">
 
             {/* 🔍 검색창 UI 추가 */}
-            <div className="search-box">
-                <input
-                    type="text"
-                    placeholder="검색하기"
-                    value={newKeyword}
-                    onChange={(e) => setNewKeyword(e.target.value)}
-
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") search();
-                    }}
-                />
-                <button className="search" onClick={search}>🔍</button>
-            </div>
+            
 
             <h1 className="search-title">“{keyword}” 검색 결과</h1>
 
