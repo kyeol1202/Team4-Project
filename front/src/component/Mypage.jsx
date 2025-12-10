@@ -18,18 +18,17 @@ function Mypage() {
 
 
  // 로그인 체크 및 데이터 로드
-  useEffect(() => {
+ useEffect(() => {
   const loginCheck = localStorage.getItem("login");
-  
+
+  // 로그인 안 되어 있으면 메인페이지로
   if (loginCheck !== "true") {
-    navigate("/", { replace: true });
-    return;
+    return navigate("/main", { replace: true });
   }
 
   setOrders(JSON.parse(localStorage.getItem("orders")) || []);
   setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
   setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
-
 }, []);
 
   // 로그아웃
