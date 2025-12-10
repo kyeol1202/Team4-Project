@@ -189,7 +189,7 @@ function Layout() {
           )}
 
 
-          {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === null) && (
+          {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === "null") && (
             <>
               <button onClick={() => login ? navigate("/wish") : setLoginOpen(true)}>♡</button>
               <button onClick={() => navigate("/cart")}>🛒</button>
