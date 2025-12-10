@@ -139,6 +139,7 @@ function Layout() {
     localStorage.setItem("role", data.user.role);
     localStorage.setItem("user", JSON.stringify(data.user));
     localStorage.setItem("member_id", data.user.member_id);
+    localStorage.setItem("user_id", data.user.member_id);
 
     setLogin(true);
     setLoginOpen(false);
@@ -198,7 +199,8 @@ function Layout() {
             <button onClick={() => setOpen(true)}>상품 등록</button>
           )}
 
-          {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === null) && (
+
+          {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === "null") && (
             <>
               <button onClick={() => login ? navigate("/wish") : setLoginOpen(true)}>♡</button>
               <button onClick={() => navigate("/cart")}>🛒</button>
