@@ -77,7 +77,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 100;
+  z-index: 10;
   backdrop-filter: blur(8px);
   box-shadow: 0 5px 20px rgba(0,0,0,0.12);
 }
