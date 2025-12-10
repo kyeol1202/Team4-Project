@@ -46,8 +46,9 @@ function App() {
                 <Route path="/payment" element={<Payment />} />
 
                 <Route path="/wish" element={<Wish />} />
-                <Route path="/service" element={<Service />} />
                 <Route path="/qna" element={<QnaPage />} />
+                <Route path="/service" element={<Service />} />
+                <Route path="*" element={<Service />} />
                 <Route path="/mypage" element={<Mypage />} />
                 <Route path="/orderdetail" element={<OrderDetail />} />
                 <Route path="/edituserinfo" element={<EditUserInfo />} />

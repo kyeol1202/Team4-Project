@@ -1,6 +1,11 @@
+// src/pages/QnaPage.jsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQna } from "../context/QnaContext";
 
 function QnaPage() {
+    const navigate = useNavigate();
+    const { addSubmission } = useQna();
     const [form, setForm] = useState({
         usrId: "",
         email: "",
@@ -13,13 +18,14 @@ function QnaPage() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
+        setForm(prev => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("문의 내용 제출 :", form);
+        addSubmission(form);
         alert("문의가 제출되었습니다.");
+        navigate("/service"); // 제출 후 고객센터 페이지로 이동
     };
 
     const kakaoChat = () => {
@@ -33,8 +39,6 @@ function QnaPage() {
 
     return (
         <div className="service-container">
-
-            {/* 타이틀 */}
             <h1 className="service-title">고객센터</h1>
             <h2 className="service-subtitle">문의 하기</h2>
 
@@ -78,7 +82,6 @@ function QnaPage() {
             <div style={{ textAlign: "center", marginTop: '20px' }}>
                 <button className="qna-submit-btn" onClick={handleSubmit}>문의 제출</button>
             </div>
-
         </div>
     );
 }
