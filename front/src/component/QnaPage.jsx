@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function QnaPage() {
+    const navigate = useNavigate();
     const [form, setForm] = useState({
         usrId: "",
         email: "",
@@ -18,13 +20,31 @@ function QnaPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("문의 내용 제출 :", form);
+
+        const newQuestion = {
+            id: Date.now(),
+            question: form.content,
+            answer: "",
+            usrId: form.usrId,
+            email: form.email,
+            phone: form.phone,
+            inquiryType: form.inquiryType,
+            productNumber: form.prodctNumber,
+            productName: form.productName,
+            createdAt: new Date().toISOString(),
+        };
+
+        const storedQuestions = JSON.parse(localStorage.getItem("questions")) || [];
+        const updatedQuestions = [newQuestion, ...storedQuestions];
+        localStorage.setItem("questions", JSON.stringify(updatedQuestions));
+
         alert("문의가 제출되었습니다.");
+        navigate("/mypage"); // 제출 후 마이페이지(문의 확인)로 이동
     };
 
     const kakaoChat = () => {
         const url = "https://pf.kakao.com/카카오채널ID/chat";
-        if(/Android|iPhone/i.test(navigator.userAgent)){
+        if (/Android|iPhone/i.test(navigator.userAgent)) {
             window.location.href = url;
         } else {
             window.open(url, "_blank");
@@ -33,8 +53,6 @@ function QnaPage() {
 
     return (
         <div className="service-container">
-
-            {/* 타이틀 */}
             <h1 className="service-title">고객센터</h1>
             <h2 className="service-subtitle">문의 하기</h2>
 
@@ -55,10 +73,10 @@ function QnaPage() {
             <section className="service-section">
                 <h3 className="service-section-title">문의 유형</h3>
                 <div className="qna-contact">
-                    <label><input type="radio" name="inquiryType" value="제품 문의" checked={form.inquiryType==="제품 문의"} onChange={handleChange} /> 제품 문의</label>
-                    <label><input type="radio" name="inquiryType" value="주문/결제 문의" checked={form.inquiryType==="주문/결제 문의"} onChange={handleChange} /> 주문/결제 문의</label>
-                    <label><input type="radio" name="inquiryType" value="교환/반품 문의" checked={form.inquiryType==="교환/반품 문의"} onChange={handleChange} /> 교환/반품 문의</label>
-                    <label><input type="radio" name="inquiryType" value="기타 문의" checked={form.inquiryType==="기타 문의"} onChange={handleChange} /> 기타 문의</label>
+                    <label><input type="radio" name="inquiryType" value="제품 문의" checked={form.inquiryType === "제품 문의"} onChange={handleChange} /> 제품 문의</label>
+                    <label><input type="radio" name="inquiryType" value="주문/결제 문의" checked={form.inquiryType === "주문/결제 문의"} onChange={handleChange} /> 주문/결제 문의</label>
+                    <label><input type="radio" name="inquiryType" value="교환/반품 문의" checked={form.inquiryType === "교환/반품 문의"} onChange={handleChange} /> 교환/반품 문의</label>
+                    <label><input type="radio" name="inquiryType" value="기타 문의" checked={form.inquiryType === "기타 문의"} onChange={handleChange} /> 기타 문의</label>
                 </div>
             </section>
 
@@ -78,7 +96,6 @@ function QnaPage() {
             <div style={{ textAlign: "center", marginTop: '20px' }}>
                 <button className="qna-submit-btn" onClick={handleSubmit}>문의 제출</button>
             </div>
-
         </div>
     );
 }

@@ -25,12 +25,14 @@ import Search from "./component/search/search";
 import OrderDetail from "./component/OrderDetail";
 import EditUserInfo from "./component/EditUserInfo";
 import ProductDetail from "./component/ProductDetail";
+import { QnaProvider } from './context/QnaContext';
 
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
         <WishProvider> 
+          <QnaProvider>
           <BrowserRouter>
             <Routes>
               <Route element={<Layout />}>
@@ -46,8 +48,9 @@ function App() {
                 <Route path="/payment" element={<Payment />} />
 
                 <Route path="/wish" element={<Wish />} />
-                <Route path="/service" element={<Service />} />
                 <Route path="/qna" element={<QnaPage />} />
+                <Route path="/service" element={<Service />} />
+                <Route path="*" element={<Service />} />
                 <Route path="/mypage" element={<Mypage />} />
                 <Route path="/orderdetail" element={<OrderDetail />} />
                 <Route path="/edituserinfo" element={<EditUserInfo />} />
@@ -56,9 +59,10 @@ function App() {
               </Route>
             </Routes>
           </BrowserRouter>
-        </WishProvider>
-      </CartProvider>
-    </AuthProvider>
+        </QnaProvider>
+      </WishProvider>
+    </CartProvider>
+  </AuthProvider>
   );
 }
 

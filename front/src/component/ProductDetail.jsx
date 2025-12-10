@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWish } from "../context/WishContext";
 import { useCart } from "../context/CartContext";
+import { Edit } from "react-feather";
 
 // ⭐ API URL 통일
 const API_URL = "http://192.168.0.224:8080";
@@ -213,6 +214,7 @@ function ProductDetail() {
       )}
 
       {/* 수량 선택 */}
+      {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === null) && (
       <div style={styles.optionBox}>
         <label style={styles.optionLabel}>수량:</label>
         <div style={styles.quantityBox}>
@@ -233,6 +235,7 @@ function ProductDetail() {
           </button>
         </div>
       </div>
+      )}
 
       {/* 상세 설명 */}
       <div style={styles.sectionBox}>
@@ -277,6 +280,7 @@ function ProductDetail() {
       </div>
 
       {/* 버튼 그룹 */}
+      {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === null) && (
       <div style={styles.btnGroup}>
         <button
           style={{
@@ -299,9 +303,25 @@ function ProductDetail() {
           장바구니 담기 🛒
         </button>
       </div>
-
+      )}
+      {localStorage.getItem("role") === "ADMIN"&& (
+      <div style={styles.btnGroup}>
+        
+        <button
+          style={{
+            ...styles.cartBtn,
+            backgroundColor: isInCart ? "#555" : "#000",
+            cursor: isInCart ? "not-allowed" : "pointer",
+          }}
+          onClick={addToCartHandler}
+          disabled={isInCart}
+        >
+          수정하기 ✏️
+        </button>
+      </div>
+      )}
       {/* 뒤로가기 */}
-      <button style={styles.backBtn} onClick={() => navigate(-1)}>
+      <button style={styles.backBtn} onClick={(Edit)}>
         ← 뒤로 돌아가기
       </button>
     </div>
