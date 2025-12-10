@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWish } from "../context/WishContext";
-// import useCart from "../hooks/useCart";
+import useCart from "./context/useCart";
 
 
 // ⭐ API URL 통일
