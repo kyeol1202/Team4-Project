@@ -19,7 +19,7 @@ useEffect(() => {
         setVisibleSection(Number(sec));
       }
     });
-  }, { threshold: 0.35 });
+  }, { threshold: 0.5 });
 
   sections.forEach(sec => observer.observe(sec));
 }, []);
@@ -189,11 +189,14 @@ useEffect(() => {
     </div>
 
     <span className="arrow right" onClick={slideRight}>
-      ›
+›
     </span>
   </div>
 </div>
+<div className="empty">
 
+
+</div>
         </>
     );
 }
