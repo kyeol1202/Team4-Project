@@ -86,6 +86,18 @@ function Layout() {
     formData.append("category_id", p_category);
     formData.append("img", p_img);
 
+    /* ⭐⭐ 🔥 자동 검색 태그 생성 — 검색 개선 핵심 부분 */
+    formData.append(
+      "search_tags",
+      `
+      ${p_name}
+      ${p_description}
+      ${p_gender}
+      ${p_top_notes} ${p_middle_notes} ${p_base}
+      여성 여자 남성 남자 향수 perf perfume scent 오라 aura 향기
+      `.toLowerCase()
+    );
+
     const response = await fetch("http://192.168.0.224:8080/api/productadd", {
       method: "POST",
       body: formData,
@@ -124,14 +136,12 @@ function Layout() {
     alert(`${data.user.name}님 환영합니다!`);
 
     localStorage.setItem("login", "true");
-    localStorage.setItem("role", data.user.role);  // 추가!
+    localStorage.setItem("role", data.user.role);
     localStorage.setItem("user", JSON.stringify(data.user));
     localStorage.setItem("member_id", data.user.member_id);
 
     setLogin(true);
     setLoginOpen(false);
-
-
 
   }
 
@@ -188,7 +198,6 @@ function Layout() {
             <button onClick={() => setOpen(true)}>상품 등록</button>
           )}
 
-
           {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === null) && (
             <>
               <button onClick={() => login ? navigate("/wish") : setLoginOpen(true)}>♡</button>
@@ -196,9 +205,6 @@ function Layout() {
             </>
           )}
           <button onClick={() => login ? navigate("/mypage") : setLoginOpen(true)}>👤</button>
-
-
-
 
         </div>
       </header>
