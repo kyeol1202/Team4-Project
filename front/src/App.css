@@ -462,6 +462,8 @@
 }
 
 /* ===== 팝업 전체 배경 ===== */
+
+
 .popup-bg {
   position: fixed;
   top: 0;
@@ -545,13 +547,21 @@
 }
   
 .perfume-popup {
-  width: 550px;              /* 좌우 넓이 증가 */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -10%);   /* 화면 정중앙 */
+  
+  width: 550px;
   background: #ffffff;
   border-radius: 14px;
-  padding: 32px;             /* 내부 여유 공간 증가 */
-  margin-top: 40px;          /* 화면 위에서 살짝 내려옴 😎 */
-  max-height: 85vh;          /* 너무 길어지면 스크롤 */
+  padding: 32px;
+  
+  max-height: 85vh;
   overflow-y: auto;
+
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.25);
+  z-index: 300;
 }
 
 .popup-title {
@@ -619,4 +629,90 @@
 
 .btn-submit:hover {
   background: #333;
+}
+
+/* ===========================
+🌙 DARK MODE THEME
+=========================== */
+
+body.dark {
+  background-color: #0e0e0e;
+  color: #e4e4e4;
+}
+
+/* 헤더 */
+body.dark .header {
+  background: #181818;
+  border-bottom: 1px solid #444;
+}
+
+body.dark .header-left {
+  border-color: #555;
+  color: white;
+}
+
+body.dark .header-left:hover {
+  background: #2b2b2b;
+}
+
+/* 검색창 */
+body.dark .search-box input {
+  background: #222;
+  color: white;
+  border-color: #555;
+}
+
+body.dark .search-box input:focus {
+  border-color: #fff;
+}
+
+body.dark .search-box button {
+  color: white;
+}
+
+/* 드롭다운 */
+body.dark .dropdown {
+  background: #222;
+  border-color: #555;
+}
+
+body.dark .dropdown li:hover {
+  background: #333;
+}
+
+/* MAIN TEXT */
+body.dark .main-text,
+body.dark .sub-text {
+  color: white;
+}
+
+/* 슬라이드 상품 */
+body.dark .product-card {
+  background: #1a1a1a;
+  border: 1px solid #333;
+}
+
+body.dark .product-card:hover {
+  box-shadow: 0 15px 35px rgba(255,255,255,0.15);
+}
+
+/* LOGIN DRAWER */
+body.dark .login-drawer {
+  background: #181818;
+  color: white;
+}
+
+body.dark .login-drawer input {
+  background: #222;
+  color: white;
+  border-color: #555;
+}
+
+/* FOOTER */
+body.dark .footer button {
+  color: white;
+}
+
+body.dark .header-right button {
+  color: white;
 }

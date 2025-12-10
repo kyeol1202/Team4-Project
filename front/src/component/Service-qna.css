@@ -237,3 +237,55 @@
         gap: 10px;
     }
 }
+
+body.dark .service-container {
+  color: #fff;
+}
+
+body.dark .service-section {
+  border-bottom-color: #444;
+}
+
+body.dark .service-list-item {
+  color: #ddd;
+}
+
+body.dark .service-faq {
+  border-bottom-color: #555;
+}
+
+body.dark .service-faq-answer {
+  color: #ccc;
+}
+
+body.dark .service-qna-btn {
+  background: #444;
+}
+
+body.dark .service-qna-btn:hover {
+  background: #666;
+}
+
+body.dark .service-kakao-inline {
+  background: #E0CC00;
+}
+
+body.dark .qna-input,
+body.dark .qna-textarea {
+  background: #1b1b1b;
+  border-color: #444;
+  color: #fff;
+}
+
+body.dark .qna-input:focus,
+body.dark .qna-textarea:focus {
+  border-color: #888;
+}
+
+body.dark .qna-submit-btn {
+  background: #555;
+}
+
+body.dark .qna-submit-btn:hover {
+  background: #777;
+}
