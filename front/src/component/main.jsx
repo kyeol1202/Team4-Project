@@ -64,15 +64,29 @@ function Main() {
     const slideRight = () => setIndex((prev) => (prev + 1) % slides.length);
     const slideLeft = () => setIndex((prev) => (prev - 1 + slides.length) % slides.length);
 
+useEffect(() => {
+        const elements = document.querySelectorAll(".fade-up");
 
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("show");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.2 }
+        );
+
+        elements.forEach((el) => observer.observe(el));
+    }, []);
 
 
 
     return (
         <>
             <div className="page1">
-                
-                 <div class="snow-container"></div>
                 <video
                     className="main-video"
                     src="image/향수광고영상.mp4"
@@ -83,38 +97,22 @@ function Main() {
                 />
             </div>
 
-          <div style={{ textAlign: "center", marginTop: "140px" }}>
-            <div className="christmas-text text-snow glow-lights">
-            A good day
-            </div>
-
-            <div className="christmas-text christmas-sub text-snow glow-lights" style={{ marginTop: "10px" }}>
-            to empty the buyer's wallet
-            </div>
-            </div>
-
-
             <div className="page2">
                 <img
-                    className="perfume-detail"
+                    className="perfume-detail fade-up"
                     src="image/image.png"
                 />
-                <div className="textbox">
-
-                    <h3>AuRa — 당신의 느낌을 향으로 기록하다</h3>
-                    <p>
-                        “한 번의 스침, 한 번의 숨결.
-                        AuRa의 향은 당신의 분위기와 어우러져
-                        세상에 단 하나의 잔향을 남깁니다.
-                        <br></br>
-                        지나가는 순간마저 특별하게—
-                        AuRa Perfume.”
-                    </p>
-                </div>
+               
+               <div className="textbox fade-up">
+  <div className="lines">
+    <span>AuRa — 당신의 느낌을 향으로 기록하다</span>
+    <span>“한 번의 스침, 한 번의 숨결.</span>
+    <span>AuRa의 향은 당신의 분위기와 어우러져 세상에 단 하나의 잔향을 남깁니다.</span>
+    <span>지나가는 순간마저 특별하게— AuRa Perfume.”</span>
+  </div>
+</div>
             </div>
             
-
-
 
             <div className="page">
 

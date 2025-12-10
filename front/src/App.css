@@ -21,45 +21,15 @@
   background-color: #928888;
 }
 
-/* ----------- 기본 골드 크리스마스 텍스트 ----------- */
-.christmas-text {
-  font-family: "Cinzel", serif;
-  font-size: 48px;
-  font-weight: 700;
-  text-align: center;
-  line-height: 1.2;
-  position: relative;
-  display: inline-block;
-
-  /* ✨ 고급 골드 그라데이션 */
-  background: linear-gradient(
-    120deg,
-    #080808 0%,
-    #000000 25%,
-    #000000 50%,
-    #000000 75%,
-    #000000 100%
-  );
-
-  background-clip: text;
-  color: transparent;
-
-  text-shadow:
-    0 0 6px rgba(255, 255, 255, 0.9),
-    0 0 12px rgba(255, 220, 120, 0.7),
-    0 0 25px rgba(255, 200, 100, 0.5),
-    0 0 35px rgba(255, 180, 80, 0.35);
-
-    /* 광택 더 강하게 */
-  filter: brightness(1.25);
-  animation: shimmer 4s infinite ease-in-out;
+.page2 {
+  height: auto;
+  min-height: 500px;
 }
 
-/* ✨ 골드 금속광 흐르는 효과 */
-@keyframes shimmer {
-  0% { filter: brightness(1); }
-  50% { filter: brightness(1.3); }
-  100% { filter: brightness(1); }
+.page2::after {
+  content: "";
+  display: block;
+  clear: both;
 }
 
 /* 아래 문장 등장 애니메이션 */
@@ -75,64 +45,55 @@
   100% { opacity: 1; transform: translateY(0); }
 }
 
-
-/* ----------- 눈 떨어지는 효과 (텍스트에만) ----------- */
-.text-snow {
-  position: relative;
-  display: inline-block;
-  overflow: visible;
+/* 공통 fade-up 기본 상태 */
+.fade-up {
+  opacity: 0;
+  transform: translateY(10px);   /* ← 훨씬 안정적 */
+  transition: all 1s ease;
 }
 
-.text-snow::before {
-  content: "";
-  position: absolute;
-  top: -20px;
-  left: 0;
-  width: 100%;
-  height: 120%;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><text y='8' font-size='10'>❄</text></svg>");
-  background-repeat: repeat;
-  animation: snowFall 6s linear infinite;
-  opacity: 0.6;
-  filter: blur(0.4px);
+/* 등장 상태 */
+.fade-up.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-@keyframes snowFall {
-  0% { background-position: 0 -50px; }
-  100% { background-position: 0 200px; }
+/* 사진은 먼저 등장 */
+.perfume-detail {
+  transition-delay: 0s !important;
 }
 
-
-/* ----------- 텍스트 주변 크리스마스 조명 반짝임 ----------- */
-.glow-lights {
-  position: relative;
+/* 텍스트는 0.25초 뒤에 등장 */
+.textlines {
+  transition-delay: 0.25s !important;
 }
 
-.glow-lights::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 180%;
-  height: 180%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 0, 0, 0.18) 10%,
-    rgba(0, 255, 0, 0.18) 20%,
-    rgba(255, 255, 150, 0.18) 40%,
-    rgba(255, 255, 255, 0) 80%
-  );
-  animation: glowPulse 4s infinite ease-in-out;
-  pointer-events: none;
+/* 기본 숨김 상태 */
+.textbox .lines span {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
 }
 
-@keyframes glowPulse {
-  0% { opacity: 0.3; filter: blur(4px); }
-  50% { opacity: 0.55; filter: blur(8px); }
-  100% { opacity: 0.3; filter: blur(4px); }
+/* fade-up가 show가 되면 순차 등장 */
+/* show 된 뒤 각각 순차 */
+.textbox.show .lines span:nth-child(1) { transition-delay: 0.2s; opacity:1; transform: translateY(0); }
+.textbox.show .lines span:nth-child(2) { transition-delay: 0.4s; opacity:1; transform: translateY(0); }
+.textbox.show .lines span:nth-child(3) { transition-delay: 0.6s; opacity:1; transform: translateY(0); }
+.textbox.show .lines span:nth-child(4) { transition-delay: 0.8s; opacity:1; transform: translateY(0); }
+
+
+/* 사진 스타일 예시 */
+.perfume-detail {
+  width: 380px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* 텍스트 */
+.textbox {
+  max-width: 420px;
+  font-family: 'Times New Roman', serif;
 }
 
 
@@ -150,20 +111,6 @@
   animation-duration: 12s;
   opacity: 0.5;
 }
-
-/* ✨ 골드 움직임 */
-@keyframes goldMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* ❄ 눈송이 입자 흩날리는 애니메이션 */
-@keyframes snowMove {
-  0%   { transform: translate(0, 0) rotate(0deg); }
-  100% { transform: translate(-20px, 20px) rotate(360deg); }
-}
-
 
 .line1, .line2 {
   font-family: "Cinzel", serif;        /* 크리스마스 + 고급스러움 */
