@@ -34,7 +34,9 @@ function Mypage() {
   const handleLogout = () => {
     localStorage.setItem("login", "false");
     localStorage.setItem("user", JSON.stringify(null));
+    localStorage.setItem("member_id", JSON.stringify(null));
     localStorage.setItem("role", JSON.stringify(null));
+    localStorage.setItem("user_id", JSON.stringify(null));
     alert(`로그아웃 되었습니다.`);
     navigate("/main");
     navigate(0);

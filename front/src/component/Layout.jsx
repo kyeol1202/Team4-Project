@@ -127,6 +127,7 @@ function Layout() {
     localStorage.setItem("role", data.user.role);  // 추가!
     localStorage.setItem("user", JSON.stringify(data.user));
     localStorage.setItem("member_id", data.user.member_id);
+    localStorage.setItem("user_id", data.user.member_id);
 
     setLogin(true);
     setLoginOpen(false);
