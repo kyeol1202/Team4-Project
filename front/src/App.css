@@ -631,6 +631,42 @@
   background: #333;
 }
 
+.hide-on-scroll {
+  opacity: 0;
+  transform: translateY(-40px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.show-on-scroll {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* .fade-section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .7s ease, transform .7s ease;
+  min-height: 100vh;          
+  min-width: 100vh;           
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  pointer-events: none;
+} */
+
+.fade-section.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.fade-section.hide {
+  opacity: 0;
+  transform: translateY(40px);
+  pointer-events: none;
+}
 /* ===========================
 🌙 DARK MODE THEME
 =========================== */
