@@ -41,16 +41,16 @@ app.get("/api/check-users", async (req, res) => {
 
 // 회원가입
 app.post("/api/register", async (req, res) => {
-  const { id, pw, name, email, adderss, number, hbd } = req.body;
+  const { id, pw, name, email, adderss, number, hbd, role } = req.body;
 
   try {
     await pool.query(
       `
       INSERT INTO member
-      (username, password, name, email, address, phone, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      (username, password, name, email, address, phone, created_at, role)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `,
-      [id, pw, name, email, adderss, number, hbd]
+      [id, pw, name, email, adderss, number, hbd, role]
     );
 
     res.json({ success: true, message: "회원가입 성공!" });
