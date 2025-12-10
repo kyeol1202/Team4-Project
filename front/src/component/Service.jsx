@@ -5,6 +5,9 @@ import { ChevronDown, ChevronUp } from "react-feather";
 function Service() {
   const navigate = useNavigate();
   const [openIndex, setOpenIndex] = useState(null);
+  const [questions, setQuestions] = useState([]); // 게시판 데이터
+  const [openId, setOpenId] = useState(null);     // 상세보기
+
 
   const faqData = [
     { question: "배송 기간은 어떻게 되나요?", answer: "평균 배송 기간은 주문 후 3~5일 내 도착합니다." },
@@ -56,6 +59,27 @@ function Service() {
           </div>
         ))}
       </section>
+      <section className="service-section">
+  <h3 className="service-section-title">📌 1:1 문의 게시판</h3>
+  <ul className="service-list">
+    {questions.map(q => (
+      <li
+        key={q.id}
+        className="service-list-item"
+        onClick={() => setOpenId(openId === q.id ? null : q.id)}
+      >
+        {q.id}. {q.title}
+        {openId === q.id && (
+          <div className="service-faq-answer">
+            <p><strong>문의 내용:</strong> {q.content}</p>
+            <p><strong>답변:</strong> {q.answer || "답변 대기 중"}</p>
+          </div>
+        )}
+      </li>
+    ))}
+  </ul>
+</section>
+
 
       {/* 1:1 문의 + 카톡 버튼 */}
       <section className="service-section">
