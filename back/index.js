@@ -1,17 +1,27 @@
-// server.js
 const express = require('express');
 const cors = require('cors');
 const pool = require('./db');
+const path = require('path');
 
 const app = express();
-app.use(cors());
+
+// ⭐ CORS 설정 강화
+app.use(cors({
+  origin: '*', // 모든 도메인 허용 (개발용)
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/uploads", express.static("uploads"));
 
-// ==================================
+// ⭐ static 파일 설정 수정 - CORS 헤더 추가
+app.use("/uploads", (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET');
+  next();
+}, express.static(path.join(__dirname, "uploads")));
+
 const multer = require("multer");
-const path = require("path");
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -24,10 +34,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-
-// =========================
-// 1. 사용자 관련 API
-// =========================
 
 // 회원 목록
 app.get("/api/check-users", async (req, res) => {
@@ -45,21 +51,18 @@ app.post("/api/register", async (req, res) => {
 
   try {
     await pool.query(
-      `
-      INSERT INTO member
+      `INSERT INTO member
       (username, password, name, email, address, phone, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-      `,
+      VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [id, pw, name, email, adderss, number, hbd]
     );
-
     res.json({ success: true, message: "회원가입 성공!" });
   } catch (err) {
     res.json({ success: false, message: "DB 오류발생" });
   }
 });
 
-// 로그인 ✅ 수정
+// 로그인
 app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -76,7 +79,6 @@ app.post("/api/auth/login", async (req, res) => {
       return res.json({ success: false, message: "로그인 정보가 올바르지 않습니다." });
 
     const user = rows[0];
-
     res.json({
       success: true,
       message: "로그인 성공",
@@ -92,13 +94,9 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-// =========================
-// 2. 상품 관련 API
-// =========================
-
+// 상품 검색
 app.get("/api/products", async (req, res) => {
   const keyword = req.query.keyword || "";
-
   try {
     const rows = await pool.query(
       "SELECT product_id, name, price, img FROM product WHERE name LIKE ?",
@@ -151,49 +149,22 @@ app.get("/api/category", async (req, res) => {
 });
 
 // 상품 등록
-// 상품 등록
 app.post("/api/productadd", upload.single("img"), async (req, res) => {
   const {
-    name,
-    price,
-    category_id,
-    description,
-    top_notes,
-    middle_notes,
-    base,
-    volume,
-    gender,
-    perfume_type,
-    longevity,
-    sillage,
+    name, price, category_id, description, top_notes,
+    middle_notes, base, volume, gender, perfume_type,
+    longevity, sillage,
   } = req.body;
 
   const imgPath = req.file ? "/uploads/" + req.file.filename : null;
 
   try {
     await pool.query(
-      `
-      INSERT INTO product 
+      `INSERT INTO product 
       (name, price, category_id, description, img, gender, top_notes, middle_notes, base_notes, volume, perfume_type, longevity, sillage)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `,
-      [
-        name,
-        price,
-        category_id,
-        description,
-        imgPath,
-        gender,
-        top_notes,
-        middle_notes,
-        base,
-        volume,
-        perfume_type,
-        longevity,
-        sillage
-      ]
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [name, price, category_id, description, imgPath, gender, top_notes, middle_notes, base, volume, perfume_type, longevity, sillage]
     );
-
     res.json({ success: true, message: "상품 등록 성공!!" });
   } catch (err) {
     console.log("❌ 상품 등록 실패:", err);
@@ -201,10 +172,7 @@ app.post("/api/productadd", upload.single("img"), async (req, res) => {
   }
 });
 
-// =========================
-// 3. 상품 상세 ✅ 수정
-// =========================
-
+// 상품 상세
 app.get("/api/products/:id", async (req, res) => {
   const id = req.params.id;
 
@@ -222,10 +190,6 @@ app.get("/api/products/:id", async (req, res) => {
     return res.status(500).json({ success: false, message: "DB 오류", error: err.message });
   }
 });
-
-// =========================
-// 4. 위시리스트 API
-// =========================
 
 // 위시리스트 추가
 app.post("/api/wish/add", async (req, res) => {
@@ -246,18 +210,15 @@ app.post("/api/wish/add", async (req, res) => {
     );
 
     return res.json({ success: true, message: "위시리스트에 추가되었습니다!" });
-
   } catch (err) {
     console.error("❌ wishlist 오류:", err);
     return res.status(500).json({ success: false, message: "DB 오류" });
   }
 });
 
-// 위시리스트 조회 ⭐ 로그 추가 버전
+// 위시리스트 조회
 app.get("/api/wish/:userId", async (req, res) => {
   const userId = req.params.userId;
-  
-  console.log("🔍 위시리스트 조회 요청 - userId:", userId);
 
   try {
     const rows = await pool.query(
@@ -268,14 +229,9 @@ app.get("/api/wish/:userId", async (req, res) => {
       [userId]
     );
 
-    console.log("✅ 조회 결과:", rows);
-    console.log("✅ 결과 개수:", rows.length);
-
     res.json({ success: true, data: rows });
   } catch (err) {
     console.error("❌ wishlist 조회 오류:", err);
-    console.error("❌ 에러 상세:", err.message);
-    console.error("❌ SQL 오류 코드:", err.code);
     res.status(500).json({ success: false, message: "DB 오류" });
   }
 });
@@ -289,7 +245,6 @@ app.delete("/api/wish/remove", async (req, res) => {
       "DELETE FROM wishlist WHERE member_id=? AND product_id=?",
       [user_id, product_id]
     );
-
     res.json({ success: true, message: "위시리스트에서 제거되었습니다!" });
   } catch (err) {
     console.error("❌ wishlist 삭제 오류:", err);
@@ -297,9 +252,7 @@ app.delete("/api/wish/remove", async (req, res) => {
   }
 });
 
-// =========================
-// 5. 장바구니 API ✅ 수정
-// =========================
+// 장바구니 추가
 app.post("/api/cart/add", async (req, res) => {
   const { user_id, product_id, count } = req.body;
 
@@ -318,16 +271,66 @@ app.post("/api/cart/add", async (req, res) => {
     );
 
     return res.json({ success: true, message: "장바구니 추가 완료!" });
-
   } catch (err) {
     console.log("❌ cart 오류:", err);
     return res.status(500).json({ success: false, message: err.message });
   }
 }); 
 
-// =========================
+// 장바구니 조회 (⭐ cart_id → id 로 보내기)
+app.get("/api/cart/:userId", async (req, res) => {
+  try {
+    const rows = await pool.query(
+      `SELECT 
+         c.cart_id AS id,      -- ⭐ 프론트에서 item.id 사용 가능!
+         c.member_id,
+         c.product_id,
+         c.quantity AS qty,
+         p.name,
+         p.price,
+         p.img
+       FROM cart c
+       JOIN product p ON c.product_id = p.product_id
+       WHERE c.member_id = ?`,
+      [req.params.userId]
+    );
+
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+});
+
+// 수량 업데이트
+app.put("/api/cart/update", async (req, res) => {
+  const { user_id, product_id, quantity } = req.body;
+  try {
+    await pool.query(
+      "UPDATE cart SET quantity = ? WHERE member_id = ? AND product_id = ?",
+      [quantity, user_id, product_id]
+    );
+    res.json({ success: true, message: "수량이 업데이트되었습니다." });
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+});
+
+// 장바구니 삭제
+app.delete("/api/cart/remove", async (req, res) => {
+  const { user_id, product_id } = req.body;
+  try {
+    await pool.query(
+      "DELETE FROM cart WHERE member_id = ? AND product_id = ?",
+      [user_id, product_id]
+    );
+    res.json({ success: true, message: "장바구니에서 삭제되었습니다." });
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+});
+
 // 서버 실행
-// =========================
 app.listen(8080, "0.0.0.0", () => {
   console.log("🚀 서버 실행 중: http://0.0.0.0:8080");
+  console.log("📁 Static files: http://0.0.0.0:8080/uploads");
 });
