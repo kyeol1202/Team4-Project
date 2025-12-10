@@ -222,9 +222,11 @@ app.post("/api/wish/add", async (req, res) => {
   }
 });
 
-// 위시리스트 조회 ⭐ 이 부분이 있어야 합니다!
+// 위시리스트 조회 ⭐ 로그 추가 버전
 app.get("/api/wish/:userId", async (req, res) => {
   const userId = req.params.userId;
+  
+  console.log("🔍 위시리스트 조회 요청 - userId:", userId);
 
   try {
     const rows = await pool.query(
@@ -235,9 +237,14 @@ app.get("/api/wish/:userId", async (req, res) => {
       [userId]
     );
 
+    console.log("✅ 조회 결과:", rows);
+    console.log("✅ 결과 개수:", rows.length);
+
     res.json({ success: true, data: rows });
   } catch (err) {
     console.error("❌ wishlist 조회 오류:", err);
+    console.error("❌ 에러 상세:", err.message);
+    console.error("❌ SQL 오류 코드:", err.code);
     res.status(500).json({ success: false, message: "DB 오류" });
   }
 });
