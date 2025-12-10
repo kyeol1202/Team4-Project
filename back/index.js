@@ -101,7 +101,7 @@ app.get("/api/products", async (req, res) => {
   const keyword = req.query.keyword || "";
   try {
     const rows = await pool.query(
-      "SELECT product_id, name, price, img FROM product WHERE name LIKE ?",
+      "SELECT product_id, name, price, img FROM product WHERE LOWER(name) LIKE LOWER(?)",
       [`%${keyword}%`]
     );
     res.json({ success: true, data: rows });
