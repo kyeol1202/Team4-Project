@@ -25,12 +25,14 @@ import Search from "./component/search/search";
 import OrderDetail from "./component/OrderDetail";
 import EditUserInfo from "./component/EditUserInfo";
 import ProductDetail from "./component/ProductDetail";
+import { QnaProvider } from './context/QnaContext';
 
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
         <WishProvider> 
+          <QnaProvider>
           <BrowserRouter>
             <Routes>
               <Route element={<Layout />}>
@@ -57,9 +59,10 @@ function App() {
               </Route>
             </Routes>
           </BrowserRouter>
-        </WishProvider>
-      </CartProvider>
-    </AuthProvider>
+        </QnaProvider>
+      </WishProvider>
+    </CartProvider>
+  </AuthProvider>
   );
 }
 

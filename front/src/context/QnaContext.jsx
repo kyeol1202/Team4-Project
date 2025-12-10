@@ -1,35 +1,38 @@
-// src/context/QnaContext.jsx
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const QnaContext = createContext();
 
 export function QnaProvider({ children }) {
   const [submissions, setSubmissions] = useState([]);
 
-  // 사용자 문의 추가
-  const addSubmission = (submission) => {
-    setSubmissions(prev => [
-      { ...submission, id: prev.length + 1, answer: "답변 대기 중" },
-      ...prev
-    ]);
-  };
+  // 로컬스토리지에서 불러오기
+  useEffect(() => {
+    const stored = localStorage.getItem("qnaSubmissions");
+    if (stored) setSubmissions(JSON.parse(stored));
+  }, []);
 
-  // 관리자 답변 추가
-  const addAnswer = (id, answer) => {
-    setSubmissions(prev =>
-      prev.map(item => item.id === id ? { ...item, answer } : item)
-    );
+  // submissions 업데이트 시 로컬스토리지 저장
+  useEffect(() => {
+    localStorage.setItem("qnaSubmissions", JSON.stringify(submissions));
+  }, [submissions]);
+
+  const addSubmission = (submission) => {
+    const newSubmission = { id: Date.now(), ...submission, answer: "" };
+    setSubmissions([newSubmission, ...submissions]);
   };
 
   return (
-    <QnaContext.Provider value={{ submissions, addSubmission, addAnswer }}>
+    <QnaContext.Provider value={{ submissions, addSubmission }}>
       {children}
     </QnaContext.Provider>
   );
 }
 
+// 훅
 export function useQna() {
-  return useContext(QnaContext);
+  const context = useContext(QnaContext);
+  if (!context) throw new Error("useQna must be used within QnaProvider");
+  return context;
 }
 
 
