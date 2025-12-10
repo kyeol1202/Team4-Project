@@ -9,7 +9,6 @@ const API_URL = "http://192.168.0.224:8080";
 function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const { wishList, addToWish, removeFromWish } = useWish();
 
   const [product, setProduct] = useState(null);
@@ -23,8 +22,6 @@ function ProductDetail() {
       .then((data) => {
         if (data.success) {
           setProduct(data.data);
-
-          // 위시리스트 체크
           setIsInWish(
             wishList.some((item) => item.product_id === data.data.product_id)
           );
@@ -46,33 +43,33 @@ function ProductDetail() {
     }
   };
 
-  // 장바구니(DB 저장)
+  // 장바구니 담기
   const addToCartHandler = async () => {
-  const userId = localStorage.getItem("member_id");
-  if (!userId) return alert("로그인이 필요합니다!");
+    const userId = localStorage.getItem("member_id");
+    if (!userId) return alert("로그인이 필요합니다!");
 
-  try {
-    const res = await fetch(`${API_URL}/api/cart/add`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user_id: userId,
-        product_id: product.product_id,
-        count: quantity,
-      }),
-    });
+    try {
+      const res = await fetch(`${API_URL}/api/cart/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: userId,
+          product_id: product.product_id,
+          count: quantity,
+        }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.success) {
-      alert("장바구니에 담았습니다!");
-    } else {
-      alert(data.message);
+      if (data.success) {
+        alert("장바구니에 담았습니다!");
+      } else {
+        alert(data.message);
+      }
+    } catch {
+      alert("장바구니 오류");
     }
-  } catch {
-    alert("장바구니 오류");
-  }
-};
+  };
 
   // 스타일
   const styles = {
@@ -152,84 +149,16 @@ function ProductDetail() {
       <h1 style={styles.name}>{product.name}</h1>
       <p style={styles.price}>{product.price?.toLocaleString()}원</p>
 
-      {/* 용량 선택 */}
-      {product.volume_options && product.volume_options.length > 0 && (
-        <div style={styles.optionBox}>
-          <label style={styles.optionLabel}>용량 선택:</label>
-          <select
-            value={selectedVolume}
-            onChange={(e) => setSelectedVolume(e.target.value)}
-            style={styles.select}
-          >
-            {product.volume_options.map((vol) => (
-              <option key={vol} value={vol}>
-                {vol}mL
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-
       {/* 수량 선택 */}
-      {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === null) && (
-      <div style={styles.optionBox}>
-        <label style={styles.optionLabel}>수량:</label>
-        <div style={styles.quantityBox}>
-          <button
-            onClick={() =>
-              setQuantity(quantity > 1 ? quantity - 1 : 1)
-            }
-            style={styles.qtyBtn}
-          >
-            -
-          </button>
-          <span style={styles.qtyNumber}>{quantity}</span>
-          <button
-            onClick={() => setQuantity(quantity + 1)}
-            style={styles.qtyBtn}
-          >
-            +
-          </button>
-        </div>
-      </div>
-      )}
-
-      {/* 상세 설명 */}
-      <div style={styles.sectionBox}>
-        <h2 style={styles.sectionTitle}>향수 설명</h2>
-        <p style={styles.desc}>{product.description}</p>
-      </div>
-
-      {/* Notes */}
-      <div style={styles.sectionBox}>
-        <h2 style={styles.sectionTitle}>향 구성</h2>
-        <p><strong>Top:</strong> {product.top_notes || "정보 없음"}</p>
-        <p><strong>Middle:</strong> {product.middle_notes || "정보 없음"}</p>
-        <p><strong>Base:</strong> {product.base_notes || "정보 없음"}</p>
-      </div>
-
-      <div style={styles.sectionBox}>
-        <h2 style={styles.sectionTitle}>향수 스펙</h2>
-        <p>
-          <strong>타입:</strong>{" "}
-          {product.perfume_type || "정보 없음"}
-        </p>
-        <p>
-          <strong>용량:</strong>{" "}
-          {product.volume || "정보 없음"}mL
-        </p>
-        <p>
-          <strong>지속력 (Longevity):</strong>{" "}
-          {product.longevity || "정보 없음"}/10
-        </p>
-        <p>
-          <strong>잔향 (Sillage):</strong>{" "}
-          {product.sillage || "정보 없음"}
-        </p>
+      <div style={{ marginTop: "20px" }}>
+        <button onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}>
+          -
+        </button>
+        <span style={{ margin: "0 8px" }}>{quantity}</span>
+        <button onClick={() => setQuantity(quantity + 1)}>+</button>
       </div>
 
       {/* 버튼 그룹 */}
-      {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === null) && (
       <div style={styles.btnGroup}>
         <button
           style={{
@@ -245,25 +174,81 @@ function ProductDetail() {
           장바구니 담기 🛒
         </button>
       </div>
-      )}
-      {localStorage.getItem("role") === "ADMIN"&& (
-      <div style={styles.btnGroup}>
-        
-        <button
-          style={{
-            ...styles.cartBtn,
-            backgroundColor: isInCart ? "#555" : "#000",
-            cursor: isInCart ? "not-allowed" : "pointer",
-          }}
-          onClick={addToCartHandler}
-          disabled={isInCart}
-        >
-          수정하기 ✏️
-        </button>
+
+      {/* 상세 설명 */}
+      <div style={styles.sectionBox}>
+        <h2 style={styles.sectionTitle}>향수 설명</h2>
+        <p style={styles.desc}>{product.description}</p>
       </div>
-      )}
+
+      <div style={styles.sectionBox}>
+        <h2 style={styles.sectionTitle}>향 구성</h2>
+        <p>
+          <strong>Top:</strong> {product.top_notes || "정보 없음"}
+        </p>
+        <p>
+          <strong>Middle:</strong> {product.middle_notes || "정보 없음"}
+        </p>
+        <p>
+          <strong>Base:</strong> {product.base_notes || "정보 없음"}
+        </p>
+      </div>
+
+      <div style={styles.sectionBox}>
+        <h2 style={styles.sectionTitle}>향수 스펙</h2>
+        <p>
+          <strong>타입:</strong> {product.perfume_type || "정보 없음"}
+        </p>
+        <p>
+          <strong>용량:</strong> {product.volume || "정보 없음"}mL
+        </p>
+        <p>
+          <strong>지속력 (Longevity):</strong> {product.longevity || "정보 없음"}
+          /10
+        </p>
+        <p>
+          <strong>잔향 (Sillage):</strong> {product.sillage || "정보 없음"}
+        </p>
+      </div>
+
+      {/* 리뷰 섹션 (더미) */}
+      <div
+        style={{
+          marginTop: "50px",
+          maxWidth: "600px",
+          margin: "50px auto",
+          padding: "20px",
+          borderRadius: "10px",
+          background: "#f7f7f7",
+        }}
+      >
+        <h2 style={{ fontSize: "20px", fontWeight: "700", marginBottom: "10px" }}>
+          고객 리뷰
+        </h2>
+        <p>구매 리뷰를 확인해보세요</p>
+        <small>개인정보 처리방침</small>
+
+        {/* 더미 리뷰 */}
+        <div style={{ marginTop: "20px" }}>
+          <div style={{ borderBottom: "1px solid #ccc", padding: "10px 0" }}>
+            <p>
+              <strong>나닝이</strong> - 2달 전
+            </p>
+            <p>★★★★★</p>
+            <p>리뷰 내용 예시입니다.</p>
+          </div>
+          <div style={{ borderBottom: "1px solid #ccc", padding: "10px 0" }}>
+            <p>
+              <strong>포스1</strong> - 1달 전
+            </p>
+            <p>★★★★☆</p>
+            <p>리뷰 내용 예시입니다.</p>
+          </div>
+        </div>
+      </div>
+
       {/* 뒤로가기 */}
-      <button style={styles.backBtn} onClick={(Edit)}>
+      <button style={styles.backBtn} onClick={() => navigate(-1)}>
         ← 뒤로 돌아가기
       </button>
     </div>
