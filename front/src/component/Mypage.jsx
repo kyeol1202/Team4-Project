@@ -2,11 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 
-
 function Mypage() {
   const navigate = useNavigate();
   const { isLogin, logout, user } = useAuth();
-  const userId = "user1"; // 예시용, 실제로는 로그인 유저 id 사용
+  const userId = user?.id || "user1"; // 실제 로그인 유저 ID 사용
 
   const [orders, setOrders] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -16,35 +15,31 @@ function Mypage() {
   const [openReviewList, setOpenReviewList] = useState(false);
   const [openQuestionList, setOpenQuestionList] = useState(false);
 
-
- // 로그인 체크 및 데이터 로드
+  // 로그인 체크 및 데이터 로드
   useEffect(() => {
-  const loginCheck = localStorage.getItem("login");
-  
-  if (loginCheck !== "true") {
-    navigate("/", { replace: true });
-    return;
-  }
+    const loginCheck = localStorage.getItem("login");
+    
+    if (loginCheck !== "true") {
+      navigate("/", { replace: true });
+      return;
+    }
 
-  setOrders(JSON.parse(localStorage.getItem("orders")) || []);
-  setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
-  setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
+    setOrders(JSON.parse(localStorage.getItem("orders")) || []);
+    setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
 
-}, []);
+    // 🔹 문의 내역 로컬스토리지에서 가져오기
+    const storedQuestions = JSON.parse(localStorage.getItem("questions")) || [];
+    setQuestions(storedQuestions.filter(q => q.usrId === userId));
+  }, [userId, navigate]);
 
   // 로그아웃
- function handleLogout(){
-  localStorage.setItem("login", "false");
-  localStorage.setItem("user", JSON.stringify(null));
-
-  alert(`로그아웃 되었습니다.`);
-
-  // 🔥 여기서 setLogin은 필요 없음
-  // Layout이 자동으로 감지함
-  
-  navigate("/main");
-  navigate(0);
-}
+  function handleLogout() {
+    localStorage.setItem("login", "false");
+    localStorage.setItem("user", JSON.stringify(null));
+    alert(`로그아웃 되었습니다.`);
+    navigate("/main");
+    navigate(0);
+  }
 
   const handleOrderClick = (orderId) => navigate(`/order/${orderId}`);
 
@@ -173,9 +168,11 @@ function Mypage() {
             {questions.length === 0 ? (
               <p>문의 내역이 없습니다.</p>
             ) : (
-              questions.map((q) => (
+              questions.map((q, idx) => (
                 <div className="card-item" key={q.id}>
-                  <p><strong>문의:</strong> {q.question}</p>
+                  <p><strong>{idx + 1}번 문의:</strong> {q.question}</p>
+                  <p><strong>문의 유형:</strong> {q.inquiryType}</p>
+                  <p><strong>제품명:</strong> {q.productName || "없음"}</p>
                   <p><strong>답변:</strong> {q.answer || "답변 대기중"}</p>
                 </div>
               ))
