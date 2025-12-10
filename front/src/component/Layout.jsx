@@ -34,6 +34,23 @@ function Layout() {
   const [gameOpen, setGameOpen] = useState(false);
   const [gameOpen2, setGame2Open] = useState(false);
 
+  const [darkMode, setDarkMode] = useState(false); // ☆ 다크모드 상태 추가
+
+  // 페이지 로드시 다크모드 유지
+  useEffect(() => {
+    const savedMode = localStorage.getItem("darkMode") === "true";
+    setDarkMode(savedMode);
+    document.body.classList.toggle("dark", savedMode);
+  }, []);
+
+  // 다크모드 토글
+  function toggleDarkMode() {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    document.body.classList.toggle("dark", newMode);
+    localStorage.setItem("darkMode", newMode);
+  }
+
   // 로그인 정보 유지
   useEffect(() => {
     const saved = localStorage.getItem("login");
@@ -118,6 +135,14 @@ function Layout() {
 
   }
 
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [open]);
+
 
   function search() {
     if (!surcharge.trim()) return alert("검색어를 입력하세요!");
@@ -155,8 +180,11 @@ function Layout() {
               onKeyDown={(e) => e.key === "Enter" && search()}
             />
             <button className="search" onClick={search}>🔍</button>
+            <button onClick={toggleDarkMode}>
+              {darkMode ? "🌞" : "🌙"}
+            </button>
           </div>
-          {localStorage.getItem("role") === "ADMIN" && (
+          {login && JSON.parse(localStorage.getItem("user"))?.role === "ADMIN" && (
             <button onClick={() => setOpen(true)}>상품 등록</button>
           )}
 
@@ -171,91 +199,7 @@ function Layout() {
 
 
 
-         {open && (
-  <>
-    {/* 바탕 클릭 시 닫힘 */}
-    <div className="overlay" onClick={() => setOpen(false)} />
 
-    {/* 팝업 */}
-    <div className="popup-box perfume-popup">
-
-      <button className="popup-close" onClick={() => setOpen(false)}>×</button>
-
-      <h3 className="popup-title">✨ 상품 등록</h3>
-
-      <div className="popup-form">
-
-        <label>상품명</label>
-        <input type="text" onChange={(e) => setP_name(e.target.value)} />
-
-        <label>상품 설명</label>
-        <textarea onChange={(e) => setP_description(e.target.value)} />
-
-        <label>탑 노트</label>
-        <input type="text" onChange={(e) => setP_top_notes(e.target.value)} />
-
-        <label>미들 노트</label>
-        <input type="text" onChange={(e) => setP_middle_notes(e.target.value)} />
-
-        <label>베이스 노트</label>
-        <input type="text" onChange={(e) => setP_base(e.target.value)} />
-
-        <label>용량(ml)</label>
-        <input type="number" onChange={(e) => setP_volume(e.target.value)} />
-
-        <label>성별</label>
-        <select onChange={(e) => setP_gender(e.target.value)}>
-          <option value="">선택</option>
-          <option value="남성">남성</option>
-          <option value="여성">여성</option>
-          <option value="유니섹스">유니섹스</option>
-        </select>
-
-        <label>향수 종류</label>
-        <select onChange={(e) => setP_perfume_type(e.target.value)}>
-          <option value="">선택</option>
-          <option value="EDP">EDP</option>
-          <option value="EDT">EDT</option>
-          <option value="EDC">EDC</option>
-        </select>
-
-        <label>지속력(1~10)</label>
-        <select onChange={(e) => setP_longevity(e.target.value)}>
-          <option value="">선택</option>
-          {[...Array(10)].map((_, i) => (
-            <option key={i + 1} value={i + 1}>{i + 1}</option>
-          ))}
-        </select>
-
-        <label>잔향</label>
-        <select onChange={(e) => setP_sillage(e.target.value)}>
-          <option value="">선택</option>
-          <option value="약함">약함</option>
-          <option value="보통">보통</option>
-          <option value="강함">강함</option>
-        </select>
-
-        <label>가격</label>
-        <input type="number" onChange={(e) => setP_price(e.target.value)} />
-
-        <label>카테고리</label>
-        <select onChange={(e) => setP_category(e.target.value)}>
-          <option value="">선택</option>
-          {categoryList.map((item) => (
-            <option key={item.category_id} value={item.category_id}>
-              {item.name}
-            </option>
-          ))}
-        </select>
-
-        <label>상품 이미지</label>
-        <input type="file" accept="image/*" onChange={(e) => setP_img(e.target.files[0])} />
-
-        <button className="btn-submit" onClick={product}>등록하기</button>
-      </div>
-    </div>
-  </>
-)}
         </div>
       </header>
 
@@ -276,6 +220,91 @@ function Layout() {
         <button className="login-btn" onClick={() => { navigate("/register"); setLoginOpen(false); }}>회원가입</button>
       </div>
 
+      {open && (
+        <>
+          {/* 바탕 클릭 시 닫힘 */}
+          <div className="overlay" onClick={() => setOpen(false)} />
+
+          {/* 팝업 */}
+          <div className="popup-box perfume-popup">
+
+            <button className="popup-close" onClick={() => setOpen(false)}>×</button>
+
+            <h3 className="popup-title">✨ 상품 등록</h3>
+
+            <div className="popup-form">
+
+              <label>상품명</label>
+              <input type="text" onChange={(e) => setP_name(e.target.value)} />
+
+              <label>상품 설명</label>
+              <textarea onChange={(e) => setP_description(e.target.value)} />
+
+              <label>탑 노트</label>
+              <input type="text" onChange={(e) => setP_top_notes(e.target.value)} />
+
+              <label>미들 노트</label>
+              <input type="text" onChange={(e) => setP_middle_notes(e.target.value)} />
+
+              <label>베이스 노트</label>
+              <input type="text" onChange={(e) => setP_base(e.target.value)} />
+
+              <label>용량(ml)</label>
+              <input type="number" onChange={(e) => setP_volume(e.target.value)} />
+
+              <label>성별</label>
+              <select onChange={(e) => setP_gender(e.target.value)}>
+                <option value="">선택</option>
+                <option value="남성">남성</option>
+                <option value="여성">여성</option>
+                <option value="유니섹스">유니섹스</option>
+              </select>
+
+              <label>향수 종류</label>
+              <select onChange={(e) => setP_perfume_type(e.target.value)}>
+                <option value="">선택</option>
+                <option value="EDP">EDP</option>
+                <option value="EDT">EDT</option>
+                <option value="EDC">EDC</option>
+              </select>
+
+              <label>지속력(1~10)</label>
+              <select onChange={(e) => setP_longevity(e.target.value)}>
+                <option value="">선택</option>
+                {[...Array(10)].map((_, i) => (
+                  <option key={i + 1} value={i + 1}>{i + 1}</option>
+                ))}
+              </select>
+
+              <label>잔향</label>
+              <select onChange={(e) => setP_sillage(e.target.value)}>
+                <option value="">선택</option>
+                <option value="약함">약함</option>
+                <option value="보통">보통</option>
+                <option value="강함">강함</option>
+              </select>
+
+              <label>가격</label>
+              <input type="number" onChange={(e) => setP_price(e.target.value)} />
+
+              <label>카테고리</label>
+              <select onChange={(e) => setP_category(e.target.value)}>
+                <option value="">선택</option>
+                {categoryList.map((item) => (
+                  <option key={item.category_id} value={item.category_id}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+
+              <label>상품 이미지</label>
+              <input type="file" accept="image/*" onChange={(e) => setP_img(e.target.files[0])} />
+
+              <button className="btn-submit" onClick={product}>등록하기</button>
+            </div>
+          </div>
+        </>
+      )}
 
       <Outlet />
 

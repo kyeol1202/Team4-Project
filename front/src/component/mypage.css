@@ -111,3 +111,23 @@
     flex: 1 1 90%;
   }
 }
+body.dark .mypage-container {
+  color: #e5e5e5;
+}
+
+body.dark .card-item {
+  background: #1a1a1a;
+  border-color: #444;
+}
+
+body.dark .mypage-section-title {
+  border-color: #666;
+}
+
+body.dark .mypage-btn {
+  background: #444;
+}
+
+body.dark .mypage-btn:hover {
+  background: #666;
+}
