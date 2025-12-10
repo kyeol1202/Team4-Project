@@ -15,7 +15,7 @@ function Service() {
   const toggleFAQ = (index) => setOpenIndex(openIndex === index ? null : index);
 
   const kakaoChat = () => {
-    const url = "https://pf.kakao.com/당신채널ID/chat"; // ← 실제 채널 ID로 변경
+    const url = "https://pf.kakao.com/당신채널ID/chat";
     if (/Android|iPhone/i.test(navigator.userAgent)) {
       window.location.href = url;
     } else {
@@ -24,53 +24,60 @@ function Service() {
   };
 
   return (
-    <div className="service-page">
+    <div className="service-container">
 
       <h1 className="service-title">고객센터</h1>
+      <p className="service-subtitle">궁금하신 사항을 확인하세요</p>
 
-      {/* 📌 공지사항 */}
-      <section className="notice">
-        <h3>📌공지사항</h3>
-        <ul>
-          <li onClick={() => navigate("/notice/1")}>▸ 설 연휴 배송 안내</li>
-          <li>▸ 향수 패키지 리뉴얼 공지</li>
-          <li>▸ 회원 등급별 혜택 안내</li>
+      {/* 공지사항 */}
+      <section className="service-section">
+        <h3 className="service-section-title">📌 공지사항</h3>
+        <ul className="service-list">
+          <li className="service-list-item" onClick={() => navigate("/notice/1")}>▸ 설 연휴 배송 안내</li>
+          <li className="service-list-item">▸ 향수 패키지 리뉴얼 공지</li>
+          <li className="service-list-item">▸ 회원 등급별 혜택 안내</li>
         </ul>
       </section>
 
-      {/* 📌 FAQ */}
-      <section className="faq">
-        <h3>📌F A Q</h3>
-        {faqData.map((item, index) => (
-          <div key={index} className="faq-item" onClick={() => toggleFAQ(index)}>
-            <div className="faq-row">
-              <span>{item.question}</span>
-              {openIndex === index ? <ChevronUp /> : <ChevronDown />}
+      {/* FAQ */}
+      <section className="service-section">
+        <h3 className="service-section-title">📌 F A Q</h3>
+        {faqData.map((item, idx) => (
+          <div
+            key={idx}
+            className={`service-faq ${openIndex === idx ? "open" : ""}`}
+            onClick={() => toggleFAQ(idx)}
+          >
+            <div className="service-faq-question">
+              {item.question}
+              {openIndex === idx ? <ChevronUp /> : <ChevronDown />}
             </div>
-            {openIndex === index && <p className="faq-answer">{item.answer}</p>}
+            <p className="service-faq-answer">{item.answer}</p>
           </div>
         ))}
       </section>
 
-      {/* 📌 1:1 문의 + 카카오톡 버튼 세트 */}
-      <div className="center-buttons">
-        <button className="qna-btn" onClick={() => navigate("/qna")}>
-          1:1 문의하기
-        </button>
-
-        <div className="kakao-mid-btn" onClick={kakaoChat}>
-          <img
-            src="https://developers.kakao.com/tool/resource/static/img/buttonbutton/channel/consult_small_yellow.png"
-            alt="카카오톡 문의"
-          />
+      {/* 1:1 문의 + 카톡 버튼 */}
+      <section className="service-section">
+        <div className="service-qna-wrapper">
+          <button className="service-qna-btn" onClick={() => navigate("/qna")}>
+            1:1 문의하기
+          </button>
+          <button className="service-kakao-inline" onClick={kakaoChat}>
+            <img
+              src="https://developers.kakao.com/tool/resource/static/img/buttonbutton/channel/consult_small_yellow.png"
+              alt="카카오톡 문의"
+            />
+          </button>
         </div>
-      </div>
+      </section>
 
-      {/* 📌 운영 안내 */}
-      <footer className="footer">
-        <p>운영 시간: 평일 09:00~18:00 | 점심 12:30~13:30 | 주말 · 공휴일 휴무</p>
+      {/* Footer */}
+      <footer className="service-footer">
+        <p>운영 시간: 평일 09:00~18:00 | 점심 12:30~13:30 | 주말·공휴일 휴무</p>
         <p>고객센터: 1234-5678</p>
       </footer>
+
     </div>
   );
 }
