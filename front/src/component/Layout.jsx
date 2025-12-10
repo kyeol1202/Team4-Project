@@ -5,7 +5,6 @@ import { useWish } from "../context/WishContext";
 import Game from "./Game";
 import Game2 from "./Game2";
 
-
 function Layout() {
 
   const navigate = useNavigate();
@@ -110,7 +109,8 @@ function Layout() {
     localStorage.setItem("login", "true");
     localStorage.setItem("role", data.user.role);  // 추가!
     localStorage.setItem("user", JSON.stringify(data.user));
-
+    localStorage.setItem("member_id", data.user.member_id);
+    
     setLogin(true);
     setLoginOpen(false);
 
