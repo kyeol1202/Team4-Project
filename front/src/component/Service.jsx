@@ -5,6 +5,9 @@ import { ChevronDown, ChevronUp } from "react-feather";
 function Service() {
   const navigate = useNavigate();
   const [openIndex, setOpenIndex] = useState(null);
+  const [questions, setQuestions] = useState([]); // 게시판 데이터
+  const [openId, setOpenId] = useState(null);     // 상세보기
+
 
   const faqData = [
     { question: "배송 기간은 어떻게 되나요?", answer: "평균 배송 기간은 주문 후 3~5일 내 도착합니다." },
