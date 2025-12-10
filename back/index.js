@@ -7,14 +7,14 @@ const app = express();
 
 // ⭐ CORS 설정 강화
 app.use(cors({
-  origin: '*', // 모든 도메인 허용 (개발용)
+  origin: '*',
   credentials: true
 }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ⭐ static 파일 설정 수정 - CORS 헤더 추가
+// ⭐ static 파일
 app.use("/uploads", (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET');
@@ -35,7 +35,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// 회원 목록
+/* ------------------------- 회원 관리 ------------------------- */
+
 app.get("/api/check-users", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM member");
@@ -48,7 +49,6 @@ app.get("/api/check-users", async (req, res) => {
 // 회원가입
 app.post("/api/register", async (req, res) => {
   const { id, pw, name, email, adderss, number, hbd, role } = req.body;
-
   try {
     await pool.query(
       `
@@ -96,13 +96,14 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-// 상품 검색
+/* ------------------------- 검색 기능 ------------------------- */
+
 app.get("/api/products", async (req, res) => {
   const keyword = req.query.keyword || "";
   try {
     const rows = await pool.query(
-      "SELECT product_id, name, price, img FROM product WHERE name LIKE ?",
-      [`%${keyword}%`]
+      "SELECT product_id, name, price, img FROM product WHERE name LIKE ? OR search_tags LIKE ?",
+      [`%${keyword}%`, `%${keyword}%`]
     );
     res.json({ success: true, data: rows });
   } catch (err) {
@@ -110,7 +111,35 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-// 전체상품
+// ⭐⭐ 통합 검색 기능
+app.get("/api/search", async (req, res) => {
+  const keyword = req.query.keyword;
+
+  if (!keyword || keyword.trim() === "") {
+    return res.json({ success: true, data: [] });
+  }
+
+  try {
+    const rows = await pool.query(
+      `
+      SELECT product_id, name, price, img, gender
+      FROM product
+      WHERE name LIKE ?
+      OR description LIKE ?
+      OR search_tags LIKE ?
+      `,
+      [`%${keyword}%`, `%${keyword}%`, `%${keyword}%`]
+    );
+
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error("❌ 검색 오류:", err);
+    res.status(500).json({ success: false, message: "DB 오류" });
+  }
+});
+
+/* ------------------------- 상품 목록 ------------------------- */
+
 app.get("/api/products/all", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM product");
@@ -120,7 +149,6 @@ app.get("/api/products/all", async (req, res) => {
   }
 });
 
-// 여성향수
 app.get("/api/products/woman", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM product WHERE gender='여성'");
@@ -130,7 +158,6 @@ app.get("/api/products/woman", async (req, res) => {
   }
 });
 
-// 남성향수
 app.get("/api/products/man", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM product WHERE gender='남성'");
@@ -140,7 +167,8 @@ app.get("/api/products/man", async (req, res) => {
   }
 });
 
-// 카테고리
+/* ------------------------- 카테고리 ------------------------- */
+
 app.get("/api/category", async (req, res) => {
   try {
     const rows = await pool.query("SELECT * FROM category");
@@ -150,12 +178,13 @@ app.get("/api/category", async (req, res) => {
   }
 });
 
-// 상품 등록
+/* ------------------------- 상품 등록 ------------------------- */
+
 app.post("/api/productadd", upload.single("img"), async (req, res) => {
   const {
     name, price, category_id, description, top_notes,
     middle_notes, base, volume, gender, perfume_type,
-    longevity, sillage,
+    longevity, sillage, search_tags
   } = req.body;
 
   const imgPath = req.file ? "/uploads/" + req.file.filename : null;
@@ -163,10 +192,27 @@ app.post("/api/productadd", upload.single("img"), async (req, res) => {
   try {
     await pool.query(
       `INSERT INTO product 
-      (name, price, category_id, description, img, gender, top_notes, middle_notes, base_notes, volume, perfume_type, longevity, sillage)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [name, price, category_id, description, imgPath, gender, top_notes, middle_notes, base, volume, perfume_type, longevity, sillage]
+      (name, price, category_id, description, img, gender, top_notes, middle_notes, base_notes, volume, perfume_type, longevity, sillage, search_tags)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `,
+      [
+        name,
+        price,
+        category_id,
+        description,
+        imgPath,
+        gender,
+        top_notes,
+        middle_notes,
+        base,
+        volume,
+        perfume_type,
+        longevity,
+        sillage,
+        search_tags   // ⭐⭐ 이거 추가됨
+      ]
     );
+
     res.json({ success: true, message: "상품 등록 성공!!" });
   } catch (err) {
     console.log("❌ 상품 등록 실패:", err);
@@ -174,7 +220,8 @@ app.post("/api/productadd", upload.single("img"), async (req, res) => {
   }
 });
 
-// 상품 상세
+/* ------------------------- 상품 상세 ------------------------- */
+
 app.get("/api/products/:id", async (req, res) => {
   const id = req.params.id;
 
@@ -189,11 +236,12 @@ app.get("/api/products/:id", async (req, res) => {
 
     return res.json({ success: true, data: rows[0] });
   } catch (err) {
-    return res.status(500).json({ success: false, message: "DB 오류", error: err.message });
+    return res.status(500).json({ success: false, message: "DB 오류" });
   }
 });
 
-// 위시리스트 추가
+/* ------------------------- 위시리스트 ------------------------- */
+
 app.post("/api/wish/add", async (req, res) => {
   const { user_id, product_id } = req.body;
 
@@ -213,12 +261,11 @@ app.post("/api/wish/add", async (req, res) => {
 
     return res.json({ success: true, message: "위시리스트에 추가되었습니다!" });
   } catch (err) {
-    console.error("❌ wishlist 오류:", err);
     return res.status(500).json({ success: false, message: "DB 오류" });
   }
 });
 
-// 위시리스트 조회
+// 위시 조회
 app.get("/api/wish/:userId", async (req, res) => {
   const userId = req.params.userId;
 
@@ -233,12 +280,11 @@ app.get("/api/wish/:userId", async (req, res) => {
 
     res.json({ success: true, data: rows });
   } catch (err) {
-    console.error("❌ wishlist 조회 오류:", err);
     res.status(500).json({ success: false, message: "DB 오류" });
   }
 });
 
-// 위시리스트 삭제
+// 위시 삭제
 app.delete("/api/wish/remove", async (req, res) => {
   const { user_id, product_id } = req.body;
 
@@ -249,12 +295,12 @@ app.delete("/api/wish/remove", async (req, res) => {
     );
     res.json({ success: true, message: "위시리스트에서 제거되었습니다!" });
   } catch (err) {
-    console.error("❌ wishlist 삭제 오류:", err);
-    res.status(500).json({ success: false, message: "DB 오류" });
+    res.status(500).json({ success: false });
   }
 });
 
-// 장바구니 추가
+/* ------------------------- 장바구니 ------------------------- */
+
 app.post("/api/cart/add", async (req, res) => {
   const { user_id, product_id, count } = req.body;
 
@@ -274,17 +320,16 @@ app.post("/api/cart/add", async (req, res) => {
 
     return res.json({ success: true, message: "장바구니 추가 완료!" });
   } catch (err) {
-    console.log("❌ cart 오류:", err);
-    return res.status(500).json({ success: false, message: err.message });
+    return res.status(500).json({ success: false });
   }
-}); 
+});
 
-// 장바구니 조회 (⭐ cart_id → id 로 보내기)
+// 장바구니 조회
 app.get("/api/cart/:userId", async (req, res) => {
   try {
     const rows = await pool.query(
       `SELECT 
-         c.cart_id AS id,      -- ⭐ 프론트에서 item.id 사용 가능!
+         c.cart_id AS id,      
          c.member_id,
          c.product_id,
          c.quantity AS qty,
@@ -331,7 +376,8 @@ app.delete("/api/cart/remove", async (req, res) => {
   }
 });
 
-// 서버 실행
+/* ------------------------- 서버 실행 ------------------------- */
+
 app.listen(8080, "0.0.0.0", () => {
   console.log("🚀 서버 실행 중: http://0.0.0.0:8080");
   console.log("📁 Static files: http://0.0.0.0:8080/uploads");

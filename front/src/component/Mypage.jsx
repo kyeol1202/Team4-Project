@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import "../component/mypage.css";
 
 function Mypage() {
   const navigate = useNavigate();
@@ -33,6 +34,9 @@ function Mypage() {
   const handleLogout = () => {
     localStorage.setItem("login", "false");
     localStorage.setItem("user", JSON.stringify(null));
+    localStorage.setItem("member_id", JSON.stringify(null));
+    localStorage.setItem("role", JSON.stringify(null));
+    localStorage.setItem("user_id", JSON.stringify(null));
     alert(`로그아웃 되었습니다.`);
     navigate("/main");
     navigate(0);
@@ -144,33 +148,58 @@ function Mypage() {
         )}
       </section>
 
-      {/* 문의 내역 (게시판형) */}
+       {/* 문의 내역 (내 것만) */}
       <section className="mypage-section">
         <h3 className="mypage-section-title" onClick={() => setOpenQuestionList(!openQuestionList)}>
           문의 내역 {openQuestionList ? "▲" : "▼"}
         </h3>
         {openQuestionList && (
           <div className="card-list">
-            {questions.length === 0 ? (
+            {questions.filter(q => q.usrId === userId).length === 0 ? (
               <p>문의 내역이 없습니다.</p>
             ) : (
-              questions.map((q, idx) => (
-                <div
-                  className="card-item"
-                  key={q.id}
-                  style={{ cursor: "pointer" }}
-                  onClick={() => setOpenQuestionIndex(openQuestionIndex === idx ? null : idx)}
-                >
-                  <p><strong>{idx + 1}번 문의:</strong> {q.inquiryType}</p>
-                  {openQuestionIndex === idx && (
-                    <div style={{ marginTop: "5px", paddingLeft: "10px" }}>
-                      <p><strong>문의 내용:</strong> {q.question}</p>
-                      <p><strong>답변:</strong> {q.answer || "답변 대기중"}</p>
-                      <p><small>작성일: {new Date(q.createdAt).toLocaleString()}</small></p>
-                    </div>
-                  )}
-                </div>
-              ))
+              questions
+                .filter(q => q.usrId === userId)
+                .map((q, idx) => (
+                  <div
+                    className="card-item"
+                    key={q.id}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setOpenQuestionIndex(openQuestionIndex === idx ? null : idx)}
+                  >
+                    <p><strong>{idx + 1}번 문의:</strong> {q.inquiryType}</p>
+                    {openQuestionIndex === idx && (
+                      <div style={{ marginTop: "5px", paddingLeft: "10px" }}>
+                        <textarea
+                          value={q.question}
+                          onChange={(e) => {
+                            const updatedQuestions = questions.map(item =>
+                              item.id === q.id ? { ...item, question: e.target.value } : item
+                            );
+                            setQuestions(updatedQuestions);
+                            localStorage.setItem("questions", JSON.stringify(updatedQuestions));
+                          }}
+                          rows={3}
+                          style={{ width: "100%" }}
+                        />
+                        <p><strong>답변:</strong> {q.answer || "답변 대기중"}</p>
+                        <p><small>작성일: {new Date(q.createdAt).toLocaleString()}</small></p>
+                        <div>
+                          <button
+                            onClick={() => {
+                              if (!window.confirm("이 문의를 삭제하시겠습니까?")) return;
+                              const updatedQuestions = questions.filter(item => item.id !== q.id);
+                              setQuestions(updatedQuestions);
+                              localStorage.setItem("questions", JSON.stringify(updatedQuestions));
+                            }}
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))
             )}
           </div>
         )}
@@ -180,5 +209,4 @@ function Mypage() {
 }
 
 export default Mypage;
-
 

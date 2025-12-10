@@ -2,20 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronDown, ChevronUp } from "react-feather";
 
-function ServicePage() {
+function ServicePage({ isAdmin = true }) {
   const navigate = useNavigate();
 
-  // FAQ 데이터
-  const [openFaqIndex, setOpenFaqIndex] = useState(null);
-  const faqData = [
+  const [faqData] = useState([
     { question: "배송 기간은 어떻게 되나요?", answer: "평균 배송 기간은 주문 후 3~5일 내 도착합니다." },
     { question: "교환/반품 신청은 어떻게 하나요?", answer: "마이페이지 > 주문 내역에서 접수 가능합니다." },
     { question: "운영 시간 안내", answer: "평일 09:00~18:00 / 점심 12:30~13:30 / 주말·공휴일 휴무" },
-  ];
+  ]);
 
-  // 문의 게시판 데이터
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [openQuestionIndex, setOpenQuestionIndex] = useState(null);
+  const [answerInputs, setAnswerInputs] = useState({});
 
   useEffect(() => {
     const storedQuestions = JSON.parse(localStorage.getItem("questions")) || [];
@@ -24,6 +23,26 @@ function ServicePage() {
 
   const toggleFaq = (idx) => setOpenFaqIndex(openFaqIndex === idx ? null : idx);
   const toggleQuestion = (idx) => setOpenQuestionIndex(openQuestionIndex === idx ? null : idx);
+
+  const handleAnswerChange = (id, value) => {
+    setAnswerInputs(prev => ({ ...prev, [id]: value }));
+  };
+
+  const saveAnswer = (id) => {
+    const updatedQuestions = questions.map(q =>
+      q.id === id ? { ...q, answer: answerInputs[id] || q.answer } : q
+    );
+    localStorage.setItem("questions", JSON.stringify(updatedQuestions));
+    setQuestions(updatedQuestions);
+    alert("답변이 저장되었습니다.");
+  };
+
+  const deleteQuestion = (id) => {
+    if (!window.confirm("이 문의를 삭제하시겠습니까?")) return;
+    const updatedQuestions = questions.filter(q => q.id !== id);
+    localStorage.setItem("questions", JSON.stringify(updatedQuestions));
+    setQuestions(updatedQuestions);
+  };
 
   const handleKakaoChat = () => {
     const url = "https://pf.kakao.com/카카오채널ID/chat";
@@ -52,9 +71,7 @@ function ServicePage() {
               {item.question}
               {openFaqIndex === idx ? <ChevronUp /> : <ChevronDown />}
             </div>
-            {openFaqIndex === idx && (
-              <p className="service-faq-answer">{item.answer}</p>
-            )}
+            {openFaqIndex === idx && <p className="service-faq-answer">{item.answer}</p>}
           </div>
         ))}
       </section>
@@ -76,24 +93,37 @@ function ServicePage() {
 
       {/* 문의 게시판 */}
       <section className="service-section">
-        <h3 className="service-section-title">📌 내가 작성한 문의</h3>
+        <h3 className="service-section-title">📌 문의 게시판</h3>
         {questions.length === 0 ? (
           <p>작성한 문의가 없습니다.</p>
         ) : (
           <div className="card-list">
             {questions.map((q, idx) => (
-              <div
-                key={q.id}
-                className="card-item"
-                style={{ cursor: "pointer" }}
-                onClick={() => toggleQuestion(idx)}
-              >
-                <p><strong>{idx + 1}번 문의:</strong> {q.inquiryType}</p>
+              <div key={q.id} className="card-item" style={{ marginBottom: 10 }}>
+                <div style={{ cursor: "pointer" }} onClick={() => toggleQuestion(idx)}>
+                  <p><strong>{idx + 1}번 문의</strong> ({q.inquiryType}) - 작성자: {q.usrId}</p>
+                </div>
+
                 {openQuestionIndex === idx && (
-                  <div style={{ marginTop: "5px", paddingLeft: "10px" }}>
+                  <div style={{ paddingLeft: 10 }}>
                     <p><strong>문의 내용:</strong> {q.question}</p>
                     <p><strong>답변:</strong> {q.answer || "답변 대기중"}</p>
                     <p><small>작성일: {new Date(q.createdAt).toLocaleString()}</small></p>
+
+                    {/* 관리자 답변 작성 */}
+                    {isAdmin && (
+                      <div style={{ marginTop: 5 }}>
+                        <textarea
+                          value={answerInputs[q.id] ?? q.answer}
+                          onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                          placeholder="답변 작성"
+                          rows={3}
+                          style={{ width: "100%" }}
+                        />
+                        <button onClick={() => saveAnswer(q.id)}>답변 저장</button>
+                        <button onClick={() => deleteQuestion(q.id)} style={{ marginLeft: 5 }}>삭제</button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -112,4 +142,3 @@ function ServicePage() {
 }
 
 export default ServicePage;
-

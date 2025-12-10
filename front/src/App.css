@@ -1,209 +1,130 @@
 /* 기본 글꼴 Dior 스타일 */
-* {
-  font-family: "Didot", "Playfair Display", serif;
-  letter-spacing: 0.5px;
-  box-sizing: border-box;
+@keyframes smooth-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-.page {
-  background: #ffffff;
-  color: #000000d0;
-}
-
-
-.page1{
-
-  width: 1000px;
-  height: 500px;
-  overflow: hidden;
-  position: relative;
-  margin: auto;
-  background-color: #928888;
-}
-
-.page2 {
-  height: auto;
-  min-height: 500px;
-}
-
-.page2::after {
-  content: "";
-  display: block;
-  clear: both;
-}
-
-/* 아래 문장 등장 애니메이션 */
-.christmas-sub {
+.fade-section {
   opacity: 0;
-  transform: translateY(20px);
-  animation: rise 1.5s ease-out forwards;
-  animation-delay: 1s;
+  transform: translateY(40px);
+  transition: opacity 1s ease, transform 1s ease;
 }
 
-@keyframes rise {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-/* 공통 fade-up 기본 상태 */
-.fade-up {
-  opacity: 0;
-  transform: translateY(10px);   /* ← 훨씬 안정적 */
-  transition: all 1s ease;
-}
-
-/* 등장 상태 */
-.fade-up.show {
+.fade-section.show {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* 사진은 먼저 등장 */
-.perfume-detail {
-  transition-delay: 0s !important;
-}
+/* ------------------ 메인 텍스트 ------------------ */
 
-/* 텍스트는 0.25초 뒤에 등장 */
-.textlines {
-  transition-delay: 0.25s !important;
-}
-
-/* 기본 숨김 상태 */
-.textbox .lines span {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
-}
-
-/* fade-up가 show가 되면 순차 등장 */
-/* show 된 뒤 각각 순차 */
-.textbox.show .lines span:nth-child(1) { transition-delay: 0.2s; opacity:1; transform: translateY(0); }
-.textbox.show .lines span:nth-child(2) { transition-delay: 0.4s; opacity:1; transform: translateY(0); }
-.textbox.show .lines span:nth-child(3) { transition-delay: 0.6s; opacity:1; transform: translateY(0); }
-.textbox.show .lines span:nth-child(4) { transition-delay: 0.8s; opacity:1; transform: translateY(0); }
-
-
-/* 사진 스타일 예시 */
-.perfume-detail {
-  width: 380px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
-
-/* 텍스트 */
-.textbox {
-  max-width: 420px;
-  font-family: 'Times New Roman', serif;
-}
-
-
-.text-wrap {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  width: 100%;
-}
-
-/* 앞/뒤 두 레이어 만들기 */
-.snow-effect::after {
-  animation-duration: 12s;
-  opacity: 0.5;
-}
-
-.line1, .line2 {
-  font-family: "Cinzel", serif;        /* 크리스마스 + 고급스러움 */
-  font-size: 3.2rem;
+.main-text {
+  font-family: "Cinzel", serif;
+  font-size: 3.8rem;
   font-weight: 600;
-  letter-spacing: 1.5px;
-  color: #ffffff;                      /* 광고 느낌 더 살리기 (원하면 변경 가능) */
+  animation: smooth-appear 1.5s ease forwards;
+}
 
+.sub-text {
+  font-family: "Cinzel", serif;
+  font-size: 1.7rem;
+  margin-top: 12px;
   opacity: 0;
-  transform: translateY(45px);
-  animation: slideUp 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: smooth-appear 1.5s ease forwards;
+  animation-delay: .3s;
 }
 
-.line2 {
-  animation-delay: 0.38s;              /* 아래 문구는 조금 뒤에 따라 올라옴 */
+/* ------------------ 페이지 기본 ------------------ */
+
+.page1 {
+  width: 1000px;
+  height: 500px;
+  position: relative;
+  margin: auto;
+  overflow: hidden;
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(45px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.page1::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.18);
+  backdrop-filter: blur(3px);
 }
 
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(45px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.main-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
+/* ------------------ 설명 섹션 ------------------ */
 
-/* 두 번째 줄은 조금 늦게 시작 */
-.line2 {
-  animation-delay: 0.35s;            /* 시간차 */
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(45px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.page2{
-
+.page2 {
   width: 1000px;
   height: 500px;
   margin: auto;
-
-
 }
-.main-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;  /* 화면 꽉 채우기 */
-}
-.perfume-detail{
-  width:300px;
-  height:400px;
+
+.perfume-detail {
+  width: 300px;
+  height: 400px;
   float: left;
-  margin-top:100px;
+  margin-top: 100px;
 }
 
-.textbox{
+.textbox {
   width: 200px;
   height: 200px;
   float: left;
-  margin-top:100px;
+  margin-top: 100px;
+}
+
+/* ------------------ 슬라이드 ------------------ */
+
+.slider-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 40px;
+}
+
+.slider {
+  width: calc(330px * 3 + 20px * 2);
+  overflow: hidden;
+}
+
+.slider-inner {
+  display: flex;
+  transition: transform 0.8s cubic-bezier(.23,1,.32,1);
+}
+
+.product-card {
+  width: 330px;
+  height: 330px;
+  background: #fff;
+  border: 1px solid #ddd;
+  transition: transform .45s, box-shadow .45s;
+}
+
+.product-card:hover {
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 0 25px 40px rgba(0,0,0,0.18);
+}
+
+/* ------------------ 기타 ------------------ */
+
+.section-title {
+  text-align: center;
+  margin-top: 60px;
+  font-size: 32px;
+  letter-spacing: 2px;
 }
 
 /* HEADER 1*/
@@ -362,34 +283,7 @@
   color: #444;
 }
 
-/* 검색창 */
-.search-box {
-  width: 350px;
-  margin: 0 auto;
-  display: flex;
-}
 
-.search-box input {
-  width: 100%;
-  flex: 1;                 /* 입력창이 남은 공간 전체 차지 */
-  padding: 12px 15px;
-  border-radius: 6px;
-  border: 1px solid #dcdcdc;
-  background: #fafafa;
-  transition: all 0.25s;
-}
-
-.search-box button.search {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.search-box input:focus {
-  outline: none;
-  border-color: #000;
-}
 
 /* SECTION TITLE */
 .section-title {
@@ -432,6 +326,35 @@
 
 .arrow:hover {
   opacity: 0.5;
+}
+
+/* 검색창 */
+.search-box {
+  width: 350px;
+  margin: 0 auto;
+  display: flex;
+}
+
+.search-box input {
+  width: 100%;
+  flex: 1;                 /* 입력창이 남은 공간 전체 차지 */
+  padding: 12px 15px;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  background: #fafafa;
+  transition: all 0.25s;
+}
+
+.search-box button.search {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: #000;
 }
 
 /* FOOTER */
@@ -539,6 +462,8 @@
 }
 
 /* ===== 팝업 전체 배경 ===== */
+
+
 .popup-bg {
   position: fixed;
   top: 0;
@@ -622,13 +547,21 @@
 }
   
 .perfume-popup {
-  width: 550px;              /* 좌우 넓이 증가 */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -10%);   /* 화면 정중앙 */
+  
+  width: 550px;
   background: #ffffff;
   border-radius: 14px;
-  padding: 32px;             /* 내부 여유 공간 증가 */
-  margin-top: 40px;          /* 화면 위에서 살짝 내려옴 😎 */
-  max-height: 85vh;          /* 너무 길어지면 스크롤 */
+  padding: 32px;
+  
+  max-height: 85vh;
   overflow-y: auto;
+
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.25);
+  z-index: 300;
 }
 
 .popup-title {
@@ -696,4 +629,126 @@
 
 .btn-submit:hover {
   background: #333;
+}
+
+.hide-on-scroll {
+  opacity: 0;
+  transform: translateY(-40px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.show-on-scroll {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* .fade-section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .7s ease, transform .7s ease;
+  min-height: 100vh;          
+  min-width: 100vh;           
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  pointer-events: none;
+} */
+
+.fade-section.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.fade-section.hide {
+  opacity: 0;
+  transform: translateY(40px);
+  pointer-events: none;
+}
+/* ===========================
+🌙 DARK MODE THEME
+=========================== */
+
+body.dark {
+  background-color: #0e0e0e;
+  color: #e4e4e4;
+}
+
+/* 헤더 */
+body.dark .header {
+  background: #181818;
+  border-bottom: 1px solid #444;
+}
+
+body.dark .header-left {
+  border-color: #555;
+  color: white;
+}
+
+body.dark .header-left:hover {
+  background: #2b2b2b;
+}
+
+/* 검색창 */
+body.dark .search-box input {
+  background: #222;
+  color: white;
+  border-color: #555;
+}
+
+body.dark .search-box input:focus {
+  border-color: #fff;
+}
+
+body.dark .search-box button {
+  color: white;
+}
+
+/* 드롭다운 */
+body.dark .dropdown {
+  background: #222;
+  border-color: #555;
+}
+
+body.dark .dropdown li:hover {
+  background: #333;
+}
+
+/* MAIN TEXT */
+body.dark .main-text,
+body.dark .sub-text {
+  color: white;
+}
+
+/* 슬라이드 상품 */
+body.dark .product-card {
+  background: #1a1a1a;
+  border: 1px solid #333;
+}
+
+body.dark .product-card:hover {
+  box-shadow: 0 15px 35px rgba(255,255,255,0.15);
+}
+
+/* LOGIN DRAWER */
+body.dark .login-drawer {
+  background: #181818;
+  color: white;
+}
+
+body.dark .login-drawer input {
+  background: #222;
+  color: white;
+  border-color: #555;
+}
+
+/* FOOTER */
+body.dark .footer button {
+  color: white;
+}
+
+body.dark .header-right button {
+  color: white;
 }
