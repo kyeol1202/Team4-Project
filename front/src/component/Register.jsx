@@ -89,7 +89,6 @@ function Register() {
             사업자 회원가입
           </button>
 
-          <button onClick={() => navigate("/")}>🏡 홈</button>
         </div>
       )}
 
@@ -98,80 +97,107 @@ function Register() {
           🔥 회원가입 폼 (둘 중 하나 선택 후)
       ===================================== */}
       {mode !== null && (
-        <>
-          <h2>{mode === "USER" ? "일반 회원가입" : "사업자 회원가입"}</h2>
+  <>
+    <h2>{mode === "USER" ? "일반 회원가입" : "사업자 회원가입"}</h2>
 
-          <div>아이디</div>
-          <input value={id} onChange={(e) => setId(e.target.value)} />
+    {/* 아이디 */}
+    <div>아이디</div>
+    <input value={id} onChange={(e) => setId(e.target.value)} />
 
-          <div>비밀번호</div>
-          <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} />
+    {/* 비밀번호 */}
+    <div>비밀번호</div>
+    <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} />
 
-          <div>비밀번호 확인</div>
-          <input type="password" value={pwCheck} onChange={(e) => setPwCheck(e.target.value)} />
+    <div>비밀번호 확인</div>
+    <input type="password" value={pwCheck} onChange={(e) => setPwCheck(e.target.value)} />
 
-          <div>성함</div>
-          <input value={name} onChange={(e) => setName(e.target.value)} />
+    {/* 이메일 */}
+    <div>이메일</div>
+    <input value={email} onChange={(e) => setEmail(e.target.value)} />
 
-          <div>이메일</div>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} />
 
-          <div>주소</div>
-          <input value={address} onChange={(e) => setAddress(e.target.value)} />
+    {/* =============== USER 전용 입력 =============== */}
+    {mode === "USER" && (
+      <>
+        <div>성함</div>
+        <input value={name} onChange={(e) => setName(e.target.value)} />
 
-          <div>전화번호</div>
-          <div>
-            <input readOnly value={number1} style={{ width:"60px" }} />
-            -
-            <input
-              value={number2}
-              maxLength={4}
-              onChange={(e) => {
-                const val = e.target.value.replace(/[^0-9]/g, '');
-                setNumber2(val);
-                if (val.length === 4) number3Ref.current?.focus();
-              }}
-              style={{ width:"80px" }}
-            />
-            -
-            <input
-              ref={number3Ref}
-              value={number3}
-              onChange={(e) => setNumber3(e.target.value.replace(/[^0-9]/g, ''))}
-              maxLength={4}
-              style={{ width:"80px" }}
-            />
-          </div>
+        <div>주소</div>
+        <input value={address} onChange={(e) => setAddress(e.target.value)} />
 
-          <div>생년월일</div>
-          <select value={hbd.year} onChange={(e) => setHbd({ ...hbd, year: e.target.value })}>
-            <option value="">년도</option>
-            {Array.from({ length: 120 }, (_, i) => 2025 - i).map((year) => (
-              <option key={year}>{year}</option>
-            ))}
-          </select>
+        <div>전화번호</div>
+        <div>
+          <input readOnly value={number1} style={{ width:"60px" }} />
+          -
+          <input
+            value={number2}
+            maxLength={4}
+            onChange={(e) => {
+              const val = e.target.value.replace(/[^0-9]/g, '');
+              setNumber2(val);
+              if (val.length === 4) number3Ref.current?.focus();
+            }}
+            style={{ width:"80px" }}
+          />
+          -
+          <input
+            ref={number3Ref}
+            value={number3}
+            onChange={(e) => setNumber3(e.target.value.replace(/[^0-9]/g, ''))}
+            maxLength={4}
+            style={{ width:"80px" }}
+          />
+        </div>
 
-          <select value={hbd.month} onChange={(e) => setHbd({ ...hbd, month: e.target.value })}>
-            <option value="">월</option>
-            {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-              <option key={month}>{month}</option>
-            ))}
-          </select>
+        <div>생년월일</div>
+        <select value={hbd.year} onChange={(e) => setHbd({ ...hbd, year: e.target.value })}>
+          <option value="">년도</option>
+          {Array.from({ length: 120 }, (_, i) => 2025 - i).map((year) => (
+            <option key={year}>{year}</option>
+          ))}
+        </select>
 
-          <select value={hbd.day} onChange={(e) => setHbd({ ...hbd, day: e.target.value })}>
-            <option value="">일</option>
-            {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
-              <option key={day}>{day}</option>
-            ))}
-          </select>
+        <select value={hbd.month} onChange={(e) => setHbd({ ...hbd, month: e.target.value })}>
+          <option value="">월</option>
+          {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+            <option key={month}>{month}</option>
+          ))}
+        </select>
 
-          <br /><br />
-          <button onClick={register}>회원가입</button>
+        <select value={hbd.day} onChange={(e) => setHbd({ ...hbd, day: e.target.value })}>
+          <option value="">일</option>
+          {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
+            <option key={day}>{day}</option>
+          ))}
+        </select>
+      </>
+    )}
 
-          <button onClick={() => setMode(null)}>← 계정 유형 다시 선택</button>
 
-        </>
-      )}
+    {/* =============== ADMIN 전용 입력 =============== */}
+    {mode === "ADMIN" && (
+      <>
+        <div>회사명 / 대표자명</div>
+        <input
+          placeholder="예: 향수샵Aura (대표: 김한결)"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+
+        <div>사업장 주소</div>
+        <input
+          placeholder="사업장 주소를 입력하세요"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+      </>
+    )}
+
+    <br /><br />
+    <button onClick={register}>회원가입</button>
+    <button onClick={() => setMode(null)}>← 계정 유형 다시 선택</button>
+  </>
+)}
     </>
   );
 }

@@ -30,7 +30,7 @@ function Layout() {
   const [p_category, setP_category] = useState("");
   const [p_img, setP_img] = useState(null);
   const [categoryList, setCategoryList] = useState([]);
-
+  const role = localStorage.getItem("role") ? JSON.parse(localStorage.getItem("role")) : "GUEST";
   // ---------------- 게임 변수 ----------------
   const [gameOpen, setGameOpen] = useState(false);
   const [gameOpen2, setGame2Open] = useState(false);
@@ -109,10 +109,12 @@ function Layout() {
 
     localStorage.setItem("login", "true");
     localStorage.setItem("user", JSON.stringify(data.user));
-    localStorage.setItem("user_id", data.user.member_id);
 
     setLogin(true);
     setLoginOpen(false);
+
+    setRole = localStorage.getItem("role");
+
   }
 
 
@@ -153,10 +155,17 @@ function Layout() {
             />
             <button className="search" onClick={search}>🔍</button>
           </div>
-
+          {role === "ADMIN" && (
           <button onClick={() => setOpen(true)}>상품 등록</button>
+          )}
+
+
+          {role === "USER" && "null" (
+            <>
           <button onClick={() => login ? navigate("/wish") : setLoginOpen(true)}>♡</button>
           <button onClick={() => navigate("/cart")}>🛒</button>
+            </>
+          )}
           <button onClick={() => login ? navigate("/mypage") : setLoginOpen(true)}>👤</button>
 
 
