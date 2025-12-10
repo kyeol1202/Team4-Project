@@ -56,6 +56,27 @@ function Service() {
           </div>
         ))}
       </section>
+      <section className="service-section">
+  <h3 className="service-section-title">📌 1:1 문의 게시판</h3>
+  <ul className="service-list">
+    {questions.map(q => (
+      <li
+        key={q.id}
+        className="service-list-item"
+        onClick={() => setOpenId(openId === q.id ? null : q.id)}
+      >
+        {q.id}. {q.title}
+        {openId === q.id && (
+          <div className="service-faq-answer">
+            <p><strong>문의 내용:</strong> {q.content}</p>
+            <p><strong>답변:</strong> {q.answer || "답변 대기 중"}</p>
+          </div>
+        )}
+      </li>
+    ))}
+  </ul>
+</section>
+
 
       {/* 1:1 문의 + 카톡 버튼 */}
       <section className="service-section">
