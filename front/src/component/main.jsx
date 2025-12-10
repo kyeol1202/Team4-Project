@@ -83,10 +83,16 @@ function Main() {
                 />
             </div>
 
-            <div class="text-wrap">
-            <div class="line1">A good day</div>
-            <div class="line2">to empty the buyer's wallet</div>
+          <div style={{ textAlign: "center", marginTop: "140px" }}>
+            <div className="christmas-text text-snow glow-lights">
+            A good day
             </div>
+
+            <div className="christmas-text christmas-sub text-snow glow-lights" style={{ marginTop: "10px" }}>
+            to empty the buyer's wallet
+            </div>
+            </div>
+
 
             <div className="page2">
                 <img
