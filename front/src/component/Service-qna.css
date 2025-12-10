@@ -27,12 +27,16 @@
 }
 
 /* =========================
-   섹션
+   4개 영역 섹션 나누기
 ========================= */
 .service-section {
     margin-bottom: 50px;
     border-bottom: 1px solid #ddd;
     padding-bottom: 30px;
+}
+
+.service-section:last-child {
+    border-bottom: none;
 }
 
 .service-section-title {
@@ -60,7 +64,7 @@
 }
 
 /* =========================
-   FAQ
+   FAQ (클릭 열림)
 ========================= */
 .service-faq {
     border-bottom: 1px solid #ccc;
@@ -101,8 +105,8 @@
 
 .service-qna-btn {
     padding: 12px 30px;
-    background: black;
-    color: white;
+    background: #000;
+    color: #fff;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -137,53 +141,7 @@
 }
 
 /* =========================
-   QnA 입력폼
-========================= */
-.qna-input {
-    border: 1px solid #cfcfcf;
-    padding: 10px 14px;
-    border-radius: 6px;
-    transition: 0.2s ease;
-    width: 100%;
-    margin-bottom: 12px;
-}
-
-.qna-input:focus {
-    outline: none;
-    border-color: black;
-}
-
-.qna-textarea {
-    border: 1px solid #cfcfcf;
-    padding: 10px 14px;
-    border-radius: 6px;
-    width: 100%;
-    min-height: 120px;
-    resize: vertical;
-    margin-bottom: 12px;
-}
-
-.qna-textarea:focus {
-    border-color: black;
-    outline: none;
-}
-
-.qna-submit-btn {
-    background: black;
-    color: white;
-    padding: 13px 40px;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: 0.2s ease;
-    cursor: pointer;
-}
-
-.qna-submit-btn:hover {
-    background: #333;
-}
-
-/* =========================
-   연락 정보 세로 정렬
+   연락 정보 입력 (세로 정렬)
 ========================= */
 .qna-contact {
     display: flex;
@@ -194,6 +152,44 @@
 
 .qna-contact input {
     width: 100%;
+}
+
+/* =========================
+   QnA 입력폼
+========================= */
+.qna-input,
+.qna-textarea {
+    border: 1px solid #cfcfcf;
+    padding: 10px 14px;
+    border-radius: 6px;
+    width: 100%;
+    transition: 0.2s ease;
+    margin-bottom: 12px;
+}
+
+.qna-input:focus,
+.qna-textarea:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.qna-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.qna-submit-btn {
+    background: #000;
+    color: #fff;
+    padding: 13px 40px;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+
+.qna-submit-btn:hover {
+    background: #333;
 }
 
 /* =========================
@@ -213,12 +209,15 @@
     .service-container {
         padding: 30px 15px;
     }
+
     .service-title {
         font-size: 32px;
     }
+
     .service-subtitle {
         font-size: 18px;
     }
+
     .service-qna-wrapper {
         flex-direction: column;
         gap: 10px;

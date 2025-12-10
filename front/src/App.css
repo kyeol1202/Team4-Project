@@ -130,8 +130,8 @@
   transition: all 0.25s;
 }
 
-.dropdownlist:hover {
-  background: #f3f3f3;
+.dropdown li:hover {
+  background: #f3efef;
 }
 
 /* 브랜드 로고 */
@@ -463,3 +463,79 @@
   background-color: #ffffff;
 }
   
+.perfume-popup {
+  width: 550px;              /* 좌우 넓이 증가 */
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 32px;             /* 내부 여유 공간 증가 */
+  margin-top: 40px;          /* 화면 위에서 살짝 내려옴 😎 */
+  max-height: 85vh;          /* 너무 길어지면 스크롤 */
+  overflow-y: auto;
+}
+
+.popup-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.popup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;                  /* 입력칸 여유 */
+}
+
+.popup-form label {
+  font-size: 14px;
+  color: #666;
+}
+.popup-bg {
+  z-index: 200;
+}
+
+.popup-box, .perfume-popup {
+  z-index: 300;
+  position: relative;
+}
+
+.popup-form input,
+.popup-form select,
+.popup-form textarea {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+  font-size: 15px;
+  transition: border-color .2s;
+}
+
+.popup-form input:focus,
+.popup-form select:focus,
+.popup-form textarea:focus {
+  border-color: #000;
+}
+
+.popup-form textarea {
+  height: 80px;
+  resize: none;
+}
+
+/* 등록 버튼 */
+.btn-submit {
+  margin-top: 20px;
+  width: 100%;
+  padding: 14px;
+  background: #000;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 17px;
+  cursor: pointer;
+  transition: background .25s;
+}
+
+.btn-submit:hover {
+  background: #333;
+}

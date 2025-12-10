@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronDown, ChevronUp } from "react-feather";
-import "./Service-qna.css"; // ★ CSS 외부 분리
 
 function Service() {
   const navigate = useNavigate();

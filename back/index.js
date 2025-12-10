@@ -151,21 +151,52 @@ app.get("/api/category", async (req, res) => {
 });
 
 // 상품 등록
+// 상품 등록
 app.post("/api/productadd", upload.single("img"), async (req, res) => {
-  const { name, price, category_id, description, gender } = req.body;
+  const {
+    name,
+    price,
+    category_id,
+    description,
+    top_notes,
+    middle_notes,
+    base,
+    volume,
+    gender,
+    perfume_type,
+    longevity,
+    sillage,
+  } = req.body;
+
   const imgPath = req.file ? "/uploads/" + req.file.filename : null;
 
   try {
     await pool.query(
       `
-      INSERT INTO product (name, price, category_id, description, img, gender)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO product 
+      (name, price, category_id, description, img, gender, top_notes, middle_notes, base_notes, volume, perfume_type, longevity, sillage)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
-      [name, price, category_id, description, imgPath, gender]
+      [
+        name,
+        price,
+        category_id,
+        description,
+        imgPath,
+        gender,
+        top_notes,
+        middle_notes,
+        base,
+        volume,
+        perfume_type,
+        longevity,
+        sillage
+      ]
     );
 
     res.json({ success: true, message: "상품 등록 성공!!" });
   } catch (err) {
+    console.log("❌ 상품 등록 실패:", err);
     res.json({ success: false, message: "DB 오류 발생" });
   }
 });
