@@ -1,4 +1,5 @@
 import React,{useState} from "react";
+import "./component/Service-qna.css";
 
 function QnaPage(){
     const [form, setForm] = useState({
