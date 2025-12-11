@@ -109,6 +109,14 @@ useEffect(() => {
   <h1 className="line2 tracking-in-expand-fwd-bottom">
     to empty the buyer's wallet
   </h1>
+  
+  <button
+          className="video-link-btn"
+          onClick={() => navigate("/Category2")}
+        >
+          상품 보러가기
+        </button>
+        
 </div>
 
 
