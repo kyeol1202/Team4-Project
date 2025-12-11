@@ -243,7 +243,7 @@ function Main() {
 
           <div class="footer-text">
             <p>
-              (주) AuRa | Owner : 김한결, 윤종빈 , 이선화 , 묵은지  | Business Number : 010-010-010 |
+              (주) AuRa | Owner : 김한결, 윤종빈 , 이선화 , 장화 안 신은지 오래됨  | Business Number : 010-010-010 |
               <a href="javascript:void(0)" onclick="onopenPermit('1148510672')" class="biz-link">
               </a>
             </p>
