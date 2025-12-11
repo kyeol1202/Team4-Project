@@ -83,6 +83,37 @@ will-change: opacity;
   border-radius: 10px;
 }
 
+.video-link-btn {
+  margin-top: 20px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-family: "Didot", "Playfair Display", serif;
+  cursor: pointer;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+/* 밑줄 */
+.video-link-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: white;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: 0.3s ease;
+}
+
+.video-link-btn:hover::after {
+  transform: scaleX(1);
+}
+
+
 /* 세로 구분선 */
 .divider {
   width: 1px;
