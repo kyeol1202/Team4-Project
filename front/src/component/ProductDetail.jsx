@@ -113,23 +113,28 @@ function ProductDetail() {
       <h1 style={styles.name}>{product.name}</h1>
       <p style={styles.price}>{product.price?.toLocaleString()}원</p>
 
-      {/* 수량 선택 */}
+      {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === "null") && (
       <div style={{ marginTop: 20 }}>
         <button onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}>-</button>
         <span style={{ margin: "0 8px" }}>{quantity}</span>
         <button onClick={() => setQuantity(quantity + 1)}>+</button>
       </div>
+      )}
 
-      {/* 버튼 그룹 */}
+      {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === "null") && (
+       
       <div style={styles.btnGroup}>
+        
         <button style={{ ...styles.wishBtn, color: isInWish ? "red" : "#000" }} onClick={toggleWish}>
           {isInWish ? "♥ 위시리스트" : "♡ 위시리스트"}
         </button>
+       
         <button style={styles.cartBtn} onClick={addToCartHandler}>
           장바구니 담기 🛒
         </button>
+        
       </div>
-
+      )}
       {/* 상품 상세 */}
       <div style={styles.sectionBox}>
         <h2 style={styles.sectionTitle}>향수 설명</h2>
