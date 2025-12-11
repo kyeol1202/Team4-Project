@@ -287,3 +287,46 @@ body.dark .form-section textarea {
   color: #e4e4e4;
   border: 1px solid #555;
 }
+/* ===== 배송지 ===== */
+.form-section {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 25px;
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column; /* 세로 정렬 */
+}
+
+.same-user {
+  margin-bottom: 15px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.same-user input {
+  margin-right: 8px;
+  transform: scale(1.2);
+}
+
+/* input들을 세로로 정렬 */
+.form-section input,
+.form-section select {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px; /* input 사이 간격 */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.form-section input:disabled {
+  background-color: #f9f9f9;
+  color: #888;
+}
+
+.form-section input:focus,
+.form-section select:focus {
+  border-color: #333;
+  outline: none;
+}
