@@ -42,8 +42,8 @@ will-change: opacity;
 .top-marquee-bar {
   width: 100%;
   overflow: hidden;
-  background-color: #000;  /* 바 배경색 */
-  color: #fff;
+  background-color: #b4b4b4;  /* 바 배경색 */
+  color: #000000;
   white-space: nowrap;
   box-sizing: border-box;
   padding: 8px 0;
