@@ -28,10 +28,10 @@ const kakaoPay = async (items, total) => {
   const res = await fetch("https://kapi.kakao.com/v1/payment/ready", {
     method: "POST",
     headers: {
-      Authorization: `KakaoAK ${process.env.KAKAO_ADMIN_KEY}`,
+      Authorization: `KakaoAK ${process.env.KAKAO_ADMIN_KEY}`, // .env에서 설정 필요
       "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
     },
-    body: params.toString(),
+    body: params.toString()
   });
 
   return res.json();
@@ -59,17 +59,17 @@ app.delete("/api/cart/remove", (req, res) => {
   res.json({ success: true });
 });
 
-// 🔹 카카오페이 준비 API
+// 🔹 결제 준비
 app.post("/api/kakao-pay/ready", async (req, res) => {
   const { items, total, user_id } = req.body;
   try {
     const orderId = ordersDB.length + 1;
     ordersDB.push({ id: orderId, user_id, items, total, payment_method: "kakao", status: "ready" });
-
     const data = await kakaoPay(items, total);
     res.json(data);
   } catch (err) {
-    res.status(500).json({ error: "카카오페이 준비 실패", detail: err.message });
+    console.error(err);
+    res.status(500).json({ error: "카카오페이 준비 실패" });
   }
 });
 
@@ -96,5 +96,4 @@ app.post("/api/order/create", (req, res) => {
   res.json({ success: true, orderId });
 });
 
-// 서버 시작
 app.listen(8080, () => console.log("Server running on port 8080"));

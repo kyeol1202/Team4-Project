@@ -39,6 +39,33 @@ will-change: opacity;
 
 /* ------------------ 페이지 기본 ------------------ */
 
+.top-marquee-bar {
+  width: 100%;
+  overflow: hidden;
+  background-color: #000;  /* 바 배경색 */
+  color: #fff;
+  white-space: nowrap;
+  box-sizing: border-box;
+  padding: 8px 0;
+}
+
+.marquee-content {
+  display: inline-block;
+  padding-left: 100%; /* 처음엔 화면 오른쪽 바깥에서 시작 */
+  animation: marquee 25s linear infinite;
+}
+
+.marquee-content span {
+  margin-right: 50px; /* 문구들 사이 간격 */
+  font-size: 16px;
+  font-weight: 500;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
 .page1 {
   position: relative;
 }
@@ -67,13 +94,6 @@ will-change: opacity;
 
 /* ------------------ 설명 섹션 ------------------ */
 
-.page3 {
-  width: 100%;
-  padding: 60px 80px;
-  display: flex;
-  justify-content: center;
-}
-
 .content-wrapper {
   display: flex;
   flex-direction: row;
@@ -90,6 +110,74 @@ will-change: opacity;
   border-radius: 10px;
 }
 
+.video-link-btn {
+  margin-top: 20px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-family: "Didot", "Playfair Display", serif;
+  cursor: pointer;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+/* 밑줄 */
+.video-link-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: white;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: 0.3s ease;
+}
+
+.video-link-btn:hover::after {
+  transform: scaleX(1);
+}
+
+.model-btn {
+  margin-top: 20px;
+  background: none;
+  border: none;
+  color: rgb(248, 94, 94);
+  font-size: 15px;
+  font-family: "Didot", "Playfair Display", serif;
+  cursor: pointer;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+/* 밑줄 */
+.model-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: rgb(0, 0, 0);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: 0.3s ease;
+}
+
+.model-btn:hover::after {
+  transform: scaleX(1);
+}
+
+
+/* 세로 구분선 */
+.divider {
+  width: 1px;
+  height: 600px;
+  background: rgba(0,0,0,0.1); /* 얇고 은은한 회색 */
+}
+
 /* 오른쪽 묶음 */
 .right-panel {
   display: flex;
@@ -99,9 +187,12 @@ will-change: opacity;
 
 /* 향수 이미지 */
 .perfume-detail {
-  width: 400px;
-  height: 500px;
+  width: 300px;
+  height: 400px;
   margin-bottom: 20px;
+  border-radius: 30px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+
 }
 
 /* 텍스트 */
@@ -164,6 +255,16 @@ will-change: opacity;
   animation: tracking-in-expand-fwd-bottom 1.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
   animation-delay: 0.1s;
 }
+
+.page3 {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center;
+  align-items: center;
+  gap: 80px; /* 영상과 내용 사이 간격 */
+  padding: 80px 0;
+}
+
 
 
 /* ------------------ 슬라이드 ------------------ */
@@ -832,4 +933,71 @@ body.dark .footer button {
 
 body.dark .header-right button {
   color: white;
+}
+
+.site-footer {
+  border-top: 1px solid #eee;
+  background-color: #fafafa;
+  padding: 28px 16px 32px;
+  font-family: "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* 가운데 정렬 + 최대 너비 제한 */
+.footer-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* 로고 텍스트 느낌 */
+.footer-logo {
+  font-size: 18px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #222;
+  margin-bottom: 14px;
+}
+
+/* 본문 텍스트 스타일 */
+.footer-text {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #6b6b6b;
+}
+
+.footer-text p {
+  margin: 0 0 4px;
+}
+
+/* 사업자정보 확인 링크 */
+.footer-text .biz-link {
+  margin-left: 4px;
+  color: #555;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-text .biz-link:hover {
+  color: #222;
+}
+
+/* 카피라이트 라인 강조 조금 */
+.footer-copy {
+  margin-top: 8px;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: #999;
+}
+
+/* 화면 조금 넓어졌을 때 살짝 여유 */
+@media (min-width: 768px) {
+  .site-footer {
+    padding-top: 32px;
+    padding-bottom: 36px;
+  }
+
+  .footer-text {
+    font-size: 12px;
+  }
 }
