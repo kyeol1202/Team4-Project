@@ -1,11 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
-<<<<<<< HEAD
 const API_URL = "http://192.168.0.224:8080";
-=======
-const API_URL = "http://http://192.168.0.224:8080";
->>>>>>> 7d6f1b79da5c1bc8ba7078bbeb2c5bcb14a1d8f3
 
 function Cart() {
   const navigate = useNavigate();
