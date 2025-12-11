@@ -83,7 +83,7 @@ function Cart() {
 
     try {
       // 백엔드 카카오페이 준비 API 호출
-      const res = await fetch("http://localhost:4000/api/kakao-pay/ready", {
+      const res = await fetch("http://localhost:8080/api/kakao-pay/ready", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ items: selectedItems, total }),
