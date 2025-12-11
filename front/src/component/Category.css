@@ -77,7 +77,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 100;
+  z-index: 10;
   backdrop-filter: blur(8px);
   box-shadow: 0 5px 20px rgba(0,0,0,0.12);
 }
@@ -103,3 +103,32 @@
 
 .arrow.left  { left: 15px; }
 .arrow.right { right: 15px; }
+
+
+body.dark .slider-wrapper {
+  background: transparent;
+}
+
+body.dark .product-card {
+  background: #151515;
+  border-color: #444;
+}
+
+body.dark .product-name {
+  color: #fff;
+}
+
+body.dark .product-desc {
+  color: #ccc;
+}
+
+body.dark .arrow {
+  background: rgba(20,20,20,0.9);
+  border-color: #666;
+  color: #eee;
+}
+
+body.dark .arrow:hover {
+  background: #fff;
+  color: #000;
+}

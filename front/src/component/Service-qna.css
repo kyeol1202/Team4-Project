@@ -1,0 +1,291 @@
+/* =========================
+   전체 컨테이너
+========================= */
+.service-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 50px 20px;
+    font-family: 'Cormorant', serif;
+    color: #000;
+}
+
+/* =========================
+   타이틀
+========================= */
+.service-title {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.service-subtitle {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 40px;
+}
+
+/* =========================
+   4개 영역 섹션 나누기
+========================= */
+.service-section {
+    margin-bottom: 50px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 30px;
+}
+
+.service-section:last-child {
+    border-bottom: none;
+}
+
+.service-section-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* =========================
+   리스트
+========================= */
+.service-list {
+    list-style: none;
+    padding: 0;
+}
+
+.service-list-item {
+    cursor: pointer;
+    padding: 6px 0;
+    transition: 0.2s;
+}
+
+.service-list-item:hover {
+    opacity: 0.7;
+}
+
+/* =========================
+   FAQ (클릭 열림)
+========================= */
+.service-faq {
+    border-bottom: 1px solid #ccc;
+    padding: 12px 0;
+    cursor: pointer;
+}
+
+.service-faq-question {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.service-faq-answer {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #555;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.service-faq.open .service-faq-answer {
+    max-height: 200px;
+}
+
+/* =========================
+   1:1 문의 + 카톡 버튼
+========================= */
+.service-qna-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+}
+
+.service-qna-btn {
+    padding: 12px 30px;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+.service-qna-btn:hover {
+    background: #333;
+}
+
+.service-kakao-inline {
+    width: 50px;
+    height: 50px;
+    background: #FEE500;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.service-kakao-inline:hover {
+    transform: scale(1.1);
+}
+
+.service-kakao-inline img {
+    width: 32px;
+    height: 32px;
+}
+
+/* =========================
+   연락 정보 입력 (세로 정렬)
+========================= */
+.qna-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.qna-contact input {
+    width: 100%;
+}
+
+/* =========================
+   QnA 입력폼
+========================= */
+.qna-input,
+.qna-textarea {
+    border: 1px solid #cfcfcf;
+    padding: 10px 14px;
+    border-radius: 6px;
+    width: 100%;
+    transition: 0.2s ease;
+    margin-bottom: 12px;
+}
+
+.qna-input:focus,
+.qna-textarea:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.qna-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.qna-submit-btn {
+    background: #000;
+    color: #fff;
+    padding: 13px 40px;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+
+.qna-submit-btn:hover {
+    background: #333;
+}
+.inquiry-type-select {
+    /* 폰트 크기를 원하는 만큼 키웁니다. */
+    font-size: 18px; /* 예시: 폰트 크기를 18px로 설정 */
+    
+    /* 패딩(여백)을 추가하여 박스 자체의 높이를 키웁니다. */
+    padding: 10px 15px; 
+    
+    /* 너비를 100%로 설정하여 부모 요소에 맞춥니다. */
+    width: 100%; 
+    
+    /* 기타 스타일 (선택 사항) */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* =========================
+   Footer
+========================= */
+.service-footer {
+    text-align: center;
+    color: #555;
+    font-size: 14px;
+    margin-top: 60px;
+}
+
+/* =========================
+   반응형
+========================= */
+@media (max-width: 768px) {
+    .service-container {
+        padding: 30px 15px;
+    }
+
+    .service-title {
+        font-size: 32px;
+    }
+
+    .service-subtitle {
+        font-size: 18px;
+    }
+
+    .service-qna-wrapper {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+body.dark .service-container {
+  color: #fff;
+}
+
+body.dark .service-section {
+  border-bottom-color: #444;
+}
+
+body.dark .service-list-item {
+  color: #ddd;
+}
+
+body.dark .service-faq {
+  border-bottom-color: #555;
+}
+
+body.dark .service-faq-answer {
+  color: #ccc;
+}
+
+body.dark .service-qna-btn {
+  background: #444;
+}
+
+body.dark .service-qna-btn:hover {
+  background: #666;
+}
+
+body.dark .service-kakao-inline {
+  background: #E0CC00;
+}
+
+body.dark .qna-input,
+body.dark .qna-textarea {
+  background: #1b1b1b;
+  border-color: #444;
+  color: #fff;
+}
+
+body.dark .qna-input:focus,
+body.dark .qna-textarea:focus {
+  border-color: #888;
+}
+
+body.dark .qna-submit-btn {
+  background: #555;
+}
+
+body.dark .qna-submit-btn:hover {
+  background: #777;
+}

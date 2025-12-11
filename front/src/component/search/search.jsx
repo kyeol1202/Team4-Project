@@ -6,21 +6,15 @@ function Search() {
     const navigate = useNavigate();
 
     const params = new URLSearchParams(location.search);
-    const keyword = params.get("keyword")?.toLowerCase();
+    const keyword = params.get("keyword");           // <= 원본 보관!
+    const searchKeyword = keyword?.toLowerCase();    // <= 검색용 변환!
 
     const [products, setProducts] = useState([]);
-    const [newKeyword, setNewKeyword] = useState(keyword || "");
-
-    // 🔍 검색 function
-    function search() {
-        if (!newKeyword.trim()) return alert("검색어를 입력하세요!");
-        navigate(`/search?keyword=${newKeyword}`);
-    }
 
     useEffect(() => {
-        if (!keyword) return;
+        if (!searchKeyword) return;
 
-        fetch(`http://192.168.0.224:8080/api/products?keyword=${keyword}`)
+        fetch(`http://192.168.0.224:8080/api/products?keyword=${searchKeyword}`)
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
@@ -28,26 +22,10 @@ function Search() {
                 }
             })
             .catch(err => console.log("검색 에러:", err));
-    }, [keyword]);
+    }, [searchKeyword]);
 
     return (
         <div className="search-page">
-
-            {/* 🔍 검색창 UI 추가 */}
-            <div className="search-box">
-                <input
-                    type="text"
-                    placeholder="검색하기"
-                    value={newKeyword}
-                    onChange={(e) => setNewKeyword(e.target.value)}
-
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") search();
-                    }}
-                />
-                <button className="search" onClick={search}>🔍</button>
-            </div>
-
             <h1 className="search-title">“{keyword}” 검색 결과</h1>
 
             {products.length === 0 && (
@@ -58,10 +36,9 @@ function Search() {
                 {products.map((item) => (
                     <div className="product-card" key={item.product_id}>
                         <button onClick={() => navigate(`/product/${item.product_id}`)}>
-                            <img src={`http://192.168.0.224:8080${item.img}`} alt={item.name} className="product-img" />
+                            <img src={`http://192.168.0.224:8080${item.img}`} />
                         </button>
 
-                        {/* 🔥 텍스트 추가 부분 */}
                         <h3 className="product-name">{item.name}</h3>
                         <p className="product-desc">{item.desc}</p>
                     </div>

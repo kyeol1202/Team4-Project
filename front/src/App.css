@@ -1,51 +1,312 @@
 /* 기본 글꼴 Dior 스타일 */
-* {
+@keyframes smooth-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.fade-section {
+will-change: opacity;
+}
+
+.fade-section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ------------------ 메인 텍스트 ------------------ */
+
+.main-text {
+  font-family: "Cinzel", serif;
+  font-size: 3.8rem;
+  font-weight: 600;
+  animation: smooth-appear 1.5s ease forwards;
+}
+
+.sub-text {
+  font-family: "Cinzel", serif;
+  font-size: 1.7rem;
+  margin-top: 12px;
+  opacity: 0;
+  animation: smooth-appear 1.5s ease forwards;
+  animation-delay: .3s;
+}
+
+/* ------------------ 페이지 기본 ------------------ */
+
+.top-marquee-bar {
+  width: 100%;
+  overflow: hidden;
+  background-color: #000;  /* 바 배경색 */
+  color: #fff;
+  white-space: nowrap;
+  box-sizing: border-box;
+  padding: 8px 0;
+}
+
+.marquee-content {
+  display: inline-block;
+  padding-left: 100%; /* 처음엔 화면 오른쪽 바깥에서 시작 */
+  animation: marquee 25s linear infinite;
+}
+
+.marquee-content span {
+  margin-right: 50px; /* 문구들 사이 간격 */
+  font-size: 16px;
+  font-weight: 500;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+.page1 {
+  position: relative;
+}
+
+/* 텍스트 오버레이 위치 설정 */
+.title-overlay {
+  position: absolute;
+  bottom: 40px; /* 영상 아래쪽에서 살짝 위로 띄움 */
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 100%;
+}
+
+.main-video1 {
+  width: 750px;
+  height: 500px;
+  object-fit: cover;
+}
+
+.main-video2 {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ------------------ 설명 섹션 ------------------ */
+
+.content-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;  /* 오른쪽 정렬 */
+  align-items: center;
+  gap: 40px; /* 이미지와 글 사이 간격 */
+  width: 100%;
+}
+
+/* 광고 영상은 기존 그대로 */
+.ad-video {
+  width: 55%;   /* 여기서 영상 가로 늘릴 수 있음 */
+  height: auto;
+  border-radius: 10px;
+}
+
+.video-link-btn {
+  margin-top: 20px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-family: "Didot", "Playfair Display", serif;
+  cursor: pointer;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+/* 밑줄 */
+.video-link-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: white;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: 0.3s ease;
+}
+
+.video-link-btn:hover::after {
+  transform: scaleX(1);
+}
+
+.model-btn {
+  margin-top: 20px;
+  background: none;
+  border: none;
+  color: rgb(248, 94, 94);
+  font-size: 15px;
+  font-family: "Didot", "Playfair Display", serif;
+  cursor: pointer;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+/* 밑줄 */
+.model-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: rgb(0, 0, 0);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: 0.3s ease;
+}
+
+.model-btn:hover::after {
+  transform: scaleX(1);
+}
+
+
+/* 세로 구분선 */
+.divider {
+  width: 1px;
+  height: 600px;
+  background: rgba(0,0,0,0.1); /* 얇고 은은한 회색 */
+}
+
+/* 오른쪽 묶음 */
+.right-panel {
+  display: flex;
+  flex-direction: column; /* 이미지 위, 텍스트 아래 */
+  align-items: center; /* 가운데 정렬 */
+}
+
+/* 향수 이미지 */
+.perfume-detail {
+  width: 300px;
+  height: 400px;
+  margin-bottom: 20px;
+  border-radius: 30px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+
+}
+
+/* 텍스트 */
+.text-box {
+  width: 280px;
+  text-align: center;
+}
+
+
+.text-box h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+
+.text-box p {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.title-box {
+  position: relative;
+  z-index: 5; /* fade-section 위 */
+  opacity: 1 !important; /* 부모 opacity 영향 안 받게 */
+}
+
+.title-overlay h1 {
   font-family: "Didot", "Playfair Display", serif;
   letter-spacing: 0.5px;
-  box-sizing: border-box;
+  font-size: 48px;
+  font-weight: 400;
+  margin: 0;
+  color: white; /* 영상 위는 흰색이 더 잘 보임 */
 }
 
-.page {
-  background: #ffffff;
-  color: #000000d0;
+.title-box h1 {
+  font-family: "Didot", "Playfair Display", serif;
+  letter-spacing: 0.5px;
+  font-size: 48px;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* 간격 */
+.line1 {
+  margin-bottom: 10px;
+}
+
+.delay {
+  animation-delay: 0.4s; /* 두 번째 문장은 조금 늦게 */
+}
+
+.line2 {
+  transform: translateY(0); /* 레이아웃 겹침 제거 */
+}
+
+/* 애니메이션 적용 */
+.tracking-in-expand-fwd-bottom {
+  animation: tracking-in-expand-fwd-bottom 1.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+  animation-delay: 0.1s;
+}
+
+.page3 {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center;
+  align-items: center;
+  gap: 80px; /* 영상과 내용 사이 간격 */
+  padding: 80px 0;
 }
 
 
-.page1{
 
-  width: 1000px;
-  height: 500px;
+/* ------------------ 슬라이드 ------------------ */
+
+.slider-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 40px;
+}
+
+.slider {
+  width: calc(330px * 3 + 20px * 2);
   overflow: hidden;
-  position: relative;
-  margin: auto;
-  background-color: #928888;
 }
 
-.page2{
-
-  width: 1000px;
-  height: 500px;
-  margin: auto;
-
-
-}
-.main-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;  /* 화면 꽉 채우기 */
-}
-.perfume-detail{
-  width:300px;
-  height:400px;
-  float: left;
-  margin-top:100px;
+.slider-inner {
+  display: flex;
+  transition: transform 0.8s cubic-bezier(.23,1,.32,1);
 }
 
-.textbox{
-  width: 200px;
-  height: 200px;
-  float: left;
-  margin-top:100px;
+.product-card {
+  width: 330px;
+  height: 330px;
+  background: #fff;
+  border: 1px solid #ddd;
+  transition: transform .45s, box-shadow .45s;
+}
+
+.product-card:hover {
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 0 25px 40px rgba(0,0,0,0.18);
+}
+
+/* ------------------ 기타 ------------------ */
+
+.section-title {
+  text-align: center;
+  margin-top: 60px;
+  font-size: 32px;
+  letter-spacing: 2px;
 }
 
 /* HEADER 1*/
@@ -130,8 +391,8 @@
   transition: all 0.25s;
 }
 
-.dropdownlist:hover {
-  background: #f3f3f3;
+.dropdown li:hover {
+  background: #f3efef;
 }
 
 /* 브랜드 로고 */
@@ -169,6 +430,7 @@
   width: 100%;
   height: 100%;
   background: rgba(255,255,255,0.97);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   opacity: 0;
   pointer-events: none;
@@ -203,34 +465,7 @@
   color: #444;
 }
 
-/* 검색창 */
-.search-box {
-  width: 350px;
-  margin: 0 auto;
-  display: flex;
-}
 
-.search-box input {
-  width: 100%;
-  flex: 1;                 /* 입력창이 남은 공간 전체 차지 */
-  padding: 12px 15px;
-  border-radius: 6px;
-  border: 1px solid #dcdcdc;
-  background: #fafafa;
-  transition: all 0.25s;
-}
-
-.search-box button.search {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.search-box input:focus {
-  outline: none;
-  border-color: #000;
-}
 
 /* SECTION TITLE */
 .section-title {
@@ -273,6 +508,35 @@
 
 .arrow:hover {
   opacity: 0.5;
+}
+
+/* 검색창 */
+.search-box {
+  width: 350px;
+  margin: 0 auto;
+  display: flex;
+}
+
+.search-box input {
+  width: 100%;
+  flex: 1;                 /* 입력창이 남은 공간 전체 차지 */
+  padding: 12px 15px;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  background: #fafafa;
+  transition: all 0.25s;
+}
+
+.search-box button.search {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: #000;
 }
 
 /* FOOTER */
@@ -380,6 +644,8 @@
 }
 
 /* ===== 팝업 전체 배경 ===== */
+
+
 .popup-bg {
   position: fixed;
   top: 0;
@@ -462,3 +728,426 @@
   background-color: #ffffff;
 }
   
+.perfume-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -10%);   /* 화면 정중앙 */
+  
+  width: 550px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 32px;
+  
+  max-height: 85vh;
+  overflow-y: auto;
+
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.25);
+  z-index: 300;
+}
+
+.popup-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.popup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;                  /* 입력칸 여유 */
+}
+
+.popup-form label {
+  font-size: 14px;
+  color: #666;
+}
+.popup-bg {
+  z-index: 200;
+}
+
+.popup-box, .perfume-popup {
+  z-index: 300;
+  position: relative;
+}
+
+.popup-form input,
+.popup-form select,
+.popup-form textarea {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+  font-size: 15px;
+  transition: border-color .2s;
+}
+
+.popup-form input:focus,
+.popup-form select:focus,
+.popup-form textarea:focus {
+  border-color: #000;
+}
+
+.popup-form textarea {
+  height: 80px;
+  resize: none;
+}
+
+/* 등록 버튼 */
+.btn-submit {
+  margin-top: 20px;
+  width: 100%;
+  padding: 14px;
+  background: #000;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 17px;
+  cursor: pointer;
+  transition: background .25s;
+}
+
+.btn-submit:hover {
+  background: #333;
+}
+
+.hide-on-scroll {
+  opacity: 0;
+  transform: translateY(-40px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.show-on-scroll {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .7s ease, transform .7s ease;
+  min-height: 50vh;          
+  min-width: 50vh;           
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.fade-section.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.fade-section.hide {
+  opacity: 0;
+  transform: translateY(40px);
+  pointer-events: none;
+}
+
+/* 전체 컨테이너 */
+.Productstyles-container {
+  padding: 40px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #000;
+  text-align: center;
+}
+
+/* 이미지 */
+.Productstyles-image {
+  width: 320px;
+  height: 320px;
+  object-fit: contain;
+  margin-bottom: 30px;
+}
+
+/* 제품명 */
+.Productstyles-name {
+  font-size: 34px;
+  font-weight: 600;
+}
+
+/* 가격 */
+.Productstyles-price {
+  font-size: 22px;
+  margin-top: 5px;
+}
+
+/* 박스 공통 영역 */
+.Productstyles-sectionBox {
+  margin-top: 35px;
+  text-align: left;
+  max-width: 600px;
+  margin: 35px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background: #f7f7f7;
+}
+
+/* 섹션 제목 */
+.Productstyles-sectionTitle {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* 설명 텍스트 */
+.Productstyles-desc {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #333;
+  white-space: pre-line;
+}
+
+/* 버튼 묶음 */
+.Productstyles-btnGroup {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+/* 위시 버튼 */
+.Productstyles-wishBtn {
+  border: 1px solid #aaa;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* 장바구니 버튼 */
+.Productstyles-cartBtn {
+  background: black;
+  color: white;
+  padding: 10px 22px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* 뒤로가기 버튼 */
+.Productstyles-backBtn {
+  margin-top: 40px;
+  font-size: 17px;
+  color: #444;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+/* ===========================
+🌙 DARK MODE THEME
+=========================== */
+
+body.dark {
+  background-color: #0e0e0e;
+  color: #e4e4e4;
+}
+
+/* 헤더 */
+body.dark .header {
+  background: #181818;
+  border-bottom: 1px solid #444;
+}
+
+body.dark .header-left {
+  border-color: #555;
+  color: white;
+}
+
+body.dark .header-left:hover {
+  background: #2b2b2b;
+}
+
+/* 검색창 */
+body.dark .search-box input {
+  background: #222;
+  color: white;
+  border-color: #555;
+}
+
+body.dark .search-box input:focus {
+  border-color: #fff;
+}
+
+body.dark .search-box button {
+  color: white;
+}
+
+/* 드롭다운 */
+body.dark .dropdown {
+  background: #222;
+  border-color: #555;
+}
+
+body.dark .dropdown li:hover {
+  background: #333;
+}
+
+/* MAIN TEXT */
+body.dark .main-text,
+body.dark .sub-text {
+  color: white;
+}
+
+/* 슬라이드 상품 */
+body.dark .product-card {
+  background: #1a1a1a;
+  border: 1px solid #333;
+}
+
+body.dark .product-card:hover {
+  box-shadow: 0 15px 35px rgba(255,255,255,0.15);
+}
+
+/* LOGIN DRAWER */
+body.dark .login-drawer {
+  background: #181818;
+  color: white;
+}
+
+body.dark .login-drawer input {
+  background: #222;
+  color: white;
+  border-color: #555;
+}
+
+/* FOOTER */
+body.dark .footer button {
+  color: white;
+}
+
+body.dark .header-right button {
+  color: white;
+}
+
+body.dark .Productstyles-container {
+  color: #e4e4e4;
+}
+
+body.dark .Productstyles-name {
+  color: #ffffff;
+}
+
+body.dark .Productstyles-price {
+  color: #cccccc;
+}
+
+body.dark .Productstyles-sectionBox {
+  background: #1c1c1c;
+  border: 1px solid #333;
+}
+
+body.dark .Productstyles-sectionTitle {
+  color: #ffffff;
+}
+
+body.dark .Productstyles-desc {
+  color: #d9d9d9;
+}
+
+/* 입력창 */
+body.dark .Product_Name,
+body.dark .Product_Price {
+  background: #222;
+  border: 1px solid #666;
+  color: #fff;
+}
+
+/* 위시 버튼 */
+body.dark .Productstyles-wishBtn {
+  background: #222;
+  border-color: #666;
+  color: #fff !important;
+}
+
+/* 장바구니 */
+body.dark .Productstyles-cartBtn {
+  background: #fff;
+  color: #000;
+}
+
+/* 뒤로가기 버튼 */
+body.dark .Productstyles-backBtn {
+  color: #bbb;
+}
+
+/* 관리자 버튼 */
+body.dark .edit-btn {
+  background: #444;
+  color: #fff;
+}
+
+.site-footer {
+  border-top: 1px solid #eee;
+  background-color: #fafafa;
+  padding: 28px 16px 32px;
+  font-family: "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* 가운데 정렬 + 최대 너비 제한 */
+.footer-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* 로고 텍스트 느낌 */
+.footer-logo {
+  font-size: 18px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #222;
+  margin-bottom: 14px;
+}
+
+/* 본문 텍스트 스타일 */
+.footer-text {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #6b6b6b;
+}
+
+.footer-text p {
+  margin: 0 0 4px;
+}
+
+/* 사업자정보 확인 링크 */
+.footer-text .biz-link {
+  margin-left: 4px;
+  color: #555;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-text .biz-link:hover {
+  color: #222;
+}
+
+/* 카피라이트 라인 강조 조금 */
+.footer-copy {
+  margin-top: 8px;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: #999;
+}
+
+/* 화면 조금 넓어졌을 때 살짝 여유 */
+@media (min-width: 768px) {
+  .site-footer {
+    padding-top: 32px;
+    padding-bottom: 36px;
+  }
+
+  .footer-text {
+    font-size: 12px;
+  }
+}

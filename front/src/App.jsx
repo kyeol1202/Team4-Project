@@ -6,6 +6,9 @@ import { AuthProvider } from "./context/AuthContext";
 import "./App.css";
 import "./Search.css";
 import './component/Category.css';
+import "./component/Service-qna.css";
+import "./component/Mypage.css"; // CSS import
+import './component/cart-pay.css';
 
 import Layout from "./component/Layout";
 import Main from "./component/main";
@@ -23,18 +26,20 @@ import Search from "./component/search/search";
 import OrderDetail from "./component/OrderDetail";
 import EditUserInfo from "./component/EditUserInfo";
 import ProductDetail from "./component/ProductDetail";
-
+import { QnaProvider } from './context/QnaContext';
+import Chatbot from "./component/Chatbot";
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
         <WishProvider> 
+          <QnaProvider>
           <BrowserRouter>
             <Routes>
               <Route element={<Layout />}>
                 <Route path="/" element={<Main />} />
                 <Route path="/main" element={<Main />} />
-
+                <Route path="/Chatbot" element={<Chatbot />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/category2" element={<Category2 />} />
                 <Route path="/category3" element={<Category3 />} />
@@ -44,8 +49,9 @@ function App() {
                 <Route path="/payment" element={<Payment />} />
 
                 <Route path="/wish" element={<Wish />} />
-                <Route path="/service" element={<Service />} />
                 <Route path="/qna" element={<QnaPage />} />
+                <Route path="/service" element={<Service />} />
+                <Route path="*" element={<Service />} />
                 <Route path="/mypage" element={<Mypage />} />
                 <Route path="/orderdetail" element={<OrderDetail />} />
                 <Route path="/edituserinfo" element={<EditUserInfo />} />
@@ -54,9 +60,10 @@ function App() {
               </Route>
             </Routes>
           </BrowserRouter>
-        </WishProvider>
-      </CartProvider>
-    </AuthProvider>
+        </QnaProvider>
+      </WishProvider>
+    </CartProvider>
+  </AuthProvider>
   );
 }
 
