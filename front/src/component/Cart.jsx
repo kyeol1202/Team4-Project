@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import './component/cart-pay.css'; // CSS import
 
 const API_URL = "http://192.168.0.224:8080";
 
@@ -8,7 +9,13 @@ function Cart() {
   const [cart, setCart] = useState([]);
   const [selected, setSelected] = useState([]);
 
-  // ✔ 장바구니 새로고침
+  // 체크박스 선택/해제
+  const toggleSelect = (pid) =>
+    setSelected((prev) =>
+      prev.includes(pid) ? prev.filter((i) => i !== pid) : [...prev, pid]
+    );
+
+  // 장바구니 데이터 가져오기
   const refreshCart = async () => {
     const userId = localStorage.getItem("member_id");
     if (!userId) return;
@@ -25,16 +32,9 @@ function Cart() {
     }
   };
 
-  // ✔ 체크박스 선택/해제
-  const toggleSelect = (pid) =>
-    setSelected((prev) =>
-      prev.includes(pid)
-        ? prev.filter((i) => i !== pid)
-        : [...prev, pid]
-    );
-
-  // ✔ 수량 변경
+  // 수량 변경
   const updateQty = async (pid, newQty) => {
+    if (newQty < 1) return;
     const userId = localStorage.getItem("member_id");
 
     await fetch(`${API_URL}/api/cart/update`, {
@@ -50,7 +50,7 @@ function Cart() {
     refreshCart();
   };
 
-  // ✔ 삭제
+  // 아이템 삭제
   const removeItem = async (item) => {
     const userId = localStorage.getItem("member_id");
 
@@ -66,18 +66,20 @@ function Cart() {
     refreshCart();
   };
 
-  // ✔ 총 금액 계산
-  const total = useMemo(() => {
-    return cart
-      .filter((i) => selected.includes(i.product_id))
-      .reduce((sum, i) => sum + i.price * i.qty, 0);
-  }, [cart, selected]);
+  // 총합 계산
+  const total = useMemo(
+    () =>
+      cart
+        .filter((i) => selected.includes(i.product_id))
+        .reduce((sum, i) => sum + i.price * i.qty, 0),
+    [cart, selected]
+  );
 
   useEffect(() => {
     refreshCart();
   }, []);
 
-  // ✔ 결제 페이지 이동
+  // 결제 페이지 이동
   const handleCheckout = () => {
     if (!selected.length) return alert("구매할 상품을 선택하세요.");
 
@@ -101,28 +103,15 @@ function Cart() {
     <div style={{ maxWidth: "900px", margin: "auto", padding: "20px" }}>
       <h1>장바구니</h1>
 
-      {cart.length === 0 && <p>장바구니가 비어 있습니다.</p>}
-
-      <div style={{ marginBottom: "10px" }}>
-        <button onClick={() => setSelected(cart.map((i) => i.product_id))}>
-          전체 선택
-        </button>
+      {/* 전체 선택 / 해제 버튼 */}
+      <div className="select-all">
+        <button onClick={() => setSelected(cart.map((i) => i.product_id))}>전체 선택</button>
         <button onClick={() => setSelected([])}>전체 해제</button>
       </div>
 
+      {/* 장바구니 상품 목록 */}
       {cart.map((item) => (
-        <div
-          key={item.product_id}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            border: "1px solid #ddd",
-            padding: "10px",
-            margin: "10px 0",
-          }}
-        >
-          {/* 체크박스 */}
+        <div key={item.product_id} className="product-item">
           <input
             type="checkbox"
             checked={selected.includes(item.product_id)}
