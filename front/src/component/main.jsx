@@ -106,17 +106,16 @@ useEffect(() => {
     muted
     playsInline
   />
-</div>
 
 
-<div
-  className={`fade-section ${visibleSection === 2 ? "show" : "hide"}`}
-  data-section="2"
-  style={{ textAlign: "center", marginTop: "140px" }}
->
-  <div className="main-text">A good day</div>
-  <div className="sub-text">to empty the buyer's wallet</div>
+  <div className="title-overlay">
+  <h1 className="line1 tracking-in-expand-fwd-bottom">A good day</h1>
+  <h1 className="line2 tracking-in-expand-fwd-bottom">
+    to empty the buyer's wallet
+  </h1>
 </div>
+</div>
+
 
 
 <div
