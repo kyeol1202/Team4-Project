@@ -24,47 +24,74 @@ function Register() {
   // 회원가입 함수
   // ============================
   async function register() {
+  // 공통 필수 항목
+  if (!id || !pw || !pwCheck || !email) {
+    alert("필수항목을 입력해주세요");
+    return;
+  }
 
-    const fullNumber = `${number1}${number2}${number3}`;
-    if (!id || !pw || !name || !email || !address || !number2 || !number3
-      || !hbd.year || !hbd.month || !hbd.day) {
-      alert("필수항목을 입력해주세요");
+  if (pw !== pwCheck) {
+    alert("비밀번호가 일치하지 않습니다");
+    return;
+  }
+
+  // ============================
+  // 일반 회원(USER) 필수 체크
+  // ============================
+  if (mode === "USER") {
+    if (!name || !address || !number2 || !number3 || !hbd.year || !hbd.month || !hbd.day) {
+      alert("일반 회원은 모든 정보를 입력해야 합니다.");
       return;
-    }
-
-    if (pw !== pwCheck) {
-      alert("비밀번호가 일치하지 않습니다");
-      return;
-    }
-
-    const birth = `${hbd.year}-${String(hbd.month).padStart(2, '0')}-${String(hbd.day).padStart(2, '0')}`;
-
-    const userData = {
-      id,
-      pw,
-      name,
-      email,
-      address,
-      number: fullNumber,
-      hbd: birth,
-      role: mode     // 🔥 USER or ADMIN 전달
-    };
-
-    const response = await fetch("http://192.168.0.224:8080/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData)
-    });
-
-    const result = await response.json();
-
-    if (result.success) {
-      alert("🎉 회원가입 성공!");
-      navigate('/main');
-    } else {
-      alert("❌ 회원가입 실패: " + result.message);
     }
   }
+
+  // ============================
+  // 사업자 회원(ADMIN) 필수 체크
+  // ============================
+  if (mode === "ADMIN") {
+    if (!name || !address) {
+      alert("사업자 회원은 회사명/대표자명과 사업장 주소를 입력해야 합니다.");
+      return;
+    }
+  }
+
+  // 전화번호 합치기 (USER만 적용)
+  const fullNumber =
+    mode === "USER"
+      ? `${number1}${number2}${number3}`
+      : null;
+
+  const birth =
+    mode === "USER"
+      ? `${hbd.year}-${String(hbd.month).padStart(2, '0')}-${String(hbd.day).padStart(2, '0')}`
+      : null;
+
+  const userData = {
+    id,
+    pw,
+    name,
+    email,
+    address,
+    number: fullNumber,
+    hbd: birth,
+    role: mode
+  };
+
+  const response = await fetch("http://192.168.0.224:8080/api/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userData)
+  });
+
+  const result = await response.json();
+
+  if (result.success) {
+    alert("🎉 회원가입 성공!");
+    navigate("/main");
+  } else {
+    alert("❌ 회원가입 실패: " + result.message);
+  }
+}
 
   return (
     <>
