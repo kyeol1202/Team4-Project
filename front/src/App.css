@@ -849,6 +849,99 @@ will-change: opacity;
   transform: translateY(40px);
   pointer-events: none;
 }
+
+/* 전체 컨테이너 */
+.Productstyles-container {
+  padding: 40px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #000;
+  text-align: center;
+}
+
+/* 이미지 */
+.Productstyles-image {
+  width: 320px;
+  height: 320px;
+  object-fit: contain;
+  margin-bottom: 30px;
+}
+
+/* 제품명 */
+.Productstyles-name {
+  font-size: 34px;
+  font-weight: 600;
+}
+
+/* 가격 */
+.Productstyles-price {
+  font-size: 22px;
+  margin-top: 5px;
+}
+
+/* 박스 공통 영역 */
+.Productstyles-sectionBox {
+  margin-top: 35px;
+  text-align: left;
+  max-width: 600px;
+  margin: 35px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background: #f7f7f7;
+}
+
+/* 섹션 제목 */
+.Productstyles-sectionTitle {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* 설명 텍스트 */
+.Productstyles-desc {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #333;
+  white-space: pre-line;
+}
+
+/* 버튼 묶음 */
+.Productstyles-btnGroup {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+/* 위시 버튼 */
+.Productstyles-wishBtn {
+  border: 1px solid #aaa;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* 장바구니 버튼 */
+.Productstyles-cartBtn {
+  background: black;
+  color: white;
+  padding: 10px 22px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* 뒤로가기 버튼 */
+.Productstyles-backBtn {
+  margin-top: 40px;
+  font-size: 17px;
+  color: #444;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
 /* ===========================
 🌙 DARK MODE THEME
 =========================== */
@@ -933,6 +1026,63 @@ body.dark .footer button {
 
 body.dark .header-right button {
   color: white;
+}
+
+body.dark .Productstyles-container {
+  color: #e4e4e4;
+}
+
+body.dark .Productstyles-name {
+  color: #ffffff;
+}
+
+body.dark .Productstyles-price {
+  color: #cccccc;
+}
+
+body.dark .Productstyles-sectionBox {
+  background: #1c1c1c;
+  border: 1px solid #333;
+}
+
+body.dark .Productstyles-sectionTitle {
+  color: #ffffff;
+}
+
+body.dark .Productstyles-desc {
+  color: #d9d9d9;
+}
+
+/* 입력창 */
+body.dark .Product_Name,
+body.dark .Product_Price {
+  background: #222;
+  border: 1px solid #666;
+  color: #fff;
+}
+
+/* 위시 버튼 */
+body.dark .Productstyles-wishBtn {
+  background: #222;
+  border-color: #666;
+  color: #fff !important;
+}
+
+/* 장바구니 */
+body.dark .Productstyles-cartBtn {
+  background: #fff;
+  color: #000;
+}
+
+/* 뒤로가기 버튼 */
+body.dark .Productstyles-backBtn {
+  color: #bbb;
+}
+
+/* 관리자 버튼 */
+body.dark .edit-btn {
+  background: #444;
+  color: #fff;
 }
 
 .site-footer {
