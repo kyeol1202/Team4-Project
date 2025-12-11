@@ -243,19 +243,16 @@ function Main() {
 
           <div class="footer-text">
             <p>
-              (주) 세정서울지사 | Owner : 김송우, 이주형 | Business Number : 114-85-10672 |
-              E-commerce Permit : 2012-서울강남-00901
+              (주) AuRa | Owner : 김한결, 윤종빈 , 이선화 , 묵은지  | Business Number : 010-010-010 |
               <a href="javascript:void(0)" onclick="onopenPermit('1148510672')" class="biz-link">
-                [사업자정보확인]
               </a>
             </p>
             <p>
-              Personal Info Manager : 김송우 (cs@didierdubot.co.kr) |
-              Address : 서울특별시 강남구 삼성로 342 (세정빌딩) |
-              호스팅서비스 : 카페24
+              Personal Info Manager : 김한결 (kyeol1202@naver.com) |
+              Address : 경기 화성시 병점노을7로 7 (아르스비아, 4층)
             </p>
             <p class="footer-copy">
-              COPYRIGHT (주) 세정서울지사 ALL RIGHT RESERVED.
+              COPYRIGHT (주) AuRa
             </p>
           </div>
         </div>
