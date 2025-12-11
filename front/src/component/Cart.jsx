@@ -1,27 +1,48 @@
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://192.168.0.224:8080";
+const API_URL = "http://localhost:8080";
 
 function Cart() {
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
   const [selected, setSelected] = useState([]);
 
-  const toggleSelect = (id) => {
-    setSelected(prev =>
-      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-    );
+  const toggleSelect = id => {
+    setSelected(prev => (prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]));
   };
 
-  async function refreshCart() {
+  const refreshCart = async () => {
     const userId = localStorage.getItem("member_id");
+    if (!userId) return;
+    try {
+      const res = await fetch(`${API_URL}/api/cart/${userId}`);
+      const data = await res.json();
+      if (data.success) setCart(data.data);
+    } catch (err) {
+      console.error("카트 조회 에러:", err);
+    }
+  };
 
-    const res = await fetch(`${API_URL}/api/cart/${userId}`);
-    const data = await res.json();
+  const updateQty = async (id, newQty) => {
+    const userId = localStorage.getItem("member_id");
+    await fetch(`${API_URL}/api/cart/update`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: userId, product_id: id, quantity: newQty }),
+    });
+    refreshCart();
+  };
 
-    if (data.success) setCart(data.data);
-  }
+  const removeItem = async item => {
+    const userId = localStorage.getItem("member_id");
+    await fetch(`${API_URL}/api/cart/remove`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: userId, product_id: item.product_id }),
+    });
+    refreshCart();
+  };
 
   const total = useMemo(
     () =>
@@ -32,79 +53,21 @@ function Cart() {
   );
 
   useEffect(() => {
-    const userId = localStorage.getItem("member_id");
-    if (!userId) return;
-
-    fetch(`${API_URL}/api/cart/${userId}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) setCart(data.data); // DB 데이터 저장
-      })
-      .catch(err => console.error("카트 조회 에러:", err));
+    refreshCart();
   }, []);
-
-  async function updateQty(id, newQty) {
-    const userId = localStorage.getItem("member_id");
-
-    await fetch(`${API_URL}/api/cart/update`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user_id: userId,
-        product_id: id,
-        quantity: newQty,
-      }),
-    });
-
-
-    // 다시 DB 데이터 새로고침
-    refreshCart();
-  }
-
-  async function removeItem(item) {
-    const userId = localStorage.getItem("member_id");
-
-    await fetch(`${API_URL}/api/cart/remove`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user_id: userId,
-        product_id: item.product_id,
-      }),
-    });
-
-    refreshCart();
-  }
 
   const handleCheckout = async () => {
     if (!selected.length) return alert("구매할 상품을 선택하세요.");
-
     const selectedItems = cart.filter(item => selected.includes(item.id));
+    const userId = localStorage.getItem("member_id");
 
-    try {
-      // 백엔드 카카오페이 준비 API 호출
-      const res = await fetch("http://localhost:8080/api/kakao-pay/ready", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: selectedItems, total }),
-      });
-
-      const data = await res.json();
-      if (data && data.next_redirect_pc_url) {
-        window.location.href = data.next_redirect_pc_url; // 카카오페이 결제 페이지로 이동
-      } else {
-        alert("결제 준비에 실패했습니다.");
-        console.log(data);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("결제 서버 오류");
-    }
+    navigate("/payment", { state: { items: selectedItems, total, user_id: userId } });
   };
 
   return (
     <div style={{ maxWidth: "900px", margin: "auto", padding: "20px" }}>
       <h1>장바구니</h1>
+
       {cart.length === 0 && <p>장바구니가 비어 있습니다.</p>}
 
       <button onClick={() => setSelected(cart.map(item => item.id))}>전체 선택</button>
@@ -117,20 +80,11 @@ function Cart() {
             <h3>{item.name}</h3>
             <p>{item.price.toLocaleString()}원</p>
           </div>
-
           <div>
-            <button
-              onClick={() => updateQty(item.product_id, item.qty - 1)}
-              disabled={item.qty <= 1}
-            >-</button>
-
+            <button onClick={() => updateQty(item.product_id, item.qty - 1)} disabled={item.qty <= 1}>-</button>
             <span style={{ margin: "0 8px" }}>{item.qty}</span>
-
-            <button
-              onClick={() => updateQty(item.product_id, item.qty + 1)}
-            >+</button>
+            <button onClick={() => updateQty(item.product_id, item.qty + 1)}>+</button>
           </div>
-
           <button onClick={() => removeItem(item)}>삭제</button>
         </div>
       ))}
@@ -146,9 +100,3 @@ function Cart() {
 }
 
 export default Cart;
-
-
-
-
-
-
