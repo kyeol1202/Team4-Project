@@ -27,7 +27,7 @@ import OrderDetail from "./component/OrderDetail";
 import EditUserInfo from "./component/EditUserInfo";
 import ProductDetail from "./component/ProductDetail";
 import { QnaProvider } from './context/QnaContext';
-
+import Chatbot from "./component/Chatbot";
 function App() {
   return (
     <AuthProvider>
@@ -39,7 +39,7 @@ function App() {
               <Route element={<Layout />}>
                 <Route path="/" element={<Main />} />
                 <Route path="/main" element={<Main />} />
-
+                <Route path="/Chatbot" element={<Chatbot />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/category2" element={<Category2 />} />
                 <Route path="/category3" element={<Category3 />} />

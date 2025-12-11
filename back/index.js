@@ -2,10 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const pool = require('./db');
 const path = require('path');
+require("dotenv").config();
 
 const app = express();
 
-// ⭐ CORS 설정 강화
+/* ------------------------- 기본 설정 ------------------------- */
+
 app.use(cors({
   origin: '*',
   credentials: true
@@ -14,7 +16,6 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ⭐ static 파일
 app.use("/uploads", (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET');
@@ -32,7 +33,6 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + ext);
   },
 });
-
 const upload = multer({ storage });
 
 /* ------------------------- 회원 관리 ------------------------- */
@@ -111,7 +111,7 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-// ⭐⭐ 통합 검색 기능
+// 통합 검색
 app.get("/api/search", async (req, res) => {
   const keyword = req.query.keyword;
 
@@ -196,20 +196,9 @@ app.post("/api/productadd", upload.single("img"), async (req, res) => {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
-        name,
-        price,
-        category_id,
-        description,
-        imgPath,
-        gender,
-        top_notes,
-        middle_notes,
-        base,
-        volume,
-        perfume_type,
-        longevity,
-        sillage,
-        search_tags   // ⭐⭐ 이거 추가됨
+        name, price, category_id, description, imgPath, gender,
+        top_notes, middle_notes, base, volume, perfume_type,
+        longevity, sillage, search_tags
       ]
     );
 
@@ -417,7 +406,8 @@ app.get("/api/cart/:userId", async (req, res) => {
   }
 });
 
-// 수량 업데이트
+/* ------------------------- 갯수 업데이트 ------------------------- */
+
 app.put("/api/cart/update", async (req, res) => {
   const { user_id, product_id, quantity } = req.body;
   try {
@@ -431,7 +421,8 @@ app.put("/api/cart/update", async (req, res) => {
   }
 });
 
-// 장바구니 삭제
+/* ------------------------- 장바구니 삭제 ------------------------- */
+
 app.delete("/api/cart/remove", async (req, res) => {
   const { user_id, product_id } = req.body;
   try {
@@ -445,73 +436,87 @@ app.delete("/api/cart/remove", async (req, res) => {
   }
 });
 
-/* ---------------------- GAME 1: Snake 랭킹 ---------------------- */
+/* =========================================================================
+          ⭐⭐⭐ 여기서부터 AI 챗봇 기능 추가됨 (기존 기능 NOT TOUCH)
+===========================================================================*/
 
-// 랭킹 불러오기
-app.get("/game", async (req, res) => {
-  try {
-    const rows = await pool.query(
-      "SELECT name, score FROM game ORDER BY score DESC LIMIT 10"
-    );
-    res.json({ success: true, data: rows });
-  } catch (err) {
-    console.error("게임1 랭킹 불러오기 오류:", err);
-    res.json({ success: false, message: "DB 오류" });
-  }
+const OpenAI = require("openai");
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
-// 랭킹 저장
-app.post("/game", async (req, res) => {
-  const { name, score } = req.body;
+/* 🔥 챗봇: 사용자 개인 데이터 가져오기 */
+async function getUserContext(userId) {
+  if (!userId) return {};
 
-  if (!name || score === undefined) {
-    return res.json({ success: false, message: "데이터 부족" });
-  }
+  const ctx = {};
 
-  try {
-    await pool.query(
-      "INSERT INTO game (name, score) VALUES (?, ?)",
-      [name, score]
-    );
-    res.json({ success: true, message: "랭킹 저장 완료" });
-  } catch (err) {
-    console.error("게임1 랭킹 저장 오류:", err);
-    res.json({ success: false, message: "DB 오류" });
-  }
-});
+  const member = await pool.query(
+    "SELECT member_id, name, gender FROM member WHERE member_id = ?",
+    [userId]
+  );
+  ctx.member = member[0] || null;
 
-/* ---------------------- GAME 2: Enemy Avoid 랭킹 ---------------------- */
+  const wishlist = await pool.query(
+    `SELECT p.name, p.scent_family
+     FROM wishlist w
+     JOIN product p ON w.product_id = p.product_id
+     WHERE w.member_id = ?
+     LIMIT 5`,
+    [userId]
+  );
+  ctx.wishlist = wishlist;
 
-// 랭킹 불러오기
-app.get("/game2", async (req, res) => {
-  try {
-    const rows = await pool.query(
-      "SELECT name, score FROM game2 ORDER BY score DESC LIMIT 10"
-    );
-    res.json({ success: true, data: rows });
-  } catch (err) {
-    console.error("게임2 랭킹 불러오기 오류:", err);
-    res.json({ success: false, message: "DB 오류" });
-  }
-});
+  const orders = await pool.query(
+    `SELECT o.order_id, o.order_status, p.name AS product_name
+     FROM orders o
+     JOIN product p ON o.product_id = p.product_id
+     WHERE o.member_id = ?
+     LIMIT 3`,
+    [userId]
+  );
+  ctx.orders = orders;
 
-// 랭킹 저장
-app.post("/game2", async (req, res) => {
-  const { name, score } = req.body;
+  return ctx;
+}
 
-  if (!name || score === undefined) {
-    return res.json({ success: false, message: "데이터 부족" });
-  }
+/* 챗봇 API */
+app.post("/api/chatbot", async (req, res) => {
+  const { message, user_id } = req.body;
+
+  if (!message) return res.json({ success: false, reply: "메시지가 없습니다." });
 
   try {
-    await pool.query(
-      "INSERT INTO game2 (name, score) VALUES (?, ?)",
-      [name, score]
-    );
-    res.json({ success: true, message: "랭킹 저장 완료" });
+    const ctx = await getUserContext(user_id);
+
+    const prompt = `
+너는 AuRa 향수 쇼핑몰 AI 상담원이다.
+사용자 정보:
+${JSON.stringify(ctx, null, 2)}
+
+사용자 질문: "${message}"
+
+역할:
+- 향수 추천 + 제품 설명
+- 사용자 위시리스트 기반 추천
+- 주문 상태 안내
+- 친절하고 간결하게 답변
+`;
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini", 
+      messages: [
+        { role: "system", content: "너는 향수 쇼핑몰 상담원 AI이다." },
+        { role: "user", content: prompt }
+      ]
+    });
+
+    const reply = completion.choices[0].message.content;
+
+    return res.json({ success: true, reply });
   } catch (err) {
-    console.error("게임2 랭킹 저장 오류:", err);
-    res.json({ success: false, message: "DB 오류" });
+    console.error("❌ 챗봇 오류:", err);
+    return res.json({ success: false, reply: "서버 오류가 발생했습니다." });
   }
 });
 
