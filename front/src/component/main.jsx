@@ -94,12 +94,18 @@ useEffect(() => {
 
     return (
         <>
-            <div
-  className={`page1 fade-section ${visibleSection === 1 ? "show" : "hide"}`}
-  data-section="1"
->
+          
+          <video
+    className="main-video2"
+    src="image/광고영상2.mp4"
+    autoPlay
+    loop
+    muted
+    playsInline
+  />
+
   <video
-    className="main-video"
+    className="main-video1"
     src="image/향수광고영상.mp4"
     autoPlay
     loop
@@ -114,14 +120,14 @@ useEffect(() => {
     to empty the buyer's wallet
   </h1>
 </div>
-</div>
 
 
 
 <div
-  className={`page2 fade-section ${visibleSection === 3 ? "show" : "hide"}`}
-  data-section="3"
+  className={`page3 fade-section ${visibleSection === 1 ? "show" : "hide"}`}
+  data-section="1"
 >
+   <div className="right-panel"></div>
   <img className="perfume-detail" src="image/image.png" />
 
   <div className="textbox">
@@ -137,9 +143,11 @@ useEffect(() => {
 </div>
 
 
+
+
 <div
-  className={`page fade-section ${visibleSection === 4 ? "show" : "hide"}`}
-  data-section="4"
+  className={`page fade-section ${visibleSection === 2 ? "show" : "hide"}`}
+  data-section="2"
 >
   <h1 className="section-title">
     {index === 0 ? "WOMAN BEST SELLERS" : "MAN BEST SELLERS"}
