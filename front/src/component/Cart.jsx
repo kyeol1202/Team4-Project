@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import './component/cart-pay.css'; // CSS import
 
 const API_URL = "http://192.168.0.224:8080";
 
