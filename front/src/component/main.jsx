@@ -92,29 +92,20 @@ function Main() {
   const slideLeft = () => setIndex(prev => (prev - 1 + slides.length) % slides.length);
 
 
-    return (
-        <>
+  return (
+    <>
 
-        <div className="top-marquee-bar">
-  <div className="marquee-content">
-    <span>4TEAM</span>
-    <span>신은지</span>
-    <span>김한결(팀장님)</span>
-    <span>윤종빈</span>
-    <span>이선화</span>
-    {/* 반복되는 문구들을 적당히 넣기 */}
-  </div>
-</div>
+      <div className="top-marquee-bar">
+        <div className="marquee-content">
+          <span>4TEAM</span>
+          <span>신은지</span>
+          <span>김한결(팀장님)</span>
+          <span>윤종빈</span>
+          <span>이선화</span>
+          {/* 반복되는 문구들을 적당히 넣기 */}
+        </div>
+      </div>
 
-          
-          <video
-    className="main-video2"
-    src="image/광고영상2.mp4"
-    autoPlay
-    loop
-    muted
-    playsInline
-  />
 
       <video
         className="main-video2"
@@ -247,31 +238,31 @@ function Main() {
       </div>
 
       <footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-logo">AuRa</div>
+        <div class="footer-inner">
+          <div class="footer-logo">AuRa</div>
 
-    <div class="footer-text">
-      <p>
-        (주) 세정서울지사 | Owner : 김송우, 이주형 | Business Number : 114-85-10672 |
-        E-commerce Permit : 2012-서울강남-00901
-        <a href="javascript:void(0)" onclick="onopenPermit('1148510672')" class="biz-link">
-          [사업자정보확인]
-        </a>
-      </p>
-      <p>
-        Personal Info Manager : 김송우 (cs@didierdubot.co.kr) |
-        Address : 서울특별시 강남구 삼성로 342 (세정빌딩) |
-        호스팅서비스 : 카페24
-      </p>
-      <p class="footer-copy">
-        COPYRIGHT (주) 세정서울지사 ALL RIGHT RESERVED.
-      </p>
-    </div>
-  </div>
-</footer>
+          <div class="footer-text">
+            <p>
+              (주) 세정서울지사 | Owner : 김송우, 이주형 | Business Number : 114-85-10672 |
+              E-commerce Permit : 2012-서울강남-00901
+              <a href="javascript:void(0)" onclick="onopenPermit('1148510672')" class="biz-link">
+                [사업자정보확인]
+              </a>
+            </p>
+            <p>
+              Personal Info Manager : 김송우 (cs@didierdubot.co.kr) |
+              Address : 서울특별시 강남구 삼성로 342 (세정빌딩) |
+              호스팅서비스 : 카페24
+            </p>
+            <p class="footer-copy">
+              COPYRIGHT (주) 세정서울지사 ALL RIGHT RESERVED.
+            </p>
+          </div>
+        </div>
+      </footer>
 
-</>
-      );
+    </>
+  );
 }
 
-      export default Main;
+export default Main;
