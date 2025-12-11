@@ -104,16 +104,6 @@ useEffect(() => {
     playsInline
   />
 
-  <video
-    className="main-video1"
-    src="image/향수광고영상.mp4"
-    autoPlay
-    loop
-    muted
-    playsInline
-  />
-
-
   <div className="title-overlay">
   <h1 className="line1 tracking-in-expand-fwd-bottom">A good day</h1>
   <h1 className="line2 tracking-in-expand-fwd-bottom">
@@ -127,17 +117,31 @@ useEffect(() => {
   className={`page3 fade-section ${visibleSection === 1 ? "show" : "hide"}`}
   data-section="1"
 >
+{/*왼쪽광고영상*/}
+  <video
+    className="main-video1"
+    src="image/향수광고영상.mp4"
+    autoPlay
+    loop
+    muted
+    playsInline
+  />
+  
+  {/* 가운데 세로 라인 */}
+  <div className="divider" />
+
    <div className="right-panel"></div>
   <img className="perfume-detail" src="image/image.png" />
 
   <div className="textbox">
     <h3>AuRa — 당신의 느낌을 향으로 기록하다</h3>
     <p>
-      “한 번의 스침, 한 번의 숨결.
-      AuRa의 향은 당신의 분위기와 어우러져
-      세상에 단 하나의 잔향을 남깁니다.
-      <br />
-      지나가는 순간마저 특별하게— AuRa Perfume.”
+      “한 번의 스침, 한 번의 숨결.<br />
+      AuRa의 향은 당신의 분위기와 어우러져<br />
+      세상에 단 하나의 잔향을 남깁니다.<br />
+      지나가는 순간마저 특별하게"<br />
+      --------------------------<br />
+       AuRa Primeveil
     </p>
   </div>
 </div>
