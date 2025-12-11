@@ -1,0 +1,289 @@
+/* =========================
+   장바구니 / 결제 페이지 공통
+========================= */
+
+.page-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 30px 20px;
+  font-family: 'Cormorant', serif;
+  color: #000;
+}
+
+.page-container h1 {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* --------------------------
+   장바구니 상품 항목
+--------------------------- */
+.product-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 12px 0;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+
+.product-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-name {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.product-price {
+  font-size: 16px;
+  color: #555;
+}
+
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty-control button {
+  padding: 6px 12px;
+  background: #f3f3f3;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.qty-control button:hover {
+  background: #e0e0e0;
+}
+
+.remove-btn {
+  padding: 6px 12px;
+  border: none;
+  background: #ff5c5c;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background: #e04848;
+}
+
+/* --------------------------
+   선택 전체 / 해제
+--------------------------- */
+.select-all {
+  margin-bottom: 20px;
+}
+
+.select-all button {
+  padding: 8px 16px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f8f8f8;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.select-all button:hover {
+  background: #eaeaea;
+}
+
+/* --------------------------
+   총 금액 / 버튼
+--------------------------- */
+.total-price {
+  font-size: 20px;
+  font-weight: 600;
+  text-align: right;
+  margin-top: 16px;
+}
+
+.action-btns {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-cancel, .btn-pay {
+  flex: 1;
+  padding: 14px 0;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-cancel {
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+}
+
+.btn-cancel:hover {
+  background: #eaeaea;
+}
+
+.btn-pay {
+  border: none;
+  background: #000;
+  color: #fff;
+}
+
+.btn-pay:hover {
+  background: #333;
+}
+
+/* --------------------------
+   결제 페이지 폼
+--------------------------- */
+.form-section {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  background: #fff;
+}
+
+.form-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.form-section label {
+  display: block;
+  font-size: 14px;
+  margin: 8px 0 4px;
+}
+
+.form-section input,
+.form-section select,
+.form-section textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fafafa;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.form-section input:focus,
+.form-section select:focus,
+.form-section textarea:focus {
+  border-color: #000;
+  outline: none;
+}
+
+.same-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+/* =========================
+   다크 모드
+=========================== */
+body.dark {
+  background-color: #0e0e0e;
+  color: #e4e4e4;
+}
+
+body.dark .page-container {
+  color: #e4e4e4;
+}
+
+body.dark .product-item {
+  background: #1a1a1a;
+  border: 1px solid #333;
+}
+
+body.dark .product-item:hover {
+  box-shadow: 0 8px 20px rgba(255,255,255,0.12);
+}
+
+body.dark .product-price {
+  color: #ccc;
+}
+
+body.dark .qty-control button {
+  background: #333;
+  color: #e4e4e4;
+  border: 1px solid #555;
+}
+
+body.dark .qty-control button:hover {
+  background: #444;
+}
+
+body.dark .remove-btn {
+  background: #ff6b6b;
+}
+
+body.dark .remove-btn:hover {
+  background: #ff4c4c;
+}
+
+body.dark .select-all button {
+  background: #222;
+  color: #e4e4e4;
+  border: 1px solid #555;
+}
+
+body.dark .select-all button:hover {
+  background: #333;
+}
+
+body.dark .total-price {
+  color: #fff;
+}
+
+body.dark .btn-cancel {
+  background: #222;
+  color: #e4e4e4;
+  border: 1px solid #555;
+}
+
+body.dark .btn-cancel:hover {
+  background: #333;
+}
+
+body.dark .btn-pay {
+  background: #fff;
+  color: #000;
+}
+
+body.dark .btn-pay:hover {
+  background: #eaeaea;
+}
+
+body.dark .form-section {
+  background: #181818;
+  border: 1px solid #444;
+}
+
+body.dark .form-section input,
+body.dark .form-section select,
+body.dark .form-section textarea {
+  background: #222;
+  color: #e4e4e4;
+  border: 1px solid #555;
+}
