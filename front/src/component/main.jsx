@@ -148,9 +148,13 @@ useEffect(() => {
       AuRa의 향은 당신의 분위기와 어우러져<br />
       세상에 단 하나의 잔향을 남깁니다.<br />
       지나가는 순간마저 특별하게"<br />
-      --------------------------<br />
-       AuRa Primeveil
     </p>
+    <button
+          className="model-btn"
+          onClick={() => navigate("http://192.168.0.224:5173/product/7")}
+        >
+          Aura Primeveil 보러가기
+        </button>
   </div>
 </div>
 
