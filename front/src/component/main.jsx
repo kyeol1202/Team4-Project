@@ -98,7 +98,7 @@ function Main() {
       <div className="top-marquee-bar">
         <div className="marquee-content">
           <span>4TEAM</span>
-          <span>신은지</span>
+          <span>시=지</span>
           <span>김한결(팀장님)</span>
           <span>윤종빈</span>
           <span>이선화</span>
