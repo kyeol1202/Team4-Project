@@ -11,9 +11,7 @@
 }
 
 .fade-section {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 1s ease, transform 1s ease;
+will-change: opacity;
 }
 
 .fade-section.show {
@@ -42,20 +40,17 @@
 /* ------------------ 페이지 기본 ------------------ */
 
 .page1 {
-  width: 1000px;
-  height: 700px;
   position: relative;
-  margin: auto;
-  overflow: hidden;
 }
 
-.page1::after {
-  content: "";
+/* 텍스트 오버레이 위치 설정 */
+.title-overlay {
   position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.18);
-  backdrop-filter: blur(3px);
-  
+  bottom: 40px; /* 영상 아래쪽에서 살짝 위로 띄움 */
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 100%;
 }
 
 .main-video {
@@ -85,6 +80,49 @@
   float: left;
   margin-top: 100px;
 }
+
+.title-box {
+  position: relative;
+  z-index: 5; /* fade-section 위 */
+  opacity: 1 !important; /* 부모 opacity 영향 안 받게 */
+}
+
+.title-overlay h1 {
+  font-family: "Didot", "Playfair Display", serif;
+  letter-spacing: 0.5px;
+  font-size: 48px;
+  font-weight: 400;
+  margin: 0;
+  color: white; /* 영상 위는 흰색이 더 잘 보임 */
+}
+
+.title-box h1 {
+  font-family: "Didot", "Playfair Display", serif;
+  letter-spacing: 0.5px;
+  font-size: 48px;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* 간격 */
+.line1 {
+  margin-bottom: 10px;
+}
+
+.delay {
+  animation-delay: 0.4s; /* 두 번째 문장은 조금 늦게 */
+}
+
+.line2 {
+  transform: translateY(0); /* 레이아웃 겹침 제거 */
+}
+
+/* 애니메이션 적용 */
+.tracking-in-expand-fwd-bottom {
+  animation: tracking-in-expand-fwd-bottom 1.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+  animation-delay: 0.1s;
+}
+
 
 /* ------------------ 슬라이드 ------------------ */
 
