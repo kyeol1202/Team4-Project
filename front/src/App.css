@@ -934,3 +934,70 @@ body.dark .footer button {
 body.dark .header-right button {
   color: white;
 }
+
+.site-footer {
+  border-top: 1px solid #eee;
+  background-color: #fafafa;
+  padding: 28px 16px 32px;
+  font-family: "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* 가운데 정렬 + 최대 너비 제한 */
+.footer-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* 로고 텍스트 느낌 */
+.footer-logo {
+  font-size: 18px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #222;
+  margin-bottom: 14px;
+}
+
+/* 본문 텍스트 스타일 */
+.footer-text {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #6b6b6b;
+}
+
+.footer-text p {
+  margin: 0 0 4px;
+}
+
+/* 사업자정보 확인 링크 */
+.footer-text .biz-link {
+  margin-left: 4px;
+  color: #555;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-text .biz-link:hover {
+  color: #222;
+}
+
+/* 카피라이트 라인 강조 조금 */
+.footer-copy {
+  margin-top: 8px;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: #999;
+}
+
+/* 화면 조금 넓어졌을 때 살짝 여유 */
+@media (min-width: 768px) {
+  .site-footer {
+    padding-top: 32px;
+    padding-bottom: 36px;
+  }
+
+  .footer-text {
+    font-size: 12px;
+  }
+}

@@ -246,20 +246,31 @@ function Main() {
 
       </div>
 
-      <div class=" text-center">
-        <div class="mb-3.5 w-[110px] mx-auto">AuRa</div>
+      <footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">AuRa</div>
 
-        <div class="text-[#3E3A39] text-[11px] leading-tight">
-          <div class="mb-4">
-              
-              (주) 세정서울지사 | Owner : 김송우, 이주형 | Business Number : 114-85-10672 | E-commerce Permit : 2012-서울강남-00901
-              <a href="javascript:void(0)" onclick="onopenPermit('1148510672')" class="font-medium">[사업자정보확인]</a><br />
-                Personal Info Manager : 김송우 (cs@didierdubot.co.kr) | Address : 서울특별시 강남구 삼성로 342 (세정빌딩) | 호스팅서비스 : 카페24
-              </div>
-              <p>COPYRIGHT (주) 세정서울지사 ALL RIGHT RESERVED.</p>
-          </div>
-        </div>
-      </>
+    <div class="footer-text">
+      <p>
+        (주) 세정서울지사 | Owner : 김송우, 이주형 | Business Number : 114-85-10672 |
+        E-commerce Permit : 2012-서울강남-00901
+        <a href="javascript:void(0)" onclick="onopenPermit('1148510672')" class="biz-link">
+          [사업자정보확인]
+        </a>
+      </p>
+      <p>
+        Personal Info Manager : 김송우 (cs@didierdubot.co.kr) |
+        Address : 서울특별시 강남구 삼성로 342 (세정빌딩) |
+        호스팅서비스 : 카페24
+      </p>
+      <p class="footer-copy">
+        COPYRIGHT (주) 세정서울지사 ALL RIGHT RESERVED.
+      </p>
+    </div>
+  </div>
+</footer>
+
+</>
       );
 }
 
