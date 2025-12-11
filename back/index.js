@@ -547,12 +547,18 @@ app.post("/game", async (req, res) => {
 
   try {
     await pool.query(
-      "INSERT INTO game (name, score) VALUES (?, ?)",
+      `
+      INSERT INTO game (name, score)
+      VALUES (?, ?)
+      ON DUPLICATE KEY UPDATE
+      score = GREATEST(score, VALUES(score))
+      `,
       [name, score]
     );
-    res.json({ success: true, message: "랭킹 저장 완료" });
+
+    res.json({ success: true, message: "랭킹 저장/갱신 완료" });
   } catch (err) {
-    console.error("게임1 랭킹 저장 오류:", err);
+    console.error("게임 랭킹 저장 오류:", err);
     res.json({ success: false, message: "DB 오류" });
   }
 });
@@ -582,10 +588,16 @@ app.post("/game2", async (req, res) => {
 
   try {
     await pool.query(
-      "INSERT INTO game2 (name, score) VALUES (?, ?)",
+      `
+      INSERT INTO game2 (name, score)
+      VALUES (?, ?)
+      ON DUPLICATE KEY UPDATE
+      score = GREATEST(score, VALUES(score))
+      `,
       [name, score]
     );
-    res.json({ success: true, message: "랭킹 저장 완료" });
+
+    res.json({ success: true, message: "랭킹 저장/갱신 완료" });
   } catch (err) {
     console.error("게임2 랭킹 저장 오류:", err);
     res.json({ success: false, message: "DB 오류" });
