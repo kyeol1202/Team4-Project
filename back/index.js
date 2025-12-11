@@ -445,6 +445,76 @@ app.delete("/api/cart/remove", async (req, res) => {
   }
 });
 
+/* ---------------------- GAME 1: Snake 랭킹 ---------------------- */
+
+// 랭킹 불러오기
+app.get("/game", async (req, res) => {
+  try {
+    const rows = await pool.query(
+      "SELECT name, score FROM game ORDER BY score DESC LIMIT 10"
+    );
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error("게임1 랭킹 불러오기 오류:", err);
+    res.json({ success: false, message: "DB 오류" });
+  }
+});
+
+// 랭킹 저장
+app.post("/game", async (req, res) => {
+  const { name, score } = req.body;
+
+  if (!name || score === undefined) {
+    return res.json({ success: false, message: "데이터 부족" });
+  }
+
+  try {
+    await pool.query(
+      "INSERT INTO game (name, score) VALUES (?, ?)",
+      [name, score]
+    );
+    res.json({ success: true, message: "랭킹 저장 완료" });
+  } catch (err) {
+    console.error("게임1 랭킹 저장 오류:", err);
+    res.json({ success: false, message: "DB 오류" });
+  }
+});
+
+/* ---------------------- GAME 2: Enemy Avoid 랭킹 ---------------------- */
+
+// 랭킹 불러오기
+app.get("/game2", async (req, res) => {
+  try {
+    const rows = await pool.query(
+      "SELECT name, score FROM game2 ORDER BY score DESC LIMIT 10"
+    );
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error("게임2 랭킹 불러오기 오류:", err);
+    res.json({ success: false, message: "DB 오류" });
+  }
+});
+
+// 랭킹 저장
+app.post("/game2", async (req, res) => {
+  const { name, score } = req.body;
+
+  if (!name || score === undefined) {
+    return res.json({ success: false, message: "데이터 부족" });
+  }
+
+  try {
+    await pool.query(
+      "INSERT INTO game2 (name, score) VALUES (?, ?)",
+      [name, score]
+    );
+    res.json({ success: true, message: "랭킹 저장 완료" });
+  } catch (err) {
+    console.error("게임2 랭킹 저장 오류:", err);
+    res.json({ success: false, message: "DB 오류" });
+  }
+});
+
 /* ------------------------- 서버 실행 ------------------------- */
 
 app.listen(8080, "0.0.0.0", () => {
