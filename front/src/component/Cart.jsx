@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import './component/cart-pay.css'
+import './component/cart-pay.css'; // CSS import
 
 const API_URL = "http://192.168.0.224:5173";
 
@@ -9,11 +9,13 @@ export default function Cart() {
   const [cart, setCart] = useState([]);
   const [selected, setSelected] = useState([]);
 
+  // 체크박스 선택/해제
   const toggleSelect = (pid) =>
     setSelected((prev) =>
       prev.includes(pid) ? prev.filter((i) => i !== pid) : [...prev, pid]
     );
 
+  // 장바구니 데이터 가져오기
   const refreshCart = async () => {
     const userId = localStorage.getItem("member_id");
     if (!userId) return;
@@ -26,7 +28,9 @@ export default function Cart() {
     }
   };
 
+  // 수량 변경
   const updateQty = async (pid, newQty) => {
+    if (newQty < 1) return;
     const userId = localStorage.getItem("member_id");
     await fetch(`${API_URL}/api/cart/update`, {
       method: "PUT",
@@ -36,6 +40,7 @@ export default function Cart() {
     refreshCart();
   };
 
+  // 아이템 삭제
   const removeItem = async (item) => {
     const userId = localStorage.getItem("member_id");
     await fetch(`${API_URL}/api/cart/remove`, {
@@ -46,6 +51,7 @@ export default function Cart() {
     refreshCart();
   };
 
+  // 총합 계산
   const total = useMemo(
     () =>
       cart
@@ -58,6 +64,7 @@ export default function Cart() {
     refreshCart();
   }, []);
 
+  // 결제 페이지 이동
   const handleCheckout = () => {
     if (!selected.length) return alert("구매할 상품을 선택하세요.");
     const userId = localStorage.getItem("member_id");
@@ -71,14 +78,20 @@ export default function Cart() {
     <div className="page-container">
       <h1>장바구니</h1>
 
+      {/* 전체 선택 / 해제 버튼 */}
       <div className="select-all">
         <button onClick={() => setSelected(cart.map((i) => i.product_id))}>전체 선택</button>
         <button onClick={() => setSelected([])}>전체 해제</button>
       </div>
 
+      {/* 장바구니 상품 목록 */}
       {cart.map((item) => (
         <div key={item.product_id} className="product-item">
-          <input type="checkbox" checked={selected.includes(item.product_id)} onChange={() => toggleSelect(item.product_id)} />
+          <input
+            type="checkbox"
+            checked={selected.includes(item.product_id)}
+            onChange={() => toggleSelect(item.product_id)}
+          />
 
           <div className="product-info">
             <span className="product-name">{item.name}</span>
