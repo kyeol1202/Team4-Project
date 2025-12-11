@@ -66,11 +66,11 @@ function Payment() {
         case "cash":
           // ✅ 현금 결제 안내
           alert(`현금 결제 안내:\n
-은행: 국민은행
-계좌번호: 123-456-7890
-예금주: 홍길동
-총 결제금액: ${total.toLocaleString()}원
-입금 확인 후 배송이 진행됩니다.`);
+               은행: 국민은행
+               계좌번호: 123-456-7890
+               예금주: 홍길동
+               총 결제금액: ${total.toLocaleString()}원
+               입금 확인 후 배송이 진행됩니다.`);
           navigate("/complete");
           return;
         default:
