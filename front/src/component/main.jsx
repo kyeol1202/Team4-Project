@@ -92,8 +92,29 @@ function Main() {
   const slideLeft = () => setIndex(prev => (prev - 1 + slides.length) % slides.length);
 
 
-  return (
-    <>
+    return (
+        <>
+
+        <div className="top-marquee-bar">
+  <div className="marquee-content">
+    <span>4TEAM</span>
+    <span>신은지</span>
+    <span>김한결(팀장님)</span>
+    <span>윤종빈</span>
+    <span>이선화</span>
+    {/* 반복되는 문구들을 적당히 넣기 */}
+  </div>
+</div>
+
+          
+          <video
+    className="main-video2"
+    src="image/광고영상2.mp4"
+    autoPlay
+    loop
+    muted
+    playsInline
+  />
 
       <video
         className="main-video2"
