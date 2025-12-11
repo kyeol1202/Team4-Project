@@ -240,6 +240,75 @@ app.get("/api/products/:id", async (req, res) => {
   }
 });
 
+/* ------------------------- 상품 수정 ------------------------- */
+
+app.put("/api/product-edit/:id", upload.single("img"), async (req, res) => {
+  const id = req.params.id;
+
+  const {
+    name,
+    price,
+    category_id,
+    description,
+    top_notes,
+    middle_notes,
+    base_notes,
+    volume,
+    gender,
+    perfume_type,
+    longevity,
+    sillage,
+    search_tags
+  } = req.body;
+
+  // 이미지가 새로 업로드되었으면 경로 저장
+  const imgPath = req.file ? "/uploads/" + req.file.filename : null;
+
+  try {
+    // 기존 데이터를 업데이트 (이미지 업데이트 포함)
+    const query = `
+      UPDATE product SET
+        name = ?,
+        price = ?,
+        category_id = ?,
+        description = ?,
+        gender = ?,
+        top_notes = ?,
+        middle_notes = ?,
+        base_notes = ?,
+        volume = ?,
+        perfume_type = ?,
+        longevity = ?,
+        sillage = ?,
+        search_tags = ?
+        ${imgPath ? `, img = '${imgPath}'` : ""}
+      WHERE product_id = ?
+    `;
+
+    await pool.query(query, [
+      name,
+      price,
+      category_id,
+      description,
+      gender,
+      top_notes,
+      middle_notes,
+      base_notes,
+      volume,
+      perfume_type,
+      longevity,
+      sillage,
+      search_tags,
+      id,
+    ]);
+
+    res.json({ success: true, message: "상품 수정 완료!" });
+  } catch (err) {
+    console.error("❌ 상품 수정 실패:", err);
+    res.status(500).json({ success: false, message: "DB 오류 발생" });
+  }
+});
+
 /* ------------------------- 위시리스트 ------------------------- */
 
 app.post("/api/wish/add", async (req, res) => {
