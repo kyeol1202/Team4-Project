@@ -6,7 +6,9 @@ import "../component/mypage.css";
 function Mypage() {
   const navigate = useNavigate();
   const { isLogin, logout, user } = useAuth();
-  const userId = "user1"; // 예시용, 실제 로그인 유저 id 사용
+  const userId = localStorage.getItem("member_id") || user?.id;
+  const ordersData = localStorage.getItem("orders");
+
 
   const [orders, setOrders] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -25,7 +27,8 @@ function Mypage() {
       return;
     }
 
-    setOrders(JSON.parse(localStorage.getItem("orders")) || []);
+    
+    setOrders(ordersData ? JSON.parse(ordersData) : []);
     setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
     setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
   }, []);
