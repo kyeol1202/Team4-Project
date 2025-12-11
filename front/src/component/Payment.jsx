@@ -68,20 +68,24 @@ export default function Payment() {
 
       {/* 배송지 */}
       <div className="form-section">
-        <div className="same-user">
-          <input type="checkbox" checked={sameAsUser} onChange={() => setSameAsUser(!sameAsUser)} />
-          회원 정보와 동일
-        </div>
-        {["name","phone","email","address","detailAddress"].map((key) => (
-          <input
-            key={key}
-            placeholder={key}
-            value={paymentInfo[key]}
-            onChange={(e) => setPaymentInfo({ ...paymentInfo, [key]: e.target.value })}
-            disabled={sameAsUser}
-          />
-        ))}
-      </div>
+       <h2>배송지 정보</h2>
+
+       <div className="same-user">
+       <input type="checkbox" checked={sameAsUser} onChange={() => setSameAsUser(!sameAsUser)} />
+         회원 정보와 동일
+       </div>
+
+       {["name", "phone", "email", "address", "detailAddress"].map((key) => (
+        <div key={key} className="form-field">
+         <label>{placeholders[key]}</label>
+        <input
+        value={paymentInfo[key]}
+        onChange={(e) => setPaymentInfo({ ...paymentInfo, [key]: e.target.value })}
+        disabled={sameAsUser}/>
+    </div>
+  ))}
+</div>
+
 
       {/* 결제 수단 */}
       <div className="form-section">
