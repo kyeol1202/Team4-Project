@@ -4,12 +4,14 @@ import { useCart } from "../context/CartContext";
 import { useWish } from "../context/WishContext";
 import Game from "./Game";
 import Game2 from "./Game2";
+import Chatbot from "./Chatbot";
 
 function Layout() {
 
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { addToWish } = useWish();
+  const { addToWish } = useWish(); 
+  const [chatbotOpen, setChatbotOpen] = useState(false);
 
   const [login, setLogin] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
@@ -319,7 +321,7 @@ function Layout() {
       {/* FOOTER 게임 */}
       <footer className="footer">
         <button onClick={() => navigate("/service")}>🎧</button>
-        <button>🤖</button>
+        <button onClick={() => setChatbotOpen(true)}>🤖</button>
         <button onClick={() => setGameOpen(true)}>🎮</button>
         <button onClick={() => setGame2Open(true)}>🎮</button>
       </footer>
@@ -341,8 +343,59 @@ function Layout() {
           </div>
         </div>
       )}
-    </>
-  );
-}
+      
+  {chatbotOpen && (
+  <div 
+    className="chatbot-overlay"
+    onClick={() => setChatbotOpen(false)}
+    style={{
+      position: "fixed",
+      bottom: "80px",
+      right: "20px",
+      width: "320px",
+      height: "420px",
+      background: "white",
+      borderRadius: "20px",
+      boxShadow: "0 0 15px rgba(0,0,0,0.3)",
+      zIndex: 9999,
+      display: "flex",
+      flexDirection: "column",
+      overflow: "hidden"
+    }}
+  >
+
+    {/* 닫기 버튼 */}
+    <button 
+      onClick={(e) => {
+        e.stopPropagation();   // ⭐ 클릭해도 팝업 안 닫힘 방지
+        setChatbotOpen(false);
+      }}
+      style={{
+        border: "none",
+        background: "none",
+        padding: "10px",
+        fontSize: "20px",
+        cursor: "pointer",
+        alignSelf: "flex-end"
+      }}
+    >
+      ✕
+    </button>
+
+    {/* 챗봇 콘텐츠 영역 (여기 클릭해도 닫히면 안됨!) */}
+    <div 
+      style={{ flex: 1, overflowY: "auto" }}
+      onClick={(e) => e.stopPropagation()}   // ⭐ 핵심
+    >
+      <Chatbot />
+    </div>
+
+  </div>
+)}
+
+
+
+  </>
+)};
 
 export default Layout;
