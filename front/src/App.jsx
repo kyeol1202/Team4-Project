@@ -8,12 +8,14 @@ import "./Search.css";
 import './component/Category.css';
 import "./component/Service-qna.css";
 import "./component/Mypage.css"; // CSS import
-import './component/cart-pay.css';
+import './component/cart.css';
+import './component/Payment.css';
 
 import Layout from "./component/Layout";
 import Main from "./component/main";
 import Cart from "./component/Cart";
 import Payment from "./component/Payment";
+import PaymentSuccess from "./component/PaymentSuccess";
 import Register from "./component/Register";
 import Wish from "./component/Wish";
 import Service from "./component/Service";
@@ -49,6 +51,7 @@ function App() {
                 <Route path="/paymentSuccess" element={<PaymentSuccess/>} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/payment" element={<Payment />} />
+                <Route path="/payment-success" element={<PaymentSuccess/>}/>
 
                 <Route path="/wish" element={<Wish />} />
                 <Route path="/qna" element={<QnaPage />} />
