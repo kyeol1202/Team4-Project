@@ -83,31 +83,56 @@ export default function Cart() {
   };
 
    return (
-    <div className="cart-container">
-      <h1>장바구니</h1>
+  <div className="cart-container">
+    <h1 className="cart-title">장바구니</h1>
 
-      {cart.length === 0 ? (
-        <p>장바구니가 비었습니다.</p>
-      ) : (
-        cart.map((item) => (
+    {cart.length === 0 ? (
+      <div className="cart-empty">
+        <p>장바구니가 비어 있습니다.</p>
+        <button onClick={() => navigate("/")}>쇼핑하러 가기</button>
+      </div>
+    ) : (
+      <div className="cart-list">
+        {cart.map((item) => (
           <div className="cart-item" key={item.product_id}>
-            <span>{item.name}</span>
-            <span>{item.price.toLocaleString()}원</span>
+            <div className="cart-item-info">
+              <h3>{item.name}</h3>
+              <p>{item.price.toLocaleString()}원</p>
+            </div>
 
-            <div className="qty-box">
+            <div className="cart-item-qty">
               <button onClick={() => updateQty(item.product_id, item.qty - 1)}>-</button>
               <span>{item.qty}</span>
               <button onClick={() => updateQty(item.product_id, item.qty + 1)}>+</button>
             </div>
 
-            <button className="delete-btn" onClick={() => deleteItem(item.product_id)}>삭제</button>
+            <div className="cart-item-total">
+              {(item.price * item.qty).toLocaleString()}원
+            </div>
+
+            <button
+              className="cart-item-remove"
+              onClick={() => deleteItem(item.product_id)}
+            >
+              삭제
+            </button>
           </div>
-        ))
-      )}
+        ))}
+      </div>
+    )}
 
-      <div className="cart-total">총 금액 : {totalPrice.toLocaleString()}원</div>
+    {cart.length > 0 && (
+      <div className="cart-summary">
+        <div className="cart-summary-row">
+          <span>총 결제 금액</span>
+          <strong>{totalPrice.toLocaleString()}원</strong>
+        </div>
 
-      <button className="go-payment" onClick={goPayment}>결제하기</button>
-    </div>
-  );
+        <button className="cart-pay-btn" onClick={goPayment}>
+          결제하기
+        </button>
+      </div>
+    )}
+  </div>
+);
 }
