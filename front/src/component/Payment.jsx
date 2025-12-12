@@ -55,7 +55,7 @@ export default function Payment() {
     if (!paymentInfo.paymentMethod) return alert("결제 수단을 선택해주세요.");
     if (selectedProducts.length === 0) return alert("선택된 상품이 없습니다.");
     if (!user_id) return alert("회원 정보가 없습니다.");
-    alert("결제 로직을 여기서 구현하세요.");
+    alert("결제창을 불러올 수 없습니다.");
   };
 
   return (
