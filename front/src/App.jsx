@@ -34,6 +34,7 @@ import Category from "./component/Category";
 import PaymentSuccess from "./component/Payment";
 function App() {
   return (
+    
     <AuthProvider>
       <CartProvider>
         <WishProvider> 
@@ -41,6 +42,9 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route element={<Layout />}>
+              <>
+              <title>이이</title>
+              </>
                 <Route path="/" element={<Main />} />
                 <Route path="/main" element={<Main />} />
                 <Route path="/Chatbot" element={<Chatbot />} />
