@@ -14,8 +14,8 @@ import './component/Payment.css';
 import Layout from "./component/Layout";
 import Main from "./component/main";
 import Cart from "./component/Cart";
-import Payment from "./component/Payment";
-import PaymentSuccess from "./component/PaymentSuccess";
+import Payment from "./component/PaymentSuccess";
+
 import Register from "./component/Register";
 import Wish from "./component/Wish";
 import Service from "./component/Service";
@@ -31,7 +31,7 @@ import ProductDetail from "./component/ProductDetail";
 import { QnaProvider } from './context/QnaContext';
 import Chatbot from "./component/Chatbot";
 import Category from "./component/Category";
-import PaymentSuccess from "./component/PaymentSuccess";
+import PaymentSuccess from "./component/Payment";
 function App() {
   return (
     <AuthProvider>
@@ -51,7 +51,6 @@ function App() {
                 <Route path="/paymentSuccess" element={<PaymentSuccess/>} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/payment" element={<Payment />} />
-                <Route path="/payment-success" element={<PaymentSuccess/>}/>
 
                 <Route path="/wish" element={<Wish />} />
                 <Route path="/qna" element={<QnaPage />} />
