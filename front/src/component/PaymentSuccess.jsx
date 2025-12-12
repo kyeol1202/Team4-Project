@@ -1,16 +1,17 @@
-// src/component/PaymentSuccess.jsx
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-export default function PaymentSuccess() {
-  const navigate = useNavigate();
+const API_URL = "http://192.168.0.224:8080";
+
+export default function Payment() {
   const location = useLocation();
-  const [orderId, setOrderId] = useState(null);
+  const navigate = useNavigate();   // ⭐ 반드시 필요함!
+  const [orderId, setOrderId] = useState("");
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     setOrderId(params.get("order_id"));
-  }, [location]);
+  }, [location.search]);
 
   return (
     <div className="success-container">
@@ -22,3 +23,4 @@ export default function PaymentSuccess() {
     </div>
   );
 }
+
