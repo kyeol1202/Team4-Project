@@ -38,10 +38,21 @@ const upload = multer({ storage });
 /* ------------------------- 회원 관리 ------------------------- */
 
 app.get("/api/check-users", async (req, res) => {
+  const keyword = req.query.keyword;
+
+  if (!keyword || keyword.trim() === "") {
+    return res.json({ success: true, data: [] });  // 키워드 없으면 빈 값 반환
+  }
+
   try {
-    const rows = await pool.query("SELECT * FROM member");
+    const [rows] = await pool.query(
+      `SELECT * FROM member WHERE name LIKE ?`,
+      [`%${keyword}%`]
+    );
+
     res.json({ success: true, data: rows });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
