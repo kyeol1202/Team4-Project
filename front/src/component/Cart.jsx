@@ -1,47 +1,43 @@
-import { useEffect, useState, useMemo } from "react";
+// src/component/Cart.jsx
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const API_URL = "http://192.168.0.224:8080";
 
-function Cart() {
+export default function Cart() {
   const navigate = useNavigate();
+  const userId = localStorage.getItem("member_id");
+
   const [cart, setCart] = useState([]);
-  const [selected, setSelected] = useState([]);
 
-  // 체크박스 선택/해제
-  const toggleSelect = (pid) =>
-    setSelected((prev) =>
-      prev.includes(pid) ? prev.filter((i) => i !== pid) : [...prev, pid]
-    );
-
-  // 장바구니 데이터 가져오기
+  // 장바구니 불러오기
   const refreshCart = async () => {
-    const userId = localStorage.getItem("member_id");
     if (!userId) return;
 
     try {
       const res = await fetch(`${API_URL}/api/cart/${userId}`);
       const data = await res.json();
 
-      if (data.success) {
-        setCart(data.data);
-      }
+      if (data.success) setCart(data.cart);
+      else setCart([]);
     } catch (err) {
-      console.error("장바구니 불러오기 오류:", err);
+      console.error("카트 API 오류 → localStorage fallback");
+      const local = JSON.parse(localStorage.getItem("cart")) || [];
+      setCart(local);
     }
   };
 
-  // 수량 변경
-  const updateQty = async (pid, newQty) => {
-    if (newQty < 1) return;
-    const userId = localStorage.getItem("member_id");
+  useEffect(() => {
+    refreshCart();
+  }, []);
 
+  const updateQty = async (id, newQty) => {
     await fetch(`${API_URL}/api/cart/update`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         user_id: userId,
-        product_id: pid,
+        product_id: id,
         quantity: newQty,
       }),
     });
@@ -49,114 +45,59 @@ function Cart() {
     refreshCart();
   };
 
-  // 아이템 삭제
-  const removeItem = async (item) => {
-    const userId = localStorage.getItem("member_id");
-
-    await fetch(`${API_URL}/api/cart/remove`, {
+  const deleteItem = async (id) => {
+    await fetch(`${API_URL}/api/cart/delete`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         user_id: userId,
-        product_id: item.product_id,
+        product_id: id,
       }),
     });
 
     refreshCart();
   };
 
-  // 총합 계산
-  const total = useMemo(
-    () =>
-      cart
-        .filter((i) => selected.includes(i.product_id))
-        .reduce((sum, i) => sum + i.price * i.qty, 0),
-    [cart, selected]
-  );
+  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
-  useEffect(() => {
-    refreshCart();
-  }, []);
-
-  // 결제 페이지 이동
-  const handleCheckout = () => {
-    if (!selected.length) return alert("구매할 상품을 선택하세요.");
-
-    const userId = localStorage.getItem("member_id");
-    if (!userId) return alert("로그인이 필요합니다.");
-
-    const selectedItems = cart.filter((i) =>
-      selected.includes(i.product_id)
-    );
-
+  // 결제 이동
+  const goPayment = () => {
+    if (cart.length === 0) return alert("선택한 상품이 없습니다.");
     navigate("/payment", {
       state: {
-        items: selectedItems,
-        total,
         user_id: userId,
+        items: cart,
+        total: totalPrice,
       },
     });
   };
 
   return (
-    <div style={{ maxWidth: "900px", margin: "auto", padding: "20px" }}>
+    <div className="cart-container">
       <h1>장바구니</h1>
 
-      {/* 전체 선택 / 해제 버튼 */}
-      <div className="select-all">
-        <button onClick={() => setSelected(cart.map((i) => i.product_id))}>전체 선택</button>
-        <button onClick={() => setSelected([])}>전체 해제</button>
-      </div>
+      {cart.length === 0 ? (
+        <p>장바구니가 비었습니다.</p>
+      ) : (
+        cart.map((item) => (
+          <div className="cart-item" key={item.product_id}>
+            <span>{item.name}</span>
+            <span>{item.price.toLocaleString()}원</span>
 
-      {/* 장바구니 상품 목록 */}
-      {cart.map((item) => (
-        <div key={item.product_id} className="product-item">
-          <input
-            type="checkbox"
-            checked={selected.includes(item.product_id)}
-            onChange={() => toggleSelect(item.product_id)}
-          />
+            <div className="qty-box">
+              <button onClick={() => updateQty(item.product_id, item.qty - 1)}>-</button>
+              <span>{item.qty}</span>
+              <button onClick={() => updateQty(item.product_id, item.qty + 1)}>+</button>
+            </div>
 
-          {/* 상품 정보 */}
-          <div style={{ flex: 1 }}>
-            <h3>{item.name}</h3>
-            <p>{item.price.toLocaleString()}원</p>
+            <button className="delete-btn" onClick={() => deleteItem(item.product_id)}>삭제</button>
           </div>
+        ))
+      )}
 
-          {/* 수량 조절 */}
-          <div>
-            <button
-              onClick={() =>
-                updateQty(item.product_id, item.qty - 1)
-              }
-              disabled={item.qty <= 1}
-            >
-              -
-            </button>
-            <span style={{ margin: "0 8px" }}>{item.qty}</span>
-            <button
-              onClick={() =>
-                updateQty(item.product_id, item.qty + 1)
-              }
-            >
-              +
-            </button>
-          </div>
+      <div className="cart-total">총 금액 : {totalPrice.toLocaleString()}원</div>
 
-          {/* 삭제 */}
-          <button onClick={() => removeItem(item)}>삭제</button>
-        </div>
-      ))}
-
-      {/* 총 금액 */}
-      <h2>선택 총 금액: {total.toLocaleString()}원</h2>
-
-      <div style={{ display: "flex", gap: "10px" }}>
-        <button onClick={() => navigate("/")}>계속 쇼핑하기</button>
-        <button onClick={handleCheckout}>선택 상품 결제하기</button>
-      </div>
+      <button className="go-payment" onClick={goPayment}>결제하기</button>
     </div>
   );
 }
-
-export default Cart;
