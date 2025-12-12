@@ -670,33 +670,33 @@ app.get("/api/products/category/:categoryId", async (req, res) => {
   }
 });
 
-function generateOrderNumber() {
-  const d = new Date();
-  const ymd =
-    d.getFullYear().toString() +
-    String(d.getMonth() + 1).padStart(2, "0") +
-    String(d.getDate()).padStart(2, "0");
+// function generateOrderNumber() {
+//   const d = new Date();
+//   const ymd =
+//     d.getFullYear().toString() +
+//     String(d.getMonth() + 1).padStart(2, "0") +
+//     String(d.getDate()).padStart(2, "0");
 
-  const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
-  return `ORD-${ymd}-${rand}`;
-}
-// 1️⃣ 주문 생성
-const orderNumber = generateOrderNumber();
+//   const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
+//   return `ORD-${ymd}-${rand}`;
+// }
+// // 1️⃣ 주문 생성
+// const orderNumber = generateOrderNumber();
 
-const [orderResult] = await pool.query(
-  `INSERT INTO orders (member_id, total_amount, order_number)
-   VALUES (?, ?, ?)`,
-  [memberId, totalAmount, orderNumber]
-);
+// const [orderResult] = await pool.query(
+//   `INSERT INTO orders (member_id, total_amount, order_number)
+//    VALUES (?, ?, ?)`,
+//   [memberId, totalAmount, orderNumber]
+// );
 
-const orderId = orderResult.insertId;
+// const orderId = orderResult.insertId;
 
-// 2️⃣ 결제 저장 (FK는 숫자 order_id)
-await pool.query(
-  `INSERT INTO payments (order_id, amount, status)
-   VALUES (?, ?, 'paid')`,
-  [orderId, totalAmount]
-);
+// // 2️⃣ 결제 저장 (FK는 숫자 order_id)
+// await pool.query(
+//   `INSERT INTO payments (order_id, amount, status)
+//    VALUES (?, ?, 'paid')`,
+//   [orderId, totalAmount]
+// );
 
 app.listen(8080, "0.0.0.0", () => {
   console.log("🚀 서버 실행 중: http://0.0.0.0:8080");

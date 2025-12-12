@@ -118,12 +118,6 @@ function ProductDetail() {
       ) : (
         <h1 className="Productstyles-name">{product.name}</h1>
       )}
-
-      {/* 이미지 업로드 */}
-      {editMode && (
-        <input type="file" onChange={(e) => setEditData({ ...editData, imgFile: e.target.files[0] })} />
-      )}
-
       {/* 가격 */}
       {editMode ? (
         <input
@@ -160,16 +154,26 @@ function ProductDetail() {
               장바구니 담기 🛒
             </button>
           </div>
+
+         
         </>
       )}
 
       {/* 관리자 수정 버튼 */}
-      {localStorage.getItem("role") === "ADMIN" && (
-        !editMode ?
-          <button className="edit-btn" onClick={toggleEdit}>상품 수정</button>
-          :
-          <button className="edit-btn" onClick={submitEdit}>저장하기</button>
+      {localStorage.getItem("role") === "ADMIN" && !editMode && (
+        <button className="edit-btn" onClick={toggleEdit}>상품 수정</button>
       )}
+      {editMode && (
+        <label className="file-upload">
+          이미지 변경
+          <input
+            type="file"
+            onChange={(e) => setEditData({ ...editData, imgFile: e.target.files[0] })}
+          />
+        </label>
+      )}
+
+
 
       {/* 상세 설명 */}
       <div className="Productstyles-sectionBox">
@@ -182,23 +186,24 @@ function ProductDetail() {
         )}
       </div>
 
-      {/* 향 구성 */}
       <div className="Productstyles-sectionBox">
         <h2 className="Productstyles-sectionTitle">향 구성</h2>
 
         {["top_notes", "middle_notes", "base_notes"].map(note => (
-          <p key={note}>
-            <strong>{note.toUpperCase()}:</strong>{" "}
+          <div className="Productstyles-row" key={note}>
+            <strong>{note.toUpperCase()}</strong>
+
             {editMode ? (
               <input
+                className="Productstyles-input"
                 name={note}
                 value={editData[note] || ""}
                 onChange={handleChange}
               />
             ) : (
-              product[note] || "정보 없음"
+              <span className="Productstyles-value">{product[note] || "정보 없음"}</span>
             )}
-          </p>
+          </div>
         ))}
       </div>
 
@@ -206,19 +211,92 @@ function ProductDetail() {
       <div className="Productstyles-sectionBox">
         <h2 className="Productstyles-sectionTitle">향수 스펙</h2>
 
-        {["perfume_type", "volume", "longevity", "sillage"].map(field => (
-          <p key={field}>
-            <strong>{field.toUpperCase()}:</strong>{" "}
-            {editMode ? (
-              <input name={field} value={editData[field] || ""} onChange={handleChange} />
-            ) : (
-              product[field]
-            )}
-          </p>
-        ))}
+        {/* TYPE */}
+        <div className="Productstyles-row">
+          <strong>TYPE</strong>
+          {editMode ? (
+            <select
+              className="Productstyles-select"
+              name="perfume_type"
+              value={editData.perfume_type || ""}
+              onChange={handleChange}
+            >
+              <option value="">선택</option>
+              <option value="EDP">EDP</option>
+              <option value="EDT">EDT</option>
+              <option value="EDC">EDC</option>
+            </select>
+          ) : (
+            <span className="Productstyles-value">{product.perfume_type}</span>
+          )}
+        </div>
+
+        {/* VOLUME */}
+        <div className="Productstyles-row">
+          <strong>VOLUME</strong>
+          {editMode ? (
+            <input
+              type="number"
+              className="Productstyles-input"
+              name="volume"
+              value={editData.volume || ""}
+              onChange={handleChange}
+            />
+          ) : (
+            <span className="Productstyles-value">{product.volume} ml</span>
+          )}
+        </div>
+
+        {/* LONGEVITY */}
+        <div className="Productstyles-row">
+          <strong>LONGEVITY</strong>
+          {editMode ? (
+            <select
+              className="Productstyles-select"
+              name="longevity"
+              value={editData.longevity || ""}
+              onChange={handleChange}
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          ) : (
+            <span className="Productstyles-value">{product.longevity}</span>
+          )}
+        </div>
+
+        {/* SILLAGE */}
+        <div className="Productstyles-row">
+          <strong>SILLAGE</strong>
+          {editMode ? (
+            <select
+              className="Productstyles-select"
+              name="sillage"
+              value={editData.sillage || ""}
+              onChange={handleChange}
+            >
+              <option value="약함">약함</option>
+              <option value="보통">보통</option>
+              <option value="강함">강함</option>
+            </select>
+          ) : (
+            <span className="Productstyles-value">{product.sillage}</span>
+          )}
+        </div>
       </div>
 
-      {/* 리뷰 */}
+      {/* 🔥 저장 버튼을 최하단으로 이동 */}
+      {editMode && (
+        <div className="save-btn-container">
+          <button className="save-btn" onClick={submitEdit}>
+            저장하기
+          </button>
+        </div>
+      )}
+
+       {/* 리뷰 */}
+       {localStorage.getItem("role") === "USER" && (
       <div className="Productstyles-sectionBox review-box">
         <h2 className="Productstyles-sectionTitle">고객 리뷰</h2>
 
@@ -249,6 +327,8 @@ function ProductDetail() {
           <p style={{ color: "red" }}>구매 고객만 리뷰를 작성할 수 있습니다.</p>
         )}
       </div>
+
+       )}
 
       <button className="Productstyles-backBtn" onClick={() => navigate(-1)}>
         ← 뒤로 돌아가기

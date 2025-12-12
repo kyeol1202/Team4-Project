@@ -1,14 +1,13 @@
-// src/component/Payment.jsx
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import "./Payment.css";
 
 const API_URL = "http://192.168.0.224:8080";
 
 export default function Payment() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { items: selectedProducts = [], total = 0, user_id = null } =
-    location.state || {};
+  const { items: selectedProducts = [], total = 0, user_id = null } = location.state || {};
 
   const [sameAsUser, setSameAsUser] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
@@ -21,7 +20,6 @@ export default function Payment() {
     paymentMethod: "",
   });
 
-  // 회원 정보 불러오기
   useEffect(() => {
     if (!user_id) {
       alert("회원 정보가 없습니다.");
@@ -33,17 +31,13 @@ export default function Payment() {
       try {
         const res = await fetch(`${API_URL}/api/user/${user_id}`);
         const data = await res.json();
-
-        if (data.success) {
-          setUserInfo(data.user);
-        }
+        if (data.success) setUserInfo(data.user);
       } catch {
         console.warn("회원정보 API 실패 → 미사용");
       }
     })();
   }, [user_id]);
 
-  // 회원정보 동일 체크
   useEffect(() => {
     if (sameAsUser && userInfo) {
       setPaymentInfo((prev) => ({
@@ -59,6 +53,8 @@ export default function Payment() {
 
   const handlePayment = async () => {
     if (!paymentInfo.paymentMethod) return alert("결제 수단을 선택해주세요.");
+    if (!paymentInfo.address || !paymentInfo.detailAddress)
+      return alert("배송 주소를 반드시 입력해주세요.");
 
     try {
       const res = await fetch(`${API_URL}/api/order/create`, {
@@ -80,9 +76,7 @@ export default function Payment() {
       });
 
       const data = await res.json();
-
       if (!data.success) return alert("주문 저장 실패");
-
       navigate(`/payment-success?order_id=${data.order_id}`);
     } catch (err) {
       console.error("order error", err);
@@ -94,27 +88,22 @@ export default function Payment() {
     <div className="payment-container">
       <h1>결제 페이지</h1>
 
-      {/* 상품 리스트 */}
-      <div className="form-section">
+      {/* 주문 상품 */}
+      <div className="form-section order-items">
         <h2>주문 상품</h2>
         {selectedProducts.map((item) => (
           <div key={item.product_id}>
             {item.name} ({item.qty}) — {(item.price * item.qty).toLocaleString()}원
           </div>
         ))}
-        <strong>총 금액: {total.toLocaleString()}원</strong>
+        <div className="payment-summary">총 금액: {total.toLocaleString()}원</div>
       </div>
 
       {/* 배송지 */}
-      <div className="form-section">
+      <div className="form-section delivery">
         <h2>배송지</h2>
-
-        <label>
-          <input
-            type="checkbox"
-            checked={sameAsUser}
-            onChange={() => setSameAsUser(!sameAsUser)}
-          />
+        <label className="same-user">
+          <input type="checkbox" checked={sameAsUser} onChange={() => setSameAsUser(!sameAsUser)} />
           회원 정보와 동일
         </label>
 
@@ -123,22 +112,18 @@ export default function Payment() {
             key={key}
             placeholder={key}
             value={paymentInfo[key]}
-            disabled={sameAsUser}
-            onChange={(event) =>
-              setPaymentInfo({ ...paymentInfo, [key]: event.target.value })
-            }
+            disabled={sameAsUser && key !== "paymentMethod"}
+            onChange={(e) => setPaymentInfo({ ...paymentInfo, [key]: e.target.value })}
           />
         ))}
       </div>
 
       {/* 결제 수단 */}
-      <div className="form-section">
+      <div className="form-section payment-method">
         <h2>결제 수단</h2>
         <select
           value={paymentInfo.paymentMethod}
-          onChange={(event) =>
-            setPaymentInfo({ ...paymentInfo, paymentMethod: event.target.value })
-          }
+          onChange={(e) => setPaymentInfo({ ...paymentInfo, paymentMethod: e.target.value })}
         >
           <option value="">선택</option>
           <option value="kakao">카카오페이</option>
@@ -148,8 +133,10 @@ export default function Payment() {
         </select>
       </div>
 
-      <button onClick={() => navigate("/cart")}>장바구니로</button>
-      <button onClick={handlePayment}>결제하기</button>
+      <div className="payment-action">
+        <button onClick={() => navigate("/cart")}>장바구니로</button>
+        <button onClick={handlePayment}>결제하기</button>
+      </div>
     </div>
   );
 }
