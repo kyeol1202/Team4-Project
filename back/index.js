@@ -628,6 +628,37 @@ app.post("/game2", async (req, res) => {
   }
 });
 
+app.get("/api/products/category/:categoryId", async (req, res) => {
+  const { categoryId } = req.params;
+  const { sort, min, max } = req.query;
+
+  let query = `SELECT * FROM product WHERE category_id = ?`;
+  let params = [categoryId];
+
+  // 가격 필터 추가
+  if (min) {
+    query += " AND price >= ?";
+    params.push(Number(min));
+  }
+  if (max) {
+    query += " AND price <= ?";
+    params.push(Number(max));
+  }
+
+  // 정렬 추가
+  if (sort === "price_asc") query += " ORDER BY price ASC";
+  if (sort === "price_desc") query += " ORDER BY price DESC";
+  if (sort === "new") query += " ORDER BY product_id DESC"; // 신상품순
+
+  try {
+    const rows = await pool.query(query, params);
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+});
+
 function generateOrderNumber() {
   const d = new Date();
   const ymd =
@@ -655,7 +686,6 @@ await pool.query(
    VALUES (?, ?, 'paid')`,
   [orderId, totalAmount]
 );
-
 
 app.listen(8080, "0.0.0.0", () => {
   console.log("🚀 서버 실행 중: http://0.0.0.0:8080");
