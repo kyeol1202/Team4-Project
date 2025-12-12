@@ -82,29 +82,32 @@ export default function Cart() {
     });
   };
 
-  return (
-    <div>
+   return (
+    <div className="cart-container">
       <h1>장바구니</h1>
 
       {cart.length === 0 ? (
         <p>장바구니가 비었습니다.</p>
       ) : (
         cart.map((item) => (
-          <div key={item.product_id}>
+          <div className="cart-item" key={item.product_id}>
             <span>{item.name}</span>
             <span>{item.price.toLocaleString()}원</span>
 
-            <button onClick={() => updateQty(item.product_id, item.qty - 1)}>-</button>
-            <span>{item.qty}</span>
-            <button onClick={() => updateQty(item.product_id, item.qty + 1)}>+</button>
+            <div className="qty-box">
+              <button onClick={() => updateQty(item.product_id, item.qty - 1)}>-</button>
+              <span>{item.qty}</span>
+              <button onClick={() => updateQty(item.product_id, item.qty + 1)}>+</button>
+            </div>
 
-            <button onClick={() => deleteItem(item.product_id)}>삭제</button>
+            <button className="delete-btn" onClick={() => deleteItem(item.product_id)}>삭제</button>
           </div>
         ))
       )}
 
-      <h3>총 금액: {totalPrice.toLocaleString()}원</h3>
-      <button onClick={goPayment}>결제하기</button>
+      <div className="cart-total">총 금액 : {totalPrice.toLocaleString()}원</div>
+
+      <button className="go-payment" onClick={goPayment}>결제하기</button>
     </div>
   );
 }

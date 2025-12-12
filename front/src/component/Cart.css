@@ -127,6 +127,8 @@
   background: #333;
 }
 
+
+
 @media (max-width: 768px) {
   .cart-item {
     flex-direction: column;
