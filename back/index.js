@@ -628,36 +628,33 @@ app.post("/game2", async (req, res) => {
   }
 });
 
-app.get("/api/products/category/:categoryId", async (req, res) => {
-  const { categoryId } = req.params;
-  const { sort, min, max } = req.query;
+function generateOrderNumber() {
+  const d = new Date();
+  const ymd =
+    d.getFullYear().toString() +
+    String(d.getMonth() + 1).padStart(2, "0") +
+    String(d.getDate()).padStart(2, "0");
 
-  let query = `SELECT * FROM product WHERE category_id = ?`;
-  let params = [categoryId];
+  const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
+  return `ORD-${ymd}-${rand}`;
+}
+// 1️⃣ 주문 생성
+const orderNumber = generateOrderNumber();
 
-  // 가격 필터 추가
-  if (min) {
-    query += " AND price >= ?";
-    params.push(Number(min));
-  }
-  if (max) {
-    query += " AND price <= ?";
-    params.push(Number(max));
-  }
+const [orderResult] = await pool.query(
+  `INSERT INTO orders (member_id, total_amount, order_number)
+   VALUES (?, ?, ?)`,
+  [memberId, totalAmount, orderNumber]
+);
 
-  // 정렬 추가
-  if (sort === "price_asc") query += " ORDER BY price ASC";
-  if (sort === "price_desc") query += " ORDER BY price DESC";
-  if (sort === "new") query += " ORDER BY product_id DESC"; // 신상품순
+const orderId = orderResult.insertId;
 
-  try {
-    const rows = await pool.query(query, params);
-    res.json({ success: true, data: rows });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false });
-  }
-});
+// 2️⃣ 결제 저장 (FK는 숫자 order_id)
+await pool.query(
+  `INSERT INTO payments (order_id, amount, status)
+   VALUES (?, ?, 'paid')`,
+  [orderId, totalAmount]
+);
 
 
 app.listen(8080, "0.0.0.0", () => {
