@@ -663,16 +663,7 @@ app.get("/api/products/category/:categoryId", async (req, res) => {
    주문 + 결제 생성 (FINAL)
 ========================= */
 
-function generateOrderNumber() {
-  const d = new Date();
-  const ymd =
-    d.getFullYear().toString() +
-    String(d.getMonth() + 1).padStart(2, "0") +
-    String(d.getDate()).padStart(2, "0");
 
-  const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
-  return `ORD-${ymd}-${rand}`;
-}
 
 /* ========================= 테스트용 간단 주문 라우트 ========================= */
 app.post("/api/order/create", async (req, res) => {

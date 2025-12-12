@@ -14,7 +14,7 @@ import './component/Payment.css';
 import Layout from "./component/Layout";
 import Main from "./component/main";
 import Cart from "./component/Cart";
-import Payment from "./component/PaymentSuccess";
+import Payment from "./component/Payment";
 
 import Register from "./component/Register";
 import Wish from "./component/Wish";
@@ -31,7 +31,7 @@ import ProductDetail from "./component/ProductDetail";
 import { QnaProvider } from './context/QnaContext';
 import Chatbot from "./component/Chatbot";
 import Category from "./component/Category";
-import PaymentSuccess from "./component/Payment";
+import PaymentSuccess from "./component/PaymentSuccess";
 function App() {
   return (
     
@@ -43,7 +43,7 @@ function App() {
             <Routes>
               <Route element={<Layout />}>
               <>
-              <title>이이</title>
+         
               </>
                 <Route path="/" element={<Main />} />
                 <Route path="/main" element={<Main />} />

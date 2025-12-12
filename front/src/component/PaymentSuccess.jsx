@@ -1,7 +1,7 @@
 // src/component/PaymentSuccess.jsx
 import { useLocation, useNavigate } from "react-router-dom";
 
-export default function PaymentSuccess() {
+export default function Payment() {
   const navigate = useNavigate();
   const location = useLocation();
 
