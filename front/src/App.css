@@ -1255,12 +1255,14 @@ body.dark .header {
 }
 
 body.dark .header-left {
-  border-color: #555;
-  color: white;
+  background-color: #000;
+  border-color: #3a3737;
+  color: rgb(243, 238, 238);
 }
 
 body.dark .header-left:hover {
-  background: #2b2b2b;
+  background: #ffffff;
+  color: rgb(39, 38, 38);
 }
 
 /* 검색창 */
@@ -1315,6 +1317,15 @@ body.dark .login-drawer input {
   color: white;
   border-color: #555;
 }
+
+body.dark .side-menu{
+
+  background: #181818;
+  color: white;
+
+}
+
+
 
 /* FOOTER */
 body.dark .footer button {

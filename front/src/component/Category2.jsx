@@ -46,8 +46,19 @@ function Category2() {
         <div
           style={styles.circleItem}
           onClick={() => handleClick(products[4].id)}
+
+          onMouseEnter={(e) => {
+              e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
+              e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.querySelector('img').style.transform = 'scale(1)';
+              e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
+            }}
         >
           <img src={products[4].img} alt={products[4].name} style={styles.circleImg} />
+
+          
         </div>
 
         <div
@@ -60,6 +71,15 @@ function Category2() {
         <div
           style={styles.circleItem}
           onClick={() => handleClick(products[5].id)}
+
+          onMouseEnter={(e) => {
+              e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
+              e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.querySelector('img').style.transform = 'scale(1)';
+              e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
+            }}  
         >
           <img src={products[5].img} alt={products[5].name} style={styles.circleImg} />
         </div>
@@ -71,6 +91,15 @@ function Category2() {
             key={item.id}
             style={styles.circleItem}
             onClick={() => handleClick(item.id)}
+
+            onMouseEnter={(e) => {
+              e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
+              e.currentTarget.querySelector('img').style.boxShadow = '0 14px 26px rgba(0,0,0,0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.querySelector('img').style.transform = 'scale(1)';
+              e.currentTarget.querySelector('img').style.boxShadow = '0 10px 20px rgba(0,0,0,0.15)';
+            }}
           >
             <img src={item.img} alt={item.name} style={styles.circleImg} />
           </div>
