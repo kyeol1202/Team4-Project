@@ -78,13 +78,17 @@ export default function Cart() {
     <div className="cart-container">
       <h1>장바구니</h1>
 
-      {cart.length === 0 ? (
+      {!Array.isArray(cart) || cart.length === 0 ? (
         <p>장바구니가 비었습니다.</p>
       ) : (
         cart.map((item) => (
           <div className="cart-item" key={item.product_id}>
             <span>{item.name}</span>
-            <span>{item.price.toLocaleString()}원</span>
+            <span>
+        {item.price
+          ? item.price.toLocaleString()
+          : 0}원
+      </span>
 
             <div className="qty-box">
               <button onClick={() => updateQty(item.product_id, item.qty - 1)}>-</button>

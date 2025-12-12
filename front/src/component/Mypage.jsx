@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import "../component/mypage.css";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const API_URL = "http://192.168.0.224:8080";
 
@@ -18,6 +18,17 @@ function Mypage() {
   const [openReviewList, setOpenReviewList] = useState(false);
   const [openQuestionList, setOpenQuestionList] = useState(false);
   const [openQuestionIndex, setOpenQuestionIndex] = useState(null);
+
+//검색어 처리(관리자 용)
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const keyword = params.get("keyword");             // URL 검색어
+  const searchKeyword = keyword?.toLowerCase();      // 검색용 변환
+
+ // ⭐ 관리자 전용 검색 결과
+  const [searchInput, setSearchInput] = useState("");   // 입력창 검색어
+const [products, setProducts] = useState([]);         // 검색된 상품 리스트
+
 
   // 로그인 체크 + 데이터 로드
   useEffect(() => {
@@ -45,6 +56,37 @@ function Mypage() {
     setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
     setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
   }, []);
+
+  
+  // ⭐⭐⭐ 7) 관리자 검색 API 실행(useEffect는 반드시 return 위에!)
+
+
+  useEffect(() => {
+    // ADMIN이 아니면 실행하지 않음
+    
+     if (localStorage.getItem("role") !== "ADMIN") return;
+    if (!searchKeyword) return;
+
+    fetch(`http://192.168.0.224:8080/api/check-users?keyword=${searchKeyword}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setProducts(data.data);
+        }
+      })
+      .catch(err => console.log("검색 에러:", err));
+  }, [searchKeyword]);
+
+
+   function search() {
+  if (!searchInput.trim()) return alert("검색어를 입력하세요!");
+
+  // ⭐ URL에 검색어를 넣어서 state 업데이트
+  navigate(`/mypage?keyword=${searchInput}`);
+}
+
+
+  
 
   // 로그아웃
   const handleLogout = () => {
@@ -95,7 +137,7 @@ function Mypage() {
         <button className="mypage-btn" onClick={() => navigate("/edituserinfo")}>정보 수정</button>
       </div>
 
-      
+        {(localStorage.getItem("role") === "USER") && (
         <>
           {/* 주문 내역 */}
           <section className="mypage-section">
@@ -260,17 +302,38 @@ function Mypage() {
               </div>
             )}
           </section>
-        </>
-    
+          </>
+        )}
 
+          {/* ================= ADMIN 화면 ================= */}
+{localStorage.getItem("role") === "ADMIN" && (
+  <>
+    <h2>관리자 페이지</h2>
 
+    <div className="search-box">
+      <input 
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+        placeholder="검색어 입력"
+      />
+      <button className="mypage-btn" onClick={search}>검색</button>
     </div>
 
+    {products.length > 0 && (
+      <div className="admin-search-grid">
+        {products.map((item) => (
+          <div key={item.member_id} className="admin-product-card">
+            <h4>{item.name}</h4>
 
+          </div>
+        ))}
+      </div>
+    )}
+  </>
+)}
 
-  );
-
-  
+    </div>
+  ); 
 }
 
 export default Mypage;
