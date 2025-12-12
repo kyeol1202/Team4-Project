@@ -58,7 +58,9 @@ export default function Cart() {
     refreshCart();
   };
 
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const totalPrice = Array.isArray(cart)
+  ? cart.reduce((sum, item) => sum + item.price * item.qty, 0)
+  : 0;
 
   // 결제 이동
   const goPayment = () => {
