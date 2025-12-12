@@ -1,30 +1,17 @@
+// src/component/Payment.jsx
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const API_URL = "http://192.168.0.224:5173";
+const API_URL = "http://192.168.0.224:8080";
 
 export default function Payment() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { items: selectedProducts = [], total = 0, user_id = null } = location.state || {};
-
-  const userInfo = {
-    name: "홍길동",
-    phone: "010-1234-5678",
-    email: "user@email.com",
-    address: "서울시 강남구 테헤란로 00",
-    detailAddress: "101동 202호",
-  };
-
-  const placeholders = {
-    name: "이름",
-    phone: "전화번호",
-    email: "이메일",
-    address: "주소",
-    detailAddress: "상세주소",
-  };
+  const { items: selectedProducts = [], total = 0, user_id = null } =
+    location.state || {};
 
   const [sameAsUser, setSameAsUser] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
   const [paymentInfo, setPaymentInfo] = useState({
     name: "",
     phone: "",
@@ -34,93 +21,135 @@ export default function Payment() {
     paymentMethod: "",
   });
 
-  // user_id 없으면 돌아가기
+  // 회원 정보 불러오기
   useEffect(() => {
     if (!user_id) {
       alert("회원 정보가 없습니다.");
       navigate("/cart");
+      return;
     }
-  }, [user_id, navigate]);
 
-  // 회원정보와 동일 체크 시 입력값 채우기
+    (async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/user/${user_id}`);
+        const data = await res.json();
+
+        if (data.success) {
+          setUserInfo(data.user);
+        }
+      } catch {
+        console.warn("회원정보 API 실패 → 미사용");
+      }
+    })();
+  }, [user_id]);
+
+  // 회원정보 동일 체크
   useEffect(() => {
-    setPaymentInfo((prev) =>
-      sameAsUser
-        ? { ...userInfo, paymentMethod: prev.paymentMethod }
-        : { ...prev, name: "", phone: "", email: "", address: "", detailAddress: "" }
-    );
-  }, [sameAsUser]);
+    if (sameAsUser && userInfo) {
+      setPaymentInfo((prev) => ({
+        ...prev,
+        name: userInfo.name,
+        phone: userInfo.phone,
+        email: userInfo.email,
+        address: userInfo.address,
+        detailAddress: userInfo.detailAddress,
+      }));
+    }
+  }, [sameAsUser, userInfo]);
 
   const handlePayment = async () => {
     if (!paymentInfo.paymentMethod) return alert("결제 수단을 선택해주세요.");
-    if (selectedProducts.length === 0) return alert("선택된 상품이 없습니다.");
-    if (!user_id) return alert("회원 정보가 없습니다.");
-    alert("결제창을 불러올 수 없습니다.");
+
+    try {
+      const res = await fetch(`${API_URL}/api/order/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id,
+          items: selectedProducts,
+          total,
+          delivery: {
+            name: paymentInfo.name,
+            phone: paymentInfo.phone,
+            email: paymentInfo.email,
+            address: paymentInfo.address,
+            detail: paymentInfo.detailAddress,
+          },
+          paymentMethod: paymentInfo.paymentMethod,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!data.success) return alert("주문 저장 실패");
+
+      navigate(`/payment-success?order_id=${data.order_id}`);
+    } catch (err) {
+      console.error("order error", err);
+      alert("결제를 진행할 수 없습니다.");
+    }
   };
 
   return (
-    <div className="page-container">
+    <div className="payment-container">
       <h1>결제 페이지</h1>
 
-      {/* 선택 상품 */}
+      {/* 상품 리스트 */}
       <div className="form-section">
-        <h2>선택 상품</h2>
-        {selectedProducts.length === 0 ? (
-          <p>선택된 상품이 없습니다.</p>
-        ) : (
-          selectedProducts.map((item) => (
-            <div key={item.product_id} className="product-item">
-              <span>{item.name} ({item.qty}개)</span>
-              <span>{(item.price * item.qty).toLocaleString()}원</span>
-            </div>
-          ))
-        )}
-        <div className="total-price">총 {total.toLocaleString()}원</div>
+        <h2>주문 상품</h2>
+        {selectedProducts.map((item) => (
+          <div key={item.product_id}>
+            {item.name} ({item.qty}) — {(item.price * item.qty).toLocaleString()}원
+          </div>
+        ))}
+        <strong>총 금액: {total.toLocaleString()}원</strong>
       </div>
 
       {/* 배송지 */}
       <div className="form-section">
-        <h2>배송지 정보</h2>
+        <h2>배송지</h2>
 
-        <div className="same-user">
-          <input type="checkbox" checked={sameAsUser} onChange={() => setSameAsUser(!sameAsUser)} />
+        <label>
+          <input
+            type="checkbox"
+            checked={sameAsUser}
+            onChange={() => setSameAsUser(!sameAsUser)}
+          />
           회원 정보와 동일
-        </div>
+        </label>
 
         {["name", "phone", "email", "address", "detailAddress"].map((key) => (
-          <div key={key} className="form-field">
-            <label>{placeholders[key]}</label>
-            <input
-              value={paymentInfo[key]}
-              onChange={(e) => setPaymentInfo({ ...paymentInfo, [key]: e.target.value })}
-              disabled={sameAsUser}
-              placeholder={placeholders[key]}
-            />
-          </div>
+          <input
+            key={key}
+            placeholder={key}
+            value={paymentInfo[key]}
+            disabled={sameAsUser}
+            onChange={(event) =>
+              setPaymentInfo({ ...paymentInfo, [key]: event.target.value })
+            }
+          />
         ))}
       </div>
 
       {/* 결제 수단 */}
       <div className="form-section">
         <h2>결제 수단</h2>
-        <div className="form-field">
-          <select
-            value={paymentInfo.paymentMethod}
-            onChange={(e) => setPaymentInfo({ ...paymentInfo, paymentMethod: e.target.value })}
-          >
-            <option value="">선택</option>
-            <option value="kakao">카카오페이</option>
-            <option value="naver">네이버페이</option>
-            <option value="card">카드 결제</option>
-            <option value="cash">현금 결제</option>
-          </select>
-        </div>
+        <select
+          value={paymentInfo.paymentMethod}
+          onChange={(event) =>
+            setPaymentInfo({ ...paymentInfo, paymentMethod: event.target.value })
+          }
+        >
+          <option value="">선택</option>
+          <option value="kakao">카카오페이</option>
+          <option value="naver">네이버페이</option>
+          <option value="card">카드 결제</option>
+          <option value="cash">현금 결제</option>
+        </select>
       </div>
 
-      <div className="action-btns">
-        <button className="btn-cancel" onClick={() => navigate("/cart")}>장바구니로 돌아가기</button>
-        <button className="btn-pay" onClick={handlePayment}>결제하기</button>
-      </div>
+      <button onClick={() => navigate("/cart")}>장바구니로</button>
+      <button onClick={handlePayment}>결제하기</button>
     </div>
   );
 }

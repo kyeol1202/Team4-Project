@@ -37,8 +37,7 @@ will-change: opacity;
   animation-delay: .3s;
 }
 
-/* ------------------ 페이지 기본 ------------------ */
-
+/* ------------------ 상단바  ------------------ */
 .top-marquee-bar {
   width: 100%;
   overflow: hidden;
@@ -66,6 +65,9 @@ will-change: opacity;
   100% { transform: translateX(-100%); }
 }
 
+
+
+/* ------------------ 페이지 기본 ------------------ */
 .page1 {
   position: relative;
 }
