@@ -10,11 +10,14 @@ function Layout() {
 
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { addToWish } = useWish(); 
+  const { addToWish } = useWish();
   const [chatbotOpen, setChatbotOpen] = useState(false);
-
+  const [menuOpen, setMenuOpen] = useState(false);
   const [login, setLogin] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+  const [bestOpen, setBestOpen] = useState(false);
+  const [allOpen, setAllOpen] = useState(false);
+  const [seasonOpen, setSeasonOpen] = useState(false);
 
   // ---------------- 상품 등록 변수 ----------------
   const [open, setOpen] = useState(false);
@@ -170,13 +173,67 @@ function Layout() {
       {/* HEADER */}
       <header className="header">
 
-        <div className="header-left">MENU
-          <ul className="dropdown">
-            <li onClick={() => navigate("/category2")}>전체상품</li>
-            <li onClick={() => navigate("/category3")}>여성향수</li>
-            <li onClick={() => navigate("/category4")}>남성향수</li>
-          </ul>
+        <div className="header-left" onClick={() => setMenuOpen(true)}>
+          MENU
         </div>
+        {/* 왼쪽 메뉴 오버레이 */}
+        {menuOpen && (
+          <div className="menu-overlay" onClick={() => setMenuOpen(false)}></div>
+        )}
+
+        {/* 왼쪽 메뉴 슬라이드 박스 */}
+        <div className={`side-menu ${menuOpen ? "open" : ""}`}>
+          <button className="menu-close" onClick={() => setMenuOpen(false)}>✕</button>
+
+          <ul className="menu-list-left">
+
+            {/* BEST 아코디언 */}
+            <li
+              className="accordion-title"
+              onClick={() => setBestOpen(!bestOpen)}
+            >
+              BEST ▼
+            </li>
+
+            <ul className={`accordion-content ${bestOpen ? "open" : ""}`}>
+              <li onClick={() => { navigate("/category2"); setMenuOpen(false); }}>전체인기상품</li>
+              <li onClick={() => { navigate("/category3"); setMenuOpen(false); }}>남성인기상품</li>
+              <li onClick={() => { navigate("/category4"); setMenuOpen(false); }}>여성인기상품</li>
+            </ul>
+
+            <li
+              className="accordion-title"
+              onClick={() => setAllOpen(!allOpen)}
+            >
+              ALL ▼
+            </li>
+
+            <ul className={`accordion-content ${allOpen ? "open" : ""}`}>
+              <li onClick={() => { navigate("/products/all"); setMenuOpen(false); }}>전체 상품</li>
+              <li onClick={() => { navigate("/products/1"); setMenuOpen(false); }}>남성 상품</li>
+              <li onClick={() => { navigate("/products/2"); setMenuOpen(false); }}>여성 상품</li>
+            </ul>
+
+            <li
+              className="accordion-title"
+              onClick={() => setSeasonOpen(!seasonOpen)}
+            >
+              Event ▼
+            </li>
+
+            <ul className={`accordion-content ${seasonOpen ? "open" : ""}`}>
+              <li onClick={() => { navigate("/products/3"); setMenuOpen(false); }}>특가</li>
+              <li onClick={() => { navigate("/products/4"); setMenuOpen(false); }}>크리스마스</li>
+            </ul>
+
+            {/* 다른 메뉴 */}
+            
+
+          </ul>
+
+          
+        </div>
+
 
         <div className="header-title" onClick={() => navigate("/")}>
           Aura
@@ -342,59 +399,60 @@ function Layout() {
           </div>
         </div>
       )}
-      
-  {chatbotOpen && (
-  <div 
-    className="chatbot-overlay"
-    onClick={() => setChatbotOpen(false)}
-    style={{
-      position: "fixed",
-      bottom: "80px",
-      right: "20px",
-      width: "320px",
-      height: "420px",
-      background: "white",
-      borderRadius: "20px",
-      boxShadow: "0 0 15px rgba(0,0,0,0.3)",
-      zIndex: 9999,
-      display: "flex",
-      flexDirection: "column",
-      overflow: "hidden"
-    }}
-  >
 
-    {/* 닫기 버튼 */}
-    <button 
-      onClick={(e) => {
-        e.stopPropagation();   // ⭐ 클릭해도 팝업 안 닫힘 방지
-        setChatbotOpen(false);
-      }}
-      style={{
-        border: "none",
-        background: "none",
-        padding: "10px",
-        fontSize: "20px",
-        cursor: "pointer",
-        alignSelf: "flex-end"
-      }}
-    >
-      ✕
-    </button>
+      {chatbotOpen && (
+        <div
+          className="chatbot-overlay"
+          onClick={() => setChatbotOpen(false)}
+          style={{
+            position: "fixed",
+            bottom: "80px",
+            right: "20px",
+            width: "320px",
+            height: "420px",
+            background: "white",
+            borderRadius: "20px",
+            boxShadow: "0 0 15px rgba(0,0,0,0.3)",
+            zIndex: 9999,
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden"
+          }}
+        >
 
-    {/* 챗봇 콘텐츠 영역 (여기 클릭해도 닫히면 안됨!) */}
-    <div 
-      style={{ flex: 1, overflowY: "auto" }}
-      onClick={(e) => e.stopPropagation()}   // ⭐ 핵심
-    >
-      <Chatbot />
-    </div>
+          {/* 닫기 버튼 */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();   // ⭐ 클릭해도 팝업 안 닫힘 방지
+              setChatbotOpen(false);
+            }}
+            style={{
+              border: "none",
+              background: "none",
+              padding: "10px",
+              fontSize: "20px",
+              cursor: "pointer",
+              alignSelf: "flex-end"
+            }}
+          >
+            ✕
+          </button>
 
-  </div>
-)}
+          {/* 챗봇 콘텐츠 영역 (여기 클릭해도 닫히면 안됨!) */}
+          <div
+            style={{ flex: 1, overflowY: "auto" }}
+            onClick={(e) => e.stopPropagation()}   // ⭐ 핵심
+          >
+            <Chatbot />
+          </div>
+
+        </div>
+      )}
 
 
 
-  </>
-)};
+    </>
+  )
+};
 
 export default Layout;
