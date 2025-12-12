@@ -95,7 +95,7 @@ function Mypage() {
         <button className="mypage-btn" onClick={() => navigate("/edituserinfo")}>정보 수정</button>
       </div>
 
- 
+      
         <>
           {/* 주문 내역 */}
           <section className="mypage-section">
