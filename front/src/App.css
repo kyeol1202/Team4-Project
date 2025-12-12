@@ -1325,7 +1325,12 @@ body.dark .side-menu{
 
 }
 
+body.dark .side-menu{
 
+  background: #181818;
+  color: white;
+
+}
 
 /* FOOTER */
 body.dark .footer button {
