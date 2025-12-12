@@ -28,6 +28,7 @@ import EditUserInfo from "./component/EditUserInfo";
 import ProductDetail from "./component/ProductDetail";
 import { QnaProvider } from './context/QnaContext';
 import Chatbot from "./component/Chatbot";
+import Category from "./component/Category";
 function App() {
   return (
     <AuthProvider>
@@ -56,6 +57,7 @@ function App() {
                 <Route path="/orderdetail" element={<OrderDetail />} />
                 <Route path="/edituserinfo" element={<EditUserInfo />} />
                 <Route path="/product/:id" element={<ProductDetail />} />
+                <Route path="/products/:categoryId" element={<Category />} />
                 <Route path="/register" element={<Register />} />
               </Route>
             </Routes>

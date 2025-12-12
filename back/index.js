@@ -102,7 +102,10 @@ app.get("/api/products", async (req, res) => {
   const keyword = req.query.keyword || "";
   try {
     const rows = await pool.query(
-      "SELECT product_id, name, price, img FROM product WHERE name LIKE ? OR search_tags LIKE ?",
+      `SELECT product_id, name, price, img, description 
+       FROM product 
+       WHERE name LIKE ? 
+       OR search_tags LIKE ?`,
       [`%${keyword}%`, `%${keyword}%`]
     );
     res.json({ success: true, data: rows });
@@ -141,11 +144,32 @@ app.get("/api/search", async (req, res) => {
 /* ------------------------- 상품 목록 ------------------------- */
 
 app.get("/api/products/all", async (req, res) => {
+  let { sort, min, max } = req.query;
+
+  let query = "SELECT * FROM product WHERE 1=1";
+  let params = [];
+
+  // 가격 필터
+  if (min) {
+    query += " AND price >= ?";
+    params.push(Number(min));
+  }
+  if (max) {
+    query += " AND price <= ?";
+    params.push(Number(max));
+  }
+
+  // 정렬
+  if (sort === "price_asc") query += " ORDER BY price ASC";
+  else if (sort === "price_desc") query += " ORDER BY price DESC";
+  else if (sort === "new") query += " ORDER BY product_id DESC";
+
   try {
-    const rows = await pool.query("SELECT * FROM product");
+    const rows = await pool.query(query, params);
     res.json({ success: true, data: rows });
   } catch (err) {
-    res.status(500).json({ success: false });
+    console.log(err);
+    res.status(500).json({ success: false, message: "DB 오류" });
   }
 });
 
@@ -603,6 +627,35 @@ app.post("/game2", async (req, res) => {
     res.json({ success: false, message: "DB 오류" });
   }
 });
+
+function generateOrderNumber() {
+  const d = new Date();
+  const ymd =
+    d.getFullYear().toString() +
+    String(d.getMonth() + 1).padStart(2, "0") +
+    String(d.getDate()).padStart(2, "0");
+
+  const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
+  return `ORD-${ymd}-${rand}`;
+}
+// 1️⃣ 주문 생성
+const orderNumber = generateOrderNumber();
+
+const [orderResult] = await pool.query(
+  `INSERT INTO orders (member_id, total_amount, order_number)
+   VALUES (?, ?, ?)`,
+  [memberId, totalAmount, orderNumber]
+);
+
+const orderId = orderResult.insertId;
+
+// 2️⃣ 결제 저장 (FK는 숫자 order_id)
+await pool.query(
+  `INSERT INTO payments (order_id, amount, status)
+   VALUES (?, ?, 'paid')`,
+  [orderId, totalAmount]
+);
+
 
 app.listen(8080, "0.0.0.0", () => {
   console.log("🚀 서버 실행 중: http://0.0.0.0:8080");
