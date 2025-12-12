@@ -1,8 +1,8 @@
+// src/component/PaymentSuccess.jsx
 import { useLocation, useNavigate } from "react-router-dom";
 
-const API_URL = "http://192.168.0.224:8080";
-
-export default function Payment() {
+export default function PaymentSuccess() {
+  const navigate = useNavigate();
   const location = useLocation();
 
   // ✅ Payment.jsx에서 state로 받은 주문번호
