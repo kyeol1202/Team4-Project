@@ -1,4 +1,3 @@
-// src/component/Payment.jsx
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -58,7 +57,19 @@ export default function Payment() {
   }, [sameAsUser, userInfo]);
 
   const handlePayment = async () => {
-    if (!paymentInfo.paymentMethod) return alert("결제 수단을 선택해주세요.");
+    // 결제 수단 체크
+    if (!paymentInfo.paymentMethod) {
+      return alert("결제 수단을 선택해주세요.");
+    }
+
+    // 주소 필수 체크
+    if (!paymentInfo.address || paymentInfo.address.trim() === "") {
+      return alert("배송 주소를 반드시 입력해주세요.");
+    }
+
+    if (!paymentInfo.detailAddress || paymentInfo.detailAddress.trim() === "") {
+      return alert("상세 주소를 반드시 입력해주세요.");
+    }
 
     try {
       const res = await fetch(`${API_URL}/api/order/create`, {
@@ -123,7 +134,7 @@ export default function Payment() {
             key={key}
             placeholder={key}
             value={paymentInfo[key]}
-            disabled={sameAsUser}
+            disabled={sameAsUser && (key !== "paymentMethod")}
             onChange={(event) =>
               setPaymentInfo({ ...paymentInfo, [key]: event.target.value })
             }
