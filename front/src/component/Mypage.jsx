@@ -3,11 +3,12 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import "../component/mypage.css";
 
+const API_URL = "http://192.168.0.224:8080";
+
 function Mypage() {
   const navigate = useNavigate();
   const { isLogin, logout, user } = useAuth();
   const userId = localStorage.getItem("member_id") || user?.id;
-  const ordersData = localStorage.getItem("orders");
 
   const [orders, setOrders] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -18,7 +19,7 @@ function Mypage() {
   const [openQuestionList, setOpenQuestionList] = useState(false);
   const [openQuestionIndex, setOpenQuestionIndex] = useState(null);
 
-  // 로그인 체크 및 데이터 불러오기
+  // 로그인 체크 + 데이터 로드
   useEffect(() => {
     const loginCheck = localStorage.getItem("login");
     if (loginCheck !== "true") {
@@ -26,7 +27,21 @@ function Mypage() {
       return;
     }
 
-    setOrders(ordersData ? JSON.parse(ordersData) : []);
+    (async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/order/${userId}`);
+        const data = await res.json();
+
+        if (data.success) {
+          setOrders(data.orders);
+        } else {
+          setOrders(JSON.parse(localStorage.getItem("orders")) || []);
+        }
+      } catch {
+        setOrders(JSON.parse(localStorage.getItem("orders")) || []);
+      }
+    })();
+
     setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
     setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
   }, []);
@@ -34,11 +49,7 @@ function Mypage() {
   // 로그아웃
   const handleLogout = () => {
     localStorage.setItem("login", "false");
-    localStorage.setItem("user", JSON.stringify(null));
-    localStorage.setItem("member_id", JSON.stringify(null));
-    localStorage.setItem("role", JSON.stringify(null));
-    localStorage.setItem("user_id", JSON.stringify(null));
-    alert(`로그아웃 되었습니다.`);
+    alert("로그아웃 되었습니다.");
     navigate("/main");
     navigate(0);
   };
@@ -76,7 +87,7 @@ function Mypage() {
     alert(`리뷰 수정 준비중: ${review.productName}`);
   };
 
-  return (
+ return (
     <div className="mypage-container">
       {/* 상단 버튼 */}
       <div className="mypage-actions">
@@ -84,7 +95,7 @@ function Mypage() {
         <button className="mypage-btn" onClick={() => navigate("/edituserinfo")}>정보 수정</button>
       </div>
 
-      {(localStorage.getItem("role") === "USER") && (
+ 
         <>
           {/* 주문 내역 */}
           <section className="mypage-section">
@@ -250,14 +261,7 @@ function Mypage() {
             )}
           </section>
         </>
-      )}
-
-      {(localStorage.getItem("role") === "ADMIN") && (
-          <>
-
-          
-          </>
-      )}
+    
 
 
     </div>

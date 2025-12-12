@@ -32,15 +32,22 @@ function Search() {
                 <p className="no-result">검색 결과가 없습니다.</p>
             )}
 
-            <div className="product-grid">
+            <div className="search-grid">
                 {products.map((item) => (
-                    <div className="product-card" key={item.product_id}>
-                        <button onClick={() => navigate(`/product/${item.product_id}`)}>
-                            <img src={`http://192.168.0.224:8080${item.img}`} />
+                    <div className="search-card" key={item.product_id}>
+                        <button
+                            className="search-img-btn"
+                            onClick={() => navigate(`/product/${item.product_id}`)}
+                        >
+                            <img
+                                src={`http://192.168.0.224:8080${item.img}`}
+                                className="search-img"
+                            />
                         </button>
 
-                        <h3 className="product-name">{item.name}</h3>
-                        <p className="product-desc">{item.desc}</p>
+                        <h3 className="search-name">{item.name}</h3>
+                        <p className="category-desc">{item.description?.slice(0, 25)}...</p>
+                        <p className="category-price">{Number(item.price).toLocaleString()}원</p>
                     </div>
                 ))}
             </div>
