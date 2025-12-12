@@ -1,19 +1,25 @@
 /* =========================
-   장바구니 / 결제 페이지 공통 (가운데 정렬 + 반응형)
-========================= */
+   전체 결제 페이지 CSS
+=========================== */
+body {
+  margin: 0;
+  font-family: 'Cormorant', serif;
+  background-color: #f5f5f5;
+  color: #111;
+}
+
+/* 공통 컨테이너 */
 .page-container {
   max-width: 900px;
   width: 90%;
-  margin: 40px auto;           /* 화면 가운데 정렬 */
+  margin: 40px auto;
   padding: 40px 30px;
-  font-family: 'Cormorant', serif;
-  color: #111;
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
-  align-items: center;         /* 내부 요소 가운데 정렬 */
+  align-items: center;
 }
 
 .page-container h1 {
@@ -36,7 +42,7 @@
   padding: 16px 18px;
   margin: 16px 0;
   background: #fff;
-  width: 100%;                 /* container 안에서 가운데 유지 */
+  width: 100%;
   transition: all 0.3s ease;
 }
 
@@ -49,7 +55,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;         /* 가운데 정렬 */
+  align-items: center;
   gap: 8px;
 }
 
@@ -99,7 +105,7 @@
   margin-bottom: 24px;
   width: 100%;
   display: flex;
-  justify-content: center;     /* 가운데 정렬 */
+  justify-content: center;
 }
 
 .select-all button {
@@ -119,7 +125,7 @@
 .total-price {
   font-size: 22px;
   font-weight: 600;
-  text-align: center;          /* 가운데 정렬 */
+  text-align: center;
   margin-top: 20px;
 }
 
@@ -128,7 +134,7 @@
   display: flex;
   gap: 16px;
   margin-top: 28px;
-  justify-content: center;      /* 버튼 가운데 정렬 */
+  justify-content: center;
   width: 100%;
 }
 
@@ -163,7 +169,7 @@
 }
 
 /* =========================
-   결제 페이지 폼 / 배송지 (세로 스택)
+   결제 페이지 폼 / 배송지
 =========================== */
 .form-section {
   border: 1px solid #ddd;
@@ -175,7 +181,7 @@
   gap: 24px;
   width: 100%;
   max-width: 600px;
-  align-items: center;         /* 내부 요소 가운데 정렬 */
+  align-items: center;
 }
 
 .form-section h2 {
@@ -188,7 +194,7 @@
 .same-user {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   font-size: 16px;
 }
 
@@ -200,13 +206,13 @@
 .form-field {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   width: 100%;
   align-items: center;
 }
 
 .form-field label {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   color: #333;
   text-align: center;
@@ -216,11 +222,43 @@
 .form-field select {
   width: 100%;
   max-width: 500px;
-  padding: 18px 22px;
-  border-radius: 12px;
+  padding: 26px 30px;   /* 입력창 크게 */
+  font-size: 20px;
+  border-radius: 16px;
   border: 1px solid #ccc;
   background-color: #fafafa;
-  font-size: 17px;
+}
+
+/* =========================
+   결제수단 버튼
+=========================== */
+.payment-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.payment-methods button {
+  padding: 24px 32px;
+  font-size: 20px;
+  border-radius: 16px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background-color: #f8f8f8;
+  transition: all 0.3s ease;
+}
+
+.payment-methods button:hover {
+  background-color: #eaeaea;
+}
+
+.payment-methods button.selected {
+  border-color: #000;
+  background-color: #000;
+  color: #fff;
 }
 
 /* =========================
@@ -312,8 +350,20 @@ body.dark .form-field select {
   border: 1px solid #555;
 }
 
+body.dark .payment-methods button {
+  background: #222;
+  color: #e4e4e4;
+  border: 1px solid #555;
+}
+
+body.dark .payment-methods button.selected {
+  background: #000;
+  color: #fff;
+  border-color: #fff;
+}
+
 /* =========================
-   반응형 (모바일)
+   반응형
 =========================== */
 @media (max-width: 768px) {
   .page-container {
@@ -347,5 +397,12 @@ body.dark .form-field select {
   .form-field input,
   .form-field select {
     max-width: 100%;
+    padding: 22px 26px;
+    font-size: 18px;
+  }
+
+  .payment-methods button {
+    padding: 20px 28px;
+    font-size: 18px;
   }
 }
