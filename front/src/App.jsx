@@ -8,7 +8,8 @@ import "./Search.css";
 import './component/Category.css';
 import "./component/Service-qna.css";
 import "./component/Mypage.css"; // CSS import
-import './component/cart-pay.css';
+import './component/cart.css';
+import './component/Payment.css';
 
 import Layout from "./component/Layout";
 import Main from "./component/main";
