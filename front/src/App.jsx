@@ -31,8 +31,7 @@ import ProductDetail from "./component/ProductDetail";
 import { QnaProvider } from './context/QnaContext';
 import Chatbot from "./component/Chatbot";
 import Category from "./component/Category";
-
-
+import PaymentSuccess from "./component/PaymentSuccess";
 function App() {
   return (
     
@@ -53,7 +52,7 @@ function App() {
                 <Route path="/category2" element={<Category2 />} />
                 <Route path="/category3" element={<Category3 />} />
                 <Route path="/category4" element={<Category4 />} />
-
+                <Route path="/paymentSuccess" element={<PaymentSuccess/>} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/payment" element={<Payment />} />
                 <Route path="/payment-success" element={<PaymentSuccess/>}/>

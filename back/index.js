@@ -38,21 +38,10 @@ const upload = multer({ storage });
 /* ------------------------- 회원 관리 ------------------------- */
 
 app.get("/api/check-users", async (req, res) => {
-  const keyword = req.query.keyword;
-
-  if (!keyword || keyword.trim() === "") {
-    return res.json({ success: true, data: [] });  // 키워드 없으면 빈 값 반환
-  }
-
   try {
-    const [rows] = await pool.query(
-      `SELECT * FROM member WHERE name LIKE ?`,
-      [`%${keyword}%`]
-    );
-
+    const rows = await pool.query("SELECT * FROM member");
     res.json({ success: true, data: rows });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
@@ -670,34 +659,121 @@ app.get("/api/products/category/:categoryId", async (req, res) => {
   }
 });
 
-// function generateOrderNumber() {
-//   const d = new Date();
-//   const ymd =
-//     d.getFullYear().toString() +
-//     String(d.getMonth() + 1).padStart(2, "0") +
-//     String(d.getDate()).padStart(2, "0");
+/* =========================
+   주문 + 결제 생성 (FINAL)
+========================= */
 
-//   const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
-//   return `ORD-${ymd}-${rand}`;
-// }
-// // 1️⃣ 주문 생성
-// const orderNumber = generateOrderNumber();
+function generateOrderNumber() {
+  const d = new Date();
+  const ymd =
+    d.getFullYear().toString() +
+    String(d.getMonth() + 1).padStart(2, "0") +
+    String(d.getDate()).padStart(2, "0");
 
-// const [orderResult] = await pool.query(
-//   `INSERT INTO orders (member_id, total_amount, order_number)
-//    VALUES (?, ?, ?)`,
-//   [memberId, totalAmount, orderNumber]
-// );
+  const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
+  return `ORD-${ymd}-${rand}`;
+}
 
-// const orderId = orderResult.insertId;
+/* ========================= 테스트용 간단 주문 라우트 ========================= */
+app.post("/api/order/create", async (req, res) => {
+  console.log("🎯 주문 라우트 호출됨!");
+  console.log("📦 받은 데이터:", req.body);
 
-// // 2️⃣ 결제 저장 (FK는 숫자 order_id)
-// await pool.query(
-//   `INSERT INTO payments (order_id, amount, status)
-//    VALUES (?, ?, 'paid')`,
-//   [orderId, totalAmount]
-// );
+  const { user_id, items, total, delivery, paymentMethod } = req.body;
 
+  // 검증
+  if (!user_id) {
+    return res.status(400).json({ success: false, message: "로그인 필요" });
+  }
+
+  if (!items || items.length === 0) {
+    return res.status(400).json({ success: false, message: "주문 상품 없음" });
+  }
+
+  if (!delivery?.name || !delivery?.phone || !delivery?.address) {
+    return res.status(400).json({ success: false, message: "배송 정보 누락" });
+  }
+
+  if (!['kakaopay','naverpay','card','bank'].includes(paymentMethod)) {
+    return res.status(400).json({ success: false, message: "유효하지 않은 결제 수단" });
+  }
+
+  let conn;
+  
+  try {
+    conn = await pool.getConnection();
+    console.log("✅ DB 연결 성공");
+    
+    await conn.beginTransaction();
+    console.log("✅ 트랜잭션 시작");
+
+    // 주문번호 생성
+    const d = new Date();
+    const ymd = d.getFullYear().toString() +
+      String(d.getMonth() + 1).padStart(2, "0") +
+      String(d.getDate()).padStart(2, "0");
+    const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const orderNumber = `ORD-${ymd}-${rand}`;
+
+    // 1. 주문 생성
+    const orderResult = await conn.query(
+      `INSERT INTO orders
+       (member_id, total_amount, shipping_address, receiver_name, receiver_phone, order_number, status)
+       VALUES (?, ?, ?, ?, ?, ?, 'paid')`,
+      [user_id, total, delivery.address, delivery.name, delivery.phone, orderNumber]
+    );
+
+    const orderId = Number(orderResult.insertId);
+    console.log("✅ 주문 생성 완료, ID:", orderId);
+
+    // 2. 주문 상품 저장
+    for (const item of items) {
+      await conn.query(
+        `INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal)
+         VALUES (?, ?, ?, ?, ?)`,
+        [orderId, item.product_id, item.qty, item.price, item.price * item.qty]
+      );
+    }
+    console.log("✅ 주문 상품 저장 완료");
+
+    // 3. 결제 정보 저장
+    await conn.query(
+      `INSERT INTO payments (order_id, payment_method, amount, status)
+       VALUES (?, ?, ?, 'paid')`,
+      [orderId, paymentMethod, total]
+    );
+    console.log("✅ 결제 정보 저장 완료");
+
+    // 4. 장바구니 비우기
+    await conn.query(`DELETE FROM cart WHERE member_id = ?`, [user_id]);
+    console.log("✅ 장바구니 비우기 완료");
+
+    await conn.commit();
+    console.log("✅ 트랜잭션 커밋 완료");
+
+    return res.json({ success: true, order_id: orderId });
+
+  } catch (err) {
+    if (conn) {
+      await conn.rollback();
+      console.log("⚠️ 트랜잭션 롤백");
+    }
+    console.error("❌ 주문 생성 오류:", err);
+
+    return res.status(500).json({
+      success: false,
+      message: "결제 처리 중 오류 발생",
+      error: err.message
+    });
+  } finally {
+    if (conn) {
+      conn.release();
+      console.log("🔓 DB 연결 해제");
+    }
+  }
+});
+
+// 서버 시작 (맨 마지막!)
 app.listen(8080, "0.0.0.0", () => {
   console.log("🚀 서버 실행 중: http://0.0.0.0:8080");
   console.log("📁 Static files: http://0.0.0.0:8080/uploads");

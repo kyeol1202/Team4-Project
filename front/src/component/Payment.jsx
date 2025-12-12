@@ -1,142 +1,173 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import "./Payment.css";
+// src/component/PaymentSuccess.jsx
+import { useLocation, useNavigate } from "react-router-dom";
 
-const API_URL = "http://192.168.0.224:8080";
-
-export default function Payment() {
+export default function PaymentSuccess() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { items: selectedProducts = [], total = 0, user_id = null } = location.state || {};
 
-  const [sameAsUser, setSameAsUser] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
-  const [paymentInfo, setPaymentInfo] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    address: "",
-    detailAddress: "",
-    paymentMethod: "",
-  });
+  // ✅ Payment.jsx에서 state로 받은 주문번호
+  const orderId = location.state?.orderId || null;
 
-  useEffect(() => {
-    if (!user_id) {
-      alert("회원 정보가 없습니다.");
-      navigate("/cart");
-      return;
-    }
+  if (!orderId) {
+    return (
+      <div className="pay-success-wrapper">
+        <div className="pay-success-card">
+          <h2 className="pay-success-title">잘못된 접근입니다</h2>
+          <button
+            className="pay-success-btn dark"
+            onClick={() => navigate("/")}
+          >
+            홈으로 이동
+          </button>
+        </div>
 
-    (async () => {
-      try {
-        const res = await fetch(`${API_URL}/api/user/${user_id}`);
-        const data = await res.json();
-        if (data.success) setUserInfo(data.user);
-      } catch {
-        console.warn("회원정보 API 실패 → 미사용");
-      }
-    })();
-  }, [user_id]);
-
-  useEffect(() => {
-    if (sameAsUser && userInfo) {
-      setPaymentInfo((prev) => ({
-        ...prev,
-        name: userInfo.name,
-        phone: userInfo.phone,
-        email: userInfo.email,
-        address: userInfo.address,
-        detailAddress: userInfo.detailAddress,
-      }));
-    }
-  }, [sameAsUser, userInfo]);
-
-  const handlePayment = async () => {
-    if (!paymentInfo.paymentMethod) return alert("결제 수단을 선택해주세요.");
-    if (!paymentInfo.address || !paymentInfo.detailAddress)
-      return alert("배송 주소를 반드시 입력해주세요.");
-
-    try {
-      const res = await fetch(`${API_URL}/api/order/create`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id,
-          items: selectedProducts,
-          total,
-          delivery: {
-            name: paymentInfo.name,
-            phone: paymentInfo.phone,
-            email: paymentInfo.email,
-            address: paymentInfo.address,
-            detail: paymentInfo.detailAddress,
-          },
-          paymentMethod: paymentInfo.paymentMethod,
-        }),
-      });
-
-      const data = await res.json();
-      if (!data.success) return alert("주문 저장 실패");
-      navigate(`/payment-success?order_id=${data.order_id}`);
-    } catch (err) {
-      console.error("order error", err);
-      alert("결제를 진행할 수 없습니다.");
-    }
-  };
+        {/* 컴포넌트 전용 스타일 */}
+        <style>{successStyle}</style>
+      </div>
+    );
+  }
 
   return (
-    <div className="payment-container">
-      <h1>결제 페이지</h1>
+    <div className="pay-success-wrapper">
+      <div className="pay-success-card">
+        <div className="pay-success-icon">✓</div>
 
-      {/* 주문 상품 */}
-      <div className="form-section order-items">
-        <h2>주문 상품</h2>
-        {selectedProducts.map((item) => (
-          <div key={item.product_id}>
-            {item.name} ({item.qty}) — {(item.price * item.qty).toLocaleString()}원
-          </div>
-        ))}
-        <div className="payment-summary">총 금액: {total.toLocaleString()}원</div>
+        <h2 className="pay-success-title">결제가 완료되었습니다</h2>
+        <p className="pay-success-desc">
+          주문이 정상적으로 접수되었습니다.
+        </p>
+
+        <div className="pay-success-order">
+          <span>주문 번호</span>
+          <strong>{orderId}</strong>
+        </div>
+
+        <div className="pay-success-actions">
+          <button
+            className="pay-success-btn outline"
+            onClick={() => navigate("/mypage")}
+          >
+            마이페이지
+          </button>
+          <button
+            className="pay-success-btn dark"
+            onClick={() => navigate("/")}
+          >
+            홈으로
+          </button>
+        </div>
       </div>
 
-      {/* 배송지 */}
-      <div className="form-section delivery">
-        <h2>배송지</h2>
-        <label className="same-user">
-          <input type="checkbox" checked={sameAsUser} onChange={() => setSameAsUser(!sameAsUser)} />
-          회원 정보와 동일
-        </label>
-
-        {["name", "phone", "email", "address", "detailAddress"].map((key) => (
-          <input
-            key={key}
-            placeholder={key}
-            value={paymentInfo[key]}
-            disabled={sameAsUser && key !== "paymentMethod"}
-            onChange={(e) => setPaymentInfo({ ...paymentInfo, [key]: e.target.value })}
-          />
-        ))}
-      </div>
-
-      {/* 결제 수단 */}
-      <div className="form-section payment-method">
-        <h2>결제 수단</h2>
-        <select
-          value={paymentInfo.paymentMethod}
-          onChange={(e) => setPaymentInfo({ ...paymentInfo, paymentMethod: e.target.value })}
-        >
-          <option value="">선택</option>
-          <option value="kakao">카카오페이</option>
-          <option value="naver">네이버페이</option>
-          <option value="card">카드 결제</option>
-          <option value="cash">현금 결제</option>
-        </select>
-      </div>
-
-      <div className="payment-action">
-        <button onClick={() => navigate("/cart")}>장바구니로</button>
-        <button onClick={handlePayment}>결제하기</button>
-      </div>
+      {/* 컴포넌트 전용 스타일 */}
+      <style>{successStyle}</style>
     </div>
   );
 }
+
+/* ===============================
+   PaymentSuccess 전용 스타일
+================================ */
+const successStyle = `
+.pay-success-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fafafa;
+  font-family: 'Cormorant', serif;
+}
+
+.pay-success-card {
+  width: 100%;
+  max-width: 520px;
+  padding: 48px 36px;
+  background: #ffffff;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 14px 35px rgba(0,0,0,0.1);
+  animation: fadeUp 0.4s ease;
+}
+
+.pay-success-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: #000;
+  color: #fff;
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pay-success-title {
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #111;
+}
+
+.pay-success-desc {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 28px;
+}
+
+.pay-success-order {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px dashed #ccc;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 32px;
+  font-size: 15px;
+}
+
+.pay-success-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.pay-success-btn {
+  flex: 1;
+  padding: 14px 0;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pay-success-btn.dark {
+  background: #000;
+  color: #fff;
+  border: none;
+}
+
+.pay-success-btn.dark:hover {
+  background: #222;
+}
+
+.pay-success-btn.outline {
+  background: #fff;
+  color: #111;
+  border: 1px solid #ccc;
+}
+
+.pay-success-btn.outline:hover {
+  background: #f5f5f5;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+`;
