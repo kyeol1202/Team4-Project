@@ -1,141 +1,364 @@
 /* /* =========================
    전체 결제 페이지 CSS
 =========================== */
+body {
+  margin: 0;
+  background-color: #f5f5f5;
+  color: #111;
+}
+
+/* 공통 컨테이너 */
 .page-container {
   max-width: 900px;
   width: 90%;
   margin: 40px auto;
-  padding: 30px 20px;
-  font-family: 'Cormorant', serif;
-  color: #000;
+  padding: 40px 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
-  gap: 30px; /* 섹션 간 간격 */
+  align-items: center;
+}
+
+.page-container h1 {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
 /* =========================
-   섹션 카드
+   장바구니 상품
 =========================== */
-.section-card {
-  background: #fff;
+.product-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   border: 1px solid #ddd;
   border-radius: 12px;
-  padding: 25px 20px;
+  padding: 16px 18px;
+  margin: 16px 0;
+  background: #fff;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.product-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+}
+
+.product-info {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
-}
-
-.section-card:last-child {
-  margin-bottom: 0;
-}
-
-/* =========================
-   섹션 제목
-=========================== */
-.section-title {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 6px;
-}
-
-/* =========================
-   장바구니 리스트
-=========================== */
-.cart-list {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.cart-item {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
-  border: 1px solid #eee;
-  border-radius: 10px;
+  gap: 8px;
+}
+
+.product-name {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.product-price {
+  font-size: 16px;
+  color: #555;
+}
+
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qty-control button {
+  padding: 8px 14px;
+  background: #f3f3f3;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
   transition: 0.2s;
 }
 
-.cart-item:hover {
-  background-color: #fafafa;
+.qty-control button:hover {
+  background: #e0e0e0;
+}
+
+.remove-btn {
+  padding: 8px 14px;
+  border: none;
+  background: #ff5c5c;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background: #e04848;
+}
+
+.select-all {
+  margin-bottom: 24px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.select-all button {
+  padding: 10px 18px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f8f8f8;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.select-all button:hover {
+  background: #eaeaea;
+}
+
+.total-price {
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* 버튼 그룹 */
+.action-btns {
+  display: flex;
+  gap: 16px;
+  margin-top: 28px;
+  justify-content: center;
+  width: 100%;
+}
+
+.btn-cancel,
+.btn-pay {
+  flex: 1;
+  padding: 16px 0;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-cancel {
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+}
+
+.btn-cancel:hover {
+  background: #eaeaea;
+}
+
+.btn-pay {
+  border: none;
+  background: #000;
+  color: #fff;
+}
+
+.btn-pay:hover {
+  background: #333;
 }
 
 /* =========================
-   결제 폼
+   결제 페이지 폼 / 배송지
 =========================== */
+.form-section {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 28px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 600px;
+  align-items: center;
+}
+
+.form-section h2 {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.same-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+}
+
+.same-user input[type="checkbox"] {
+  transform: scale(1.35);
+  cursor: pointer;
+}
+
 .form-field {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
+  width: 100%;
+  align-items: center;
 }
 
 .form-field label {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 500;
   color: #333;
+  text-align: center;
 }
 
 .form-field input,
 .form-field select {
   width: 100%;
-  padding: 16px 18px;
-  border-radius: 10px;
+  max-width: 500px;
+  padding: 26px 30px;   /* 입력창 크게 */
+  font-size: 20px;
+  border-radius: 16px;
   border: 1px solid #ccc;
   background-color: #fafafa;
-  font-size: 16px;
-  transition: all 0.2s ease;
-}
-
-.form-field input:focus,
-.form-field select:focus {
-  border-color: #111;
-  outline: none;
-}
-
-.form-field input:disabled {
-  background-color: #f2f2f2;
-  color: #888;
 }
 
 /* =========================
-   체크박스
+   결제수단 버튼
 =========================== */
-.checkbox-field {
+.payment-methods {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 15px;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  margin-top: 16px;
 }
 
-.checkbox-field input[type="checkbox"] {
-  transform: scale(1.3);
+.payment-methods button {
+  padding: 24px 32px;
+  font-size: 20px;
+  border-radius: 16px;
+  border: 1px solid #ccc;
   cursor: pointer;
+  background-color: #f8f8f8;
+  transition: all 0.3s ease;
 }
 
-/* =========================
-   버튼
-=========================== */
-.button {
+.payment-methods button:hover {
+  background-color: #eaeaea;
+}
+
+.payment-methods button.selected {
+  border-color: #000;
   background-color: #000;
   color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 14px 40px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: 0.2s ease;
 }
 
-.button:hover {
-  background-color: #333;
+/* =========================
+   다크 모드
+=========================== */
+body.dark {
+  background-color: #0e0e0e;
+  color: #e4e4e4;
+}
+
+body.dark .page-container {
+  color: #e4e4e4;
+  background-color: #181818;
+}
+
+body.dark .product-item {
+  background: #1a1a1a;
+  border: 1px solid #333;
+}
+
+body.dark .product-item:hover {
+  box-shadow: 0 8px 20px rgba(255,255,255,0.12);
+}
+
+body.dark .product-price {
+  color: #ccc;
+}
+
+body.dark .qty-control button {
+  background: #333;
+  color: #e4e4e4;
+  border: 1px solid #555;
+}
+
+body.dark .qty-control button:hover {
+  background: #444;
+}
+
+body.dark .remove-btn {
+  background: #ff6b6b;
+}
+
+body.dark .remove-btn:hover {
+  background: #ff4c4c;
+}
+
+body.dark .select-all button {
+  background: #222;
+  color: #e4e4e4;
+  border: 1px solid #555;
+}
+
+body.dark .select-all button:hover {
+  background: #333;
+}
+
+body.dark .total-price {
+  color: #fff;
+}
+
+body.dark .btn-cancel {
+  background: #222;
+  color: #e4e4e4;
+  border: 1px solid #555;
+}
+
+body.dark .btn-cancel:hover {
+  background: #333;
+}
+
+body.dark .btn-pay {
+  background: #fff;
+  color: #000;
+}
+
+body.dark .btn-pay:hover {
+  background: #eaeaea;
+}
+
+body.dark .form-section {
+  background: #181818;
+  border: 1px solid #444;
+}
+
+body.dark .form-field input,
+body.dark .form-field select {
+  background: #222;
+  color: #e4e4e4;
+  border: 1px solid #555;
+}
+
+body.dark .payment-methods button {
+  background: #222;
+  color: #e4e4e4;
+  border: 1px solid #555;
+}
+
+body.dark .payment-methods button.selected {
+  background: #000;
+  color: #fff;
+  border-color: #fff;
 }
 
 /* =========================
@@ -143,64 +366,42 @@
 =========================== */
 @media (max-width: 768px) {
   .page-container {
-    padding: 20px 15px;
+    padding: 30px 20px;
+  }
+
+  .product-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .qty-control {
+    justify-content: center;
+  }
+
+  .action-btns {
+    flex-direction: column;
+  }
+
+  .btn-cancel,
+  .btn-pay {
+    width: 100%;
+  }
+
+  .form-section {
+    padding: 24px;
     gap: 20px;
-  }
-
-  .section-card {
-    padding: 20px 15px;
-  }
-
-  .section-title {
-    font-size: 20px;
   }
 
   .form-field input,
   .form-field select {
-    padding: 14px 16px;
+    max-width: 100%;
+    padding: 22px 26px;
+    font-size: 18px;
   }
 
-  .button {
-    width: 100%;
-    text-align: center;
+  .payment-methods button {
+    padding: 20px 28px;
+    font-size: 18px;
   }
-}
-
-/* =========================
-   다크 모드
-=========================== */
-body.dark .page-container,
-body.dark .section-card {
-  color: #fff;
-  background-color: #1b1b1b;
-  border-color: #444;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-}
-
-body.dark .form-field input,
-body.dark .form-field select {
-  background-color: #222;
-  border-color: #555;
-  color: #fff;
-}
-
-body.dark .form-field input:focus,
-body.dark .form-field select:focus {
-  border-color: #888;
-}
-
-body.dark .cart-item {
-  border-color: #555;
-}
-
-body.dark .cart-item:hover {
-  background-color: #2a2a2a;
-}
-
-body.dark .button {
-  background-color: #444;
-}
-
-body.dark .button:hover {
-  background-color: #666;
-}
+} 
