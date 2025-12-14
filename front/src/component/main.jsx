@@ -102,6 +102,12 @@ function Main() {
           <span>김한결(팀장님)</span>
           <span>윤종빈</span>
           <span>이선화</span>
+          <span>정신나갈거같아</span>
+          <span>점심 나가서 먹을거 같아</span>
+          <span>팀장 영혼 이탈</span>
+          <span>살려줘</span>
+          <span>골칫덩어리 장바구니</span>
+          <span></span>
           {/* 반복되는 문구들을 적당히 넣기 */}
         </div>
       </div>
