@@ -74,7 +74,7 @@
 
 .delivery input:disabled {
   background: #f2f2f2;
-  color: #888;
+  color: #c3f33fef;
 }
 
 .delivery input:focus {
