@@ -5,9 +5,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const API_URL = "http://192.168.0.224:8080";
 
+
 function Mypage() {
   const navigate = useNavigate();
-  const { isLogin, logout, user } = useAuth();
+  const { user } = useAuth();
   const userId = localStorage.getItem("member_id") || user?.id;
 
   const [orders, setOrders] = useState([]);
@@ -27,10 +28,12 @@ function Mypage() {
   const params = new URLSearchParams(location.search);
   const keyword = params.get("keyword");             // URL 검색어
   const searchKeyword = keyword?.toLowerCase();      // 검색용 변환
+  const [adminOrders, setAdminOrders] = useState([]);
 
   // ⭐ 관리자 전용 검색 결과
   const [searchInput, setSearchInput] = useState("");   // 입력창 검색어
   const [products, setProducts] = useState([]);         // 검색된 상품 리스트
+  // const [products, setProducts] = useState([]);         // 검색된 상품 리스트
 
   const ORDER_STATUS_KR = {
     ready: "결제 완료",
@@ -38,10 +41,33 @@ function Mypage() {
     done: "주문 완료",
   };
 
+  const ORDER_STATUS_TEXT = {
+    pending: "상품 준비중",
+    paid: "배송 준비 완료",
+    shipping: "배송 중",
+    completed: "배송 완료",
+    cancel: "주문 취소",
+  };
+
+  //관리자전용 주문내역 조회
+  useEffect(() => {
+    if (localStorage.getItem("role") !== "ADMIN") return;
+
+    fetch("http://192.168.0.224:8080/admin/orders")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setAdminOrders(data.data);
+        }
+      });
+  }, []);
+
   // 로그인 체크 + 데이터 로드
   useEffect(() => {
     const loginCheck = localStorage.getItem("login");
-    if (loginCheck !== "true") {
+    const role = localStorage.getItem("role");
+
+    if (loginCheck !== "true" && role !== "ADMIN") {
       navigate("/", { replace: true });
       return;
     }
@@ -65,9 +91,13 @@ function Mypage() {
     setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
   }, []);
 
+
+
   // ⭐⭐⭐ 7) 관리자 검색 API 실행(useEffect는 반드시 return 위에!)
   useEffect(() => {
     // ADMIN이 아니면 실행하지 않음
+    if (localStorage.getItem("role") !== "ADMIN") return;
+
     if (localStorage.getItem("role") !== "ADMIN") return;
     if (!searchKeyword) return;
 
@@ -75,7 +105,7 @@ function Mypage() {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          setProducts(data.data);
+          setAdminOrders(data.data);
         }
       })
       .catch(err => console.log("검색 에러:", err));
@@ -141,7 +171,7 @@ function Mypage() {
                 ) : (
                   orders.map((order) => (
                     <div className="card-item" key={order.id}>
-                      <p><strong>주문번호:</strong> {order.id}</p>
+                      <p><strong>주문번호:</strong> {order.orderNumber}</p>
 
                       <div className="order-items">
                         {order.items.map((item) => (
@@ -149,9 +179,9 @@ function Mypage() {
                             <p className="item-name">{item.productName}</p>
 
                             <p>
-                              <strong>배송:</strong>{" "}
+                              <strong>배송 상태:</strong>
                               <span className={`status-${order.status}`}>
-                                {ORDER_STATUS_KR[order.status] || order.status}
+                                {ORDER_STATUS_TEXT[order.status] || order.status}
                               </span>
                             </p>
 
@@ -184,10 +214,15 @@ function Mypage() {
                       </div>
 
                       <p className="order-total">
-                        총 금액: {order.total?.toLocaleString() || 0}원
+                        총 금액: {order.total.toLocaleString()}원
                       </p>
 
-                    
+                      <button
+                        className="mypage-btn"
+                        onClick={() => handleOrderClick(order.id)}
+                      >
+                        상세보기
+                      </button>
                     </div>
                   ))
                 )}
@@ -198,13 +233,8 @@ function Mypage() {
           {/* 내가 쓴 리뷰 */}
           <section className="mypage-section">
             <h3 className="mypage-section-title" onClick={() => setOpenReviewList(!openReviewList)}>
-              내가 작성한 리뷰 {openReviewList ? "▲" : "▼"}
+              내가 쓴 리뷰 {openReviewList ? "▲" : "▼"}
             </h3>
-            {/* <ReviewSection
-              userId={userId}
-              myPageMode={true}
-            /> */}
-
 
             {openReviewList && (
               <div className="card-list">
@@ -333,8 +363,12 @@ function Mypage() {
 
                   <p><strong>주문번호:</strong> {order.order_number}</p>
                   <p><strong>구매자:</strong> {order.member_name}</p>
-                  <p><strong>금액:</strong> {order.total_amount.toLocaleString()}원</p>
-
+                  <p>
+                    <strong>금액:</strong>{" "}
+                    {order.total_amount
+                      ? order.total_amount.toLocaleString()
+                      : "0"}원
+                  </p>
                   {/* ✅ 주문 상태 변경 */}
                   <p>
                     <strong>주문 상태:</strong>{" "}
@@ -437,6 +471,8 @@ function Mypage() {
       )}
 
     </div>
+
+
   );
 }
 
