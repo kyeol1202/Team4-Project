@@ -4,17 +4,11 @@ import "../component/mypage.css";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const API_URL = "http://192.168.0.224:8080";
-const ORDER_STATUS_TEXT = {
-  pending: "결제 대기",
-  paid: "결제 완료",
-  shipping: "배송 중",
-  completed: "배송 완료",
-  cancel: "주문 취소",
-};
+
 
 function Mypage() {
   const navigate = useNavigate();
-  const { isLogin, logout, user } = useAuth();
+  const { user } = useAuth();
   const userId = localStorage.getItem("member_id") || user?.id;
 
   const [orders, setOrders] = useState([]);
@@ -25,8 +19,8 @@ function Mypage() {
   const [openReviewList, setOpenReviewList] = useState(false);
   const [openQuestionList, setOpenQuestionList] = useState(false);
   const [openQuestionIndex, setOpenQuestionIndex] = useState(null);
+  const [editingOrderId, setEditingOrderId] = useState(null);
 
-  //검색어 처리(관리자 용)
   //검색어 처리(관리자 용)
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -35,23 +29,36 @@ function Mypage() {
   const [adminOrders, setAdminOrders] = useState([]);
 
   // ⭐ 관리자 전용 검색 결과
-  // ⭐ 관리자 전용 검색 결과
   const [searchInput, setSearchInput] = useState("");   // 입력창 검색어
   const [products, setProducts] = useState([]);         // 검색된 상품 리스트
   // const [products, setProducts] = useState([]);         // 검색된 상품 리스트
 
-//관리자전용 주문내역 조회
-useEffect(() => {
-  if (localStorage.getItem("role") !== "ADMIN") return;
+  const ORDER_STATUS_KR = {
+  ready: "결제 완료",
+  shipping: "출고 처리 중",
+  done: "주문 완료",
+};
 
-  fetch("http://192.168.0.224:8080/admin/orders")
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        setAdminOrders(data.data);
-      }
-    });
-}, []);
+const ORDER_STATUS_TEXT = {
+  pending: "상품 준비중",
+  paid: "배송 준비 완료",
+  shipping: "배송 중",
+  completed: "배송 완료",
+  cancel: "주문 취소",
+};
+
+  //관리자전용 주문내역 조회
+  useEffect(() => {
+    if (localStorage.getItem("role") !== "ADMIN") return;
+
+    fetch("http://192.168.0.224:8080/admin/orders")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setAdminOrders(data.data);
+        }
+      });
+  }, []);
 
   // 로그인 체크 + 데이터 로드
   useEffect(() => {
@@ -108,15 +115,15 @@ useEffect(() => {
 
   // 로그아웃
   const handleLogout = () => {
-  localStorage.setItem("login", "false");
-  localStorage.setItem("role", "null");
-  localStorage.removeItem("member_id");
-  localStorage.removeItem("user_id");
-  localStorage.removeItem("user");
-  alert("로그아웃 되었습니다.");
-  navigate("/main");
-  navigate(0);
-};
+    localStorage.setItem("login", "false");
+    localStorage.setItem("role", "null");
+    localStorage.removeItem("member_id");
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("user");
+    alert("로그아웃 되었습니다.");
+    navigate("/main");
+    navigate(0);
+  };
 
   const handleOrderClick = (orderId) => navigate(`/order/${orderId}`);
 
@@ -138,7 +145,6 @@ useEffect(() => {
   };
 
   return (
-  return (
     <div className="mypage-container">
       {/* 상단 버튼 */}
       <div className="mypage-actions">
@@ -146,7 +152,6 @@ useEffect(() => {
         <button className="mypage-btn" onClick={() => navigate("/edituserinfo")}>정보 수정</button>
       </div>
 
-      {(localStorage.getItem("role") === "USER") && (
       {(localStorage.getItem("role") === "USER") && (
         <>
           {/* 주문 내역 */}
@@ -172,7 +177,7 @@ useEffect(() => {
                             <p>
                               <strong>배송 상태:</strong>
                               <span className={`status-${order.status}`}>
-                               {ORDER_STATUS_TEXT[order.status] || order.status}
+                                {ORDER_STATUS_TEXT[order.status] || order.status}
                               </span>
                             </p>
 
@@ -316,8 +321,6 @@ useEffect(() => {
           </section>
         </>
       )}
-        </>
-      )}
 
       {/* ================= ADMIN 화면 ================= */}
       {localStorage.getItem("role") === "ADMIN" && (
@@ -353,36 +356,120 @@ useEffect(() => {
         ))}
       </div>
     )} */}
-   {/* ===== 소비자 전체 주문 내역 (추가) ===== */}
-    <h3 style={{ marginTop: "40px" }}>전체 주문 내역</h3>
+          {/* ===== 소비자 전체 주문 내역 (추가) ===== */}
+          <h3 style={{ marginTop: "40px" }}>주문 내역</h3>
 
-    {adminOrders.length > 0 ? (
-  <div className="admin-search-grid">
-    {adminOrders.map(order => (
-      <div key={order.order_id} className="admin-product-card">
-        <p><strong>주문번호:</strong> {order.order_number}</p>
-        <p><strong>구매자:</strong> {order.member_name}</p>
-        <p><strong>회원ID:</strong> {order.member_id}</p>
-        <p><strong>금액:</strong> {order.total_amount.toLocaleString()}원</p>
-        <p>
-          <strong>주문 상태:</strong>{" "}
-          {ORDER_STATUS_TEXT[order.order_status] || order.order_status}
-        </p>
-        <p><strong>배송 상태:</strong> {order.delivery_status}</p>
-      </div>
-    ))}
-  </div>
-) : (
-  <p>주문 내역이 없습니다.</p>
-)}
+          {adminOrders.length > 0 ? (
+            <div className="admin-search-grid">
+              {adminOrders.map(order => (
+                <div key={order.order_id} className="admin-product-card">
 
-    
+                  <p><strong>주문번호:</strong> {order.order_number}</p>
+                  <p><strong>구매자:</strong> {order.member_name}</p>
+                  <p><strong>금액:</strong> {order.total_amount.toLocaleString()}원</p>
 
-  </>
-)}
+                  {/* ✅ 주문 상태 변경 */}
+                  <p>
+                    <strong>주문 상태:</strong>{" "}
+                    {editingOrderId === order.order_id ? (
+                      <select
+                        value={order.status}
+                        onChange={async (e) => {
+                          const newStatus = e.target.value;
+
+                          await fetch(`${API_URL}/admin/order/status`, {
+                            method: "PUT",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              order_id: order.order_id,
+                              status: newStatus,
+                            }),
+                          });
+
+                          setAdminOrders(prev =>
+                            prev.map(o =>
+                              o.order_id === order.order_id
+                                ? { ...o, status: newStatus }
+                                : o
+                            )
+                          );
+                        }}
+                      >
+                        <option value="ready">결제 완료</option>
+                        <option value="shipping">출고 처리 중</option>
+                        <option value="done">주문 완료</option>
+                      </select>
+                    ) : (
+                      <span>{ORDER_STATUS_KR[order.status]}</span>
+                    )}
+                  </p>
+
+                  {/* ✅ 배송 상태 변경 */}
+                  <p>
+                    <strong>배송 상태:</strong>{" "}
+                    {editingOrderId === order.order_id ? (
+                      <select
+                        value={order.order_status}
+                        onChange={async (e) => {
+                          const newStatus = e.target.value;
+
+                          await fetch(`${API_URL}/admin/order/delivery`, {
+                            method: "PUT",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              order_id: order.order_id,
+                              order_status: newStatus,
+                            }),
+                          });
+
+                          setAdminOrders(prev =>
+                            prev.map(o =>
+                              o.order_id === order.order_id
+                                ? { ...o, order_status: newStatus }
+                                : o
+                            )
+                          );
+                        }}
+                      >
+                        <option value="pending">상품 준비중</option>
+                        <option value="paid">배송 준비 완료</option>
+                        <option value="shipping">배송 중</option>
+                        <option value="completed">배송 완료</option>
+                        <option value="cancel">주문 취소</option>
+                      </select>
+                    ) : (
+                      <span>{ORDER_STATUS_TEXT[order.order_status]}</span>
+                    )}
+                  </p>
+
+                  <div className="admin-order-actions">
+                    {editingOrderId === order.order_id ? (
+                      <button
+                        className="mypage-btn"
+                        onClick={() => setEditingOrderId(null)}
+                      >
+                        저장
+                      </button>
+                    ) : (
+                      <button
+                        className="mypage-btn"
+                        onClick={() => setEditingOrderId(order.order_id)}
+                      >
+                        수정
+                      </button>
+                    )}
+                  </div>
+
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>주문 내역이 없습니다.</p>
+          )}
 
     </div>
-  );
+
+
   );
 }
 
