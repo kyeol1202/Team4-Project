@@ -35,17 +35,20 @@ function Mypage() {
 
   // ⭐ 관리자 전용 검색 결과
   const [searchInput, setSearchInput] = useState("");   // 입력창 검색어
-  const [products, setProducts] = useState([]);         // 검색된 상품 리스트
+  // const [products, setProducts] = useState([]);         // 검색된 상품 리스트
 
 //관리자전용 주문내역 조회
 useEffect(() => {
-  if (localStorage.getItem("role") === "ADMIN") {
-    fetch("http://localhost:3001/admin/search")
-      .then(res => res.json())
-      .then(data => setAdminOrders(data))
-  }
-}, []);
+  if (localStorage.getItem("role") !== "ADMIN") return;
 
+  fetch("http://192.168.0.224:8080/admin/orders")
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        setAdminOrders(data.data);
+      }
+    });
+}, []);
 
   // 로그인 체크 + 데이터 로드
   useEffect(() => {
@@ -84,11 +87,11 @@ useEffect(() => {
     if (localStorage.getItem("role") !== "ADMIN") return;
     if (!searchKeyword) return;
 
-    fetch(`http://192.168.0.224:8080/api/check-users?keyword=${searchKeyword}`)
+    fetch(`http://192.168.0.224:8080/admin/search?keyword=${searchKeyword}`)
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          setProducts(data.data);
+          setAdminOrders(data.data);
         }
       })
       .catch(err => console.log("검색 에러:", err));
@@ -342,7 +345,7 @@ useEffect(() => {
       <button className="mypage-btn" onClick={search}>검색</button>
     </div>
 
-    {products.length > 0 && (
+    {/* {products.length > 0 && (
       <div className="admin-search-grid">
         {products.map((item) => (
           <div key={item.member_id} className="admin-product-card">
@@ -350,26 +353,31 @@ useEffect(() => {
           </div>
         ))}
       </div>
-    )}
+    )} */}
    {/* ===== 소비자 전체 주문 내역 (추가) ===== */}
     <h3 style={{ marginTop: "40px" }}>전체 주문 내역</h3>
 
     {adminOrders.length > 0 ? (
-      <div className="admin-search-grid">
-        {adminOrders.map(order => (
-          <div key={order.order_id} className="admin-product-card">
-            <p><strong>주문번호:</strong> {order.order_id}</p>
-            <p><strong>구매자:</strong> {order.name}</p>
-            <p><strong>회원ID:</strong> {order.member_id}</p>
-            <p><strong>상품:</strong> {order.product_name}</p>
-            <p><strong>금액:</strong> {order.price}원</p>
-            <p><strong>상태:</strong> {order.status}</p>
-          </div>
-        ))}
+  <div className="admin-search-grid">
+    {adminOrders.map(order => (
+      <div key={order.order_id} className="admin-product-card">
+        <p><strong>주문번호:</strong> {order.order_number}</p>
+        <p><strong>구매자:</strong> {order.member_name}</p>
+        <p><strong>회원ID:</strong> {order.member_id}</p>
+        <p><strong>금액:</strong> {order.total_amount.toLocaleString()}원</p>
+        <p>
+          <strong>주문 상태:</strong>{" "}
+          {ORDER_STATUS_TEXT[order.order_status] || order.order_status}
+        </p>
+        <p><strong>배송 상태:</strong> {order.delivery_status}</p>
       </div>
-    ) : (
-      <p>주문 내역이 없습니다.</p>
-    )}
+    ))}
+  </div>
+) : (
+  <p>주문 내역이 없습니다.</p>
+)}
+
+    
 
   </>
 )}
