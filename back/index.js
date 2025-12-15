@@ -141,6 +141,8 @@ app.get("/api/search", async (req, res) => {
   }
 });
 
+
+
 /* ------------------------- 상품 목록 ------------------------- */
 
 app.get("/api/products/all", async (req, res) => {
@@ -528,7 +530,7 @@ ${JSON.stringify(ctx, null, 2)}
 `;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini", 
+      model: "gpt-4o-mini",
       messages: [
         { role: "system", content: "너는 향수 쇼핑몰 상담원 AI이다." },
         { role: "user", content: prompt }
@@ -753,16 +755,16 @@ app.post("/api/order/create", async (req, res) => {
     return res.status(400).json({ success: false, message: "배송 정보 누락" });
   }
 
-  if (!['kakaopay','naverpay','card','bank'].includes(paymentMethod)) {
+  if (!['kakaopay', 'naverpay', 'card', 'bank'].includes(paymentMethod)) {
     return res.status(400).json({ success: false, message: "유효하지 않은 결제 수단" });
   }
 
   let conn;
-  
+
   try {
     conn = await pool.getConnection();
     console.log("✅ DB 연결 성공");
-    
+
     await conn.beginTransaction();
     console.log("✅ 트랜잭션 시작");
 
@@ -833,27 +835,56 @@ app.post("/api/order/create", async (req, res) => {
 });
 
 /* ------------------------- 관리자용 ------------------------- */
-app.get("/admin/orders", (req,res)=> {
-  const sql = `
-  SELECT
-  o.member_id
-  o.username,
-  o.product,
-  o.status,
-  o.price
-  FROM orders o
-  JOIN members m ON o.username = m.username
-  ORDER BY o.product_at DESC
-  `;
+app.get("/admin/orders", async (req, res) => {
+  try {
+    const rows = await pool.query(`
+      SELECT
+        o.order_id,
+        o.order_number,
+        o.member_id,
+        m.name AS member_name,
+        o.total_amount,
+        o.order_status,
+        o.order_date
+      FROM orders o
+      JOIN member m ON o.member_id = m.member_id
+      ORDER BY o.order_date DESC
+    `);
 
-  pool.query(sql, (err, results)=> {
-    if(err) {
-      console.error(arr);
-      return res.status(500).json({ message : "주문 조회 실패"});
-    }
-    res.json(results);
-  });
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
 });
+
+/* ------------------------- 관리자용 검색 기능 ------------------------- */
+
+app.get("/admin/search", async (req, res) => {
+  const { keyword } = req.query;
+
+  try {
+    const rows = await pool.query(`
+      SELECT
+        o.order_id,
+        o.order_number,
+        o.member_id,
+        m.name AS member_name,
+        o.total_amount,
+        o.order_status,
+        o.order_date
+      FROM orders o
+      JOIN member m ON o.member_id = m.member_id
+      WHERE m.name LIKE ?
+      ORDER BY o.order_date DESC
+    `, [`%${keyword}%`]);
+
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+});
+
 
 
 // 서버 시작 (맨 마지막!)
