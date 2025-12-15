@@ -187,12 +187,7 @@ function Mypage() {
                         총 금액: {order.total?.toLocaleString() || 0}원
                       </p>
 
-                      <button
-                        className="mypage-btn"
-                        onClick={() => handleOrderClick(order.id)}
-                      >
-                        상세보기
-                      </button>
+                    
                     </div>
                   ))
                 )}
