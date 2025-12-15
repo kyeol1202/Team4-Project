@@ -11,14 +11,19 @@ function Returns() {
   const params = new URLSearchParams(location.search);
   const orderId = params.get("orderId");
   const productId = params.get("productId");
-  const type = params.get("type"); // 반품 | 교환
+
+  const rawType = params.get("type"); // 반품 | 교환
+  const type = rawType === "교환" ? "EXCHANGE" : "RETURN";
 
   const [email, setEmail] = useState(localStorage.getItem("email") || "");
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
 
   const submitReturn = async () => {
-    if (!email || !orderId) return alert("필수 정보를 확인해주세요.");
+    if (!email || !orderId) {
+      alert("필수 정보를 확인해주세요.");
+      return;
+    }
 
     setLoading(true);
     try {
@@ -26,7 +31,6 @@ function Returns() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: localStorage.getItem("member_id"),
           orderId,
           productId,
           type,
@@ -35,16 +39,21 @@ function Returns() {
         }),
       });
 
-      const data = await res.json();
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = { success: res.ok };
+      }
 
       if (data.success) {
-        alert(`${type} 신청이 접수되었습니다.`);
+        alert(`${rawType} 신청이 접수되었습니다.`);
         navigate("/mypage");
       } else {
         alert(data.message || "접수 실패");
       }
     } catch (err) {
-      alert("서버 오류");
+      alert("서버 오류가 발생했습니다.");
     } finally {
       setLoading(false);
     }
@@ -55,7 +64,7 @@ function Returns() {
       <h1>AuRa Returns & Refunds</h1>
 
       <div className="returns-box">
-        <h2>{type} 신청</h2>
+        <h2>{rawType} 신청</h2>
 
         <label>
           이메일 주소
@@ -77,12 +86,12 @@ function Returns() {
             rows={4}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            placeholder={`${type} 사유를 입력해주세요`}
+            placeholder={`${rawType} 사유를 입력해주세요`}
           />
         </label>
 
         <button onClick={submitReturn} disabled={loading}>
-          {loading ? "접수 중..." : `${type} 신청`}
+          {loading ? "접수 중..." : `${rawType} 신청`}
         </button>
 
         <button className="back-btn" onClick={() => navigate(-1)}>
