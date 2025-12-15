@@ -844,6 +844,7 @@ app.get("/admin/orders", async (req, res) => {
         o.member_id,
         m.name AS member_name,
         o.total_amount,
+        o.status,
         o.order_status,
         o.order_date
       FROM orders o
@@ -857,6 +858,38 @@ app.get("/admin/orders", async (req, res) => {
     res.status(500).json({ success: false });
   }
 });
+// 관리자 주문 상태 변경
+app.put("/admin/order/status", async (req, res) => {
+  const { order_id, status } = req.body;
+
+  try {
+    await pool.query(
+      "UPDATE orders SET status = ? WHERE order_id = ?",
+      [status, order_id]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+});
+
+// 관리자 배송 상태 변경
+app.put("/admin/order/delivery", async (req, res) => {
+  const { order_id, order_status } = req.body;
+
+  try {
+    await pool.query(
+      "UPDATE orders SET order_status = ? WHERE order_id = ?",
+      [order_status, order_id]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+});
+
 
 /* ------------------------- 관리자용 검색 기능 ------------------------- */
 
