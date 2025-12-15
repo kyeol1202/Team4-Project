@@ -20,6 +20,8 @@ function Mypage() {
   const [openQuestionList, setOpenQuestionList] = useState(false);
   const [openQuestionIndex, setOpenQuestionIndex] = useState(null);
   const [editingOrderId, setEditingOrderId] = useState(null);
+  const isAdmin = localStorage.getItem("role") === "ADMIN";
+  
 
   //검색어 처리(관리자 용)
   const location = useLocation();
@@ -323,7 +325,7 @@ const ORDER_STATUS_TEXT = {
       )}
 
       {/* ================= ADMIN 화면 ================= */}
-      {localStorage.getItem("role") === "ADMIN" && (
+      {isAdmin && (
         <>
           <h2>관리자 페이지</h2>
 
@@ -345,18 +347,11 @@ const ORDER_STATUS_TEXT = {
               ))}
             </div>
           )}
-        </>
-      )}
-    {/* {products.length > 0 && (
-      <div className="admin-search-grid">
-        {products.map((item) => (
-          <div key={item.member_id} className="admin-product-card">
-            <h4>{item.name}</h4>
-          </div>
-        ))}
-      </div>
-    )} */}
-          {/* ===== 소비자 전체 주문 내역 (추가) ===== */}
+        
+      
+        {/* ================= ADMIN 주문내역 ================= */}
+
+          
           <h3 style={{ marginTop: "40px" }}>주문 내역</h3>
 
           {adminOrders.length > 0 ? (
@@ -465,6 +460,8 @@ const ORDER_STATUS_TEXT = {
             </div>
           ) : (
             <p>주문 내역이 없습니다.</p>
+          )}
+          </>
           )}
 
     </div>
