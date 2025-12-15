@@ -5,9 +5,11 @@ import { useWish } from "../context/WishContext";
 import Game from "./Game";
 import Game2 from "./Game2";
 import Chatbot from "./Chatbot";
+import { useLocation } from "react-router-dom";
 
 function Layout() {
 
+  
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { addToWish } = useWish();
@@ -61,6 +63,15 @@ function Layout() {
     const saved = localStorage.getItem("login");
     setLogin(saved === "true");
   }, []);
+ const location = useLocation();
+  useEffect(() => {
+  if (location.state?.openLogin) {
+    setLoginOpen(true);
+
+    // 뒤로가기 시 다시 열리는 것 방지
+    navigate(location.pathname, { replace: true, state: {} });
+  }
+}, [location, navigate]);
 
   // 카테고리 목록 가져오기 (DB)
   useEffect(() => {
@@ -92,6 +103,9 @@ function Layout() {
     formData.append("img", p_img);
 
     /* ⭐⭐ 🔥 자동 검색 태그 생성 — 검색 개선 핵심 부분 */
+
+    location.state?.openLogin === true
+
     formData.append(
       "search_tags",
       `
@@ -121,6 +135,7 @@ function Layout() {
   // ---------------- 로그인 ----------------
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+ 
 
   async function Login() {
     if (!userId || !password) return alert("아이디와 비밀번호를 입력하세요!");
