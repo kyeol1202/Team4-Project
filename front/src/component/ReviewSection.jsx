@@ -1,133 +1,112 @@
-import { useState, useEffect } from "react";
-import "../component/mypage.css";
+import { useEffect, useState } from "react";
+import "./review.css";
 
 const API_URL = "http://192.168.0.224:8080";
 
-/**
- * @param productId   상품 상세 페이지에서 전달
- * @param userId      로그인 유저 ID
- * @param myPageMode  true: 마이페이지 / false: 상품 상세
- * @param hasPurchased 상품 구매 여부 (상품 상세에서만 사용)
- */
 export default function ReviewSection({
-  productId = null,
-  userId = null,
-  myPageMode = false,
-  hasPurchased = false,
+  productId = null,     // 상품 상세일 때만 전달
+  userId,
+  myPageMode = false,   // 마이페이지 여부
+  hasPurchased = true,  // 상품 상세에서 구매 여부
 }) {
   const [reviews, setReviews] = useState([]);
   const [newReview, setNewReview] = useState("");
+  const [newStar, setNewStar] = useState(0);
   const [showForm, setShowForm] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  /* =========================
-     리뷰 조회
-  ========================= */
+  /* ===================== 리뷰 불러오기 ===================== */
   useEffect(() => {
-    fetchReviews();
-    // eslint-disable-next-line
+    if (myPageMode && userId) {
+      // 내가 쓴 리뷰
+      fetch(`${API_URL}/api/review/user/${userId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) setReviews(data.reviews);
+        });
+    }
+
+    if (!myPageMode && productId) {
+      // 상품 전체 리뷰
+      fetch(`${API_URL}/api/review/product/${productId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) setReviews(data.reviews);
+        });
+    }
   }, [productId, userId, myPageMode]);
 
-  async function fetchReviews() {
-    let url = `${API_URL}/api/reviews`;
-
-    if (myPageMode && userId) {
-      url += `?user_id=${userId}`;
-    } else if (productId) {
-      url += `?product_id=${productId}`;
-    }
-
-    try {
-      setLoading(true);
-      const res = await fetch(url);
-      const data = await res.json();
-      if (data.success) setReviews(data.data);
-      else setReviews([]);
-    } catch (err) {
-      console.error("리뷰 조회 실패:", err);
-      setReviews([]);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  /* =========================
-     리뷰 작성
-  ========================= */
-  async function handleSubmit(e) {
+  /* ===================== 리뷰 등록 ===================== */
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!newReview.trim()) return alert("리뷰 내용을 입력해주세요.");
+    if (!newReview.trim() || newStar === 0) return;
 
-    try {
-      const res = await fetch(`${API_URL}/api/reviews`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: userId,
-          product_id: productId,
-          content: newReview,
-        }),
-      });
+    const res = await fetch(`${API_URL}/api/review`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user_id: userId,
+        product_id: productId,
+        content: newReview,
+        star: newStar,
+      }),
+    });
 
-      const data = await res.json();
-      if (data.success) {
-        setNewReview("");
-        setShowForm(false);
-        fetchReviews();
-      } else {
-        alert("리뷰 작성 실패");
-      }
-    } catch (err) {
-      console.error("리뷰 작성 오류:", err);
+    const data = await res.json();
+    if (data.success) {
+      setReviews([data.review, ...reviews]);
+      setNewReview("");
+      setNewStar(0);
+      setShowForm(false);
     }
-  }
+  };
 
-  /* =========================
-     리뷰 삭제 (마이페이지)
-  ========================= */
-  async function handleDelete(reviewId) {
+  /* ===================== 리뷰 삭제 ===================== */
+  const handleDelete = async (reviewId) => {
     if (!window.confirm("리뷰를 삭제하시겠습니까?")) return;
 
-    try {
-      const res = await fetch(`${API_URL}/api/reviews/${reviewId}`, {
-        method: "DELETE",
-      });
-      const data = await res.json();
-      if (data.success) fetchReviews();
-      else alert("리뷰 삭제 실패");
-    } catch (err) {
-      console.error("리뷰 삭제 오류:", err);
-    }
-  }
+    await fetch(`${API_URL}/api/review/${reviewId}`, {
+      method: "DELETE",
+    });
 
-  /* =========================
-     UI
-  ========================= */
+    setReviews(reviews.filter(r => r.review_id !== reviewId));
+  };
+
   return (
     <div className="review-section">
-      {/* ===== 리뷰 헤더 ===== */}
-      <div className="review-header">
-        <h2 className="review-title">리뷰</h2>
+      <h3 className="review-title">리뷰</h3>
 
-        {/* ⭐ 리뷰 작성 버튼 (상품 상세 + 구매자만) */}
-        {!myPageMode && userId && hasPurchased && (
-          <button
-            className="review-write-btn"
-            onClick={() => setShowForm(!showForm)}
-          >
-            ✍ 리뷰 작성
-          </button>
-        )}
-      </div>
+      {/* ================= 작성 버튼 ================= */}
+      {!myPageMode && hasPurchased && (
+        <button
+          className="review-write-btn"
+          onClick={() => setShowForm(!showForm)}
+        >
+          리뷰 작성
+        </button>
+      )}
 
-      {/* ===== 리뷰 작성 폼 ===== */}
+      {/* ================= 작성 폼 ================= */}
       {showForm && (
         <form className="review-form" onSubmit={handleSubmit}>
+          {/* ⭐ 별점 */}
+          <div className="review-stars">
+            {[1, 2, 3, 4, 5].map(n => (
+              <span
+                key={n}
+                onClick={() => setNewStar(n)}
+                className={n <= newStar ? "star active" : "star"}
+              >
+                ★
+              </span>
+            ))}
+          </div>
+
           <textarea
             value={newReview}
             onChange={(e) => setNewReview(e.target.value)}
             placeholder="상품은 어떠셨나요?"
           />
+
           <div className="review-form-actions">
             <button type="submit">등록</button>
             <button
@@ -141,21 +120,21 @@ export default function ReviewSection({
         </form>
       )}
 
-      {/* ===== 리뷰 리스트 ===== */}
-      <ul className="review-list">
-        {loading && <li className="no-reviews">리뷰를 불러오는 중…</li>}
-
-        {!loading && reviews.length === 0 && (
-          <li className="no-reviews">아직 작성된 리뷰가 없습니다.</li>
-        )}
-
-        {!loading &&
-          reviews.map((review) => (
-            <li key={review.id} className="review-item">
+      {/* ================= 리뷰 리스트 ================= */}
+      <div className="review-list">
+        {reviews.length === 0 ? (
+          <p className="no-review">리뷰가 없습니다.</p>
+        ) : (
+          reviews.map(review => (
+            <div key={review.review_id} className="review-card">
               <div className="review-top">
-                <strong className="review-user">
-                  {review.user_name || "익명"}
-                </strong>
+                <strong>{review.user_name || "익명"}</strong>
+
+                <span className="review-stars-view">
+                  {"★".repeat(review.star)}
+                  {"☆".repeat(5 - review.star)}
+                </span>
+
                 <span className="review-date">
                   {review.created_at?.slice(0, 10)}
                 </span>
@@ -163,18 +142,19 @@ export default function ReviewSection({
 
               <p className="review-content">{review.content}</p>
 
-              {/* 마이페이지에서만 삭제 가능 */}
+              {/* 마이페이지일 때만 삭제 */}
               {myPageMode && (
                 <button
-                  className="mypage-btn delete"
-                  onClick={() => handleDelete(review.id)}
+                  className="review-delete-btn"
+                  onClick={() => handleDelete(review.review_id)}
                 >
                   삭제
                 </button>
               )}
-            </li>
-          ))}
-      </ul>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWish } from "../context/WishContext";
+import ReviewSection from "../component/ReviewSection";
 
 const API_URL = "http://192.168.0.224:8080";
 
@@ -14,14 +15,14 @@ function ProductDetail() {
   const [editData, setEditData] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [isInWish, setIsInWish] = useState(false);
-  const [reviewContent, setReviewContent] = useState("");
-  const [reviewStar, setReviewStar] = useState(0);
   const [hasPurchased, setHasPurchased] = useState(false);
-
-  const userId = localStorage.getItem("member_id");
   const [categoryList, setCategoryList] = useState([]);
 
-  /* ------------------------ 상품 데이터 ------------------------ */
+  const userId = localStorage.getItem("member_id");
+
+  /* =========================
+     상품 데이터
+  ========================= */
   useEffect(() => {
     fetch(`${API_URL}/api/products/${id}`)
       .then(res => res.json())
@@ -29,60 +30,63 @@ function ProductDetail() {
         if (data.success) {
           setProduct(data.data);
           setEditData(data.data);
-          setIsInWish(wishList.some(item => item.product_id === data.data.product_id));
+          setIsInWish(
+            wishList.some(item => item.product_id === data.data.product_id)
+          );
         }
       });
   }, [id, wishList]);
 
-  /* ------------------------ 구매 여부 체크 ------------------------ */
+  /* =========================
+     구매 여부 체크
+  ========================= */
   useEffect(() => {
     if (!userId) return;
     fetch(`${API_URL}/api/orders/${userId}/check/${id}`)
       .then(res => res.json())
-      .then(data => { if (data.success) setHasPurchased(data.purchased); });
+      .then(data => {
+        if (data.success) setHasPurchased(data.purchased);
+      });
   }, [userId, id]);
 
+  /* =========================
+     카테고리
+  ========================= */
   useEffect(() => {
-    async function getCategory() {
-      const res = await fetch("http://192.168.0.224:8080/api/category");
-      const data = await res.json();
-      if (data.success) setCategoryList(data.data);
-    }
-    getCategory();
+    fetch(`${API_URL}/api/category`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setCategoryList(data.data);
+      });
   }, []);
 
-
-  /* ------------------------ 위시 토글 ------------------------ */
+  /* =========================
+     위시리스트
+  ========================= */
   const toggleWish = () => {
+    if (!userId) return alert("로그인이 필요합니다.");
 
-    if (!userId) return alert("로그인이 필요합니다!");
-
-    else {
-
-
-
-      if (isInWish) {
-        removeFromWish(product.product_id);
-        setIsInWish(false);
-      } else {
-        addToWish({ product_id: product.product_id });
-        setIsInWish(true);
-      }
+    if (isInWish) {
+      removeFromWish(product.product_id);
+      setIsInWish(false);
+    } else {
+      addToWish({ product_id: product.product_id });
+      setIsInWish(true);
     }
   };
 
-  /* ------------------------ 장바구니 ------------------------ */
+  /* =========================
+     장바구니
+  ========================= */
   const addToCartHandler = async () => {
-    // 1) 로그아웃 상태면 localStorage에 담기
     if (!userId || userId === "null") {
       const key = "guest_cart";
       const cart = JSON.parse(localStorage.getItem(key) || "[]");
 
       const existing = cart.find(i => i.product_id === product.product_id);
 
-      if (existing) {
-        existing.count += quantity;
-      } else {
+      if (existing) existing.count += quantity;
+      else {
         cart.push({
           product_id: product.product_id,
           name: product.name,
@@ -93,11 +97,10 @@ function ProductDetail() {
       }
 
       localStorage.setItem(key, JSON.stringify(cart));
-      alert("로그인 전 장바구니(임시)에 담았습니다!");
+      alert("장바구니에 담았습니다!");
       return;
     }
 
-    // 2) 로그인 상태면 기존처럼 DB에 담기
     const res = await fetch(`${API_URL}/api/cart/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -109,37 +112,21 @@ function ProductDetail() {
     });
 
     const data = await res.json();
-    if (data.success) alert("장바구니에 담았습니다!");
-    else alert(data.message);
+    alert(data.success ? "장바구니에 담았습니다!" : data.message);
   };
 
-
-  /* ------------------------ 수정 모드 ------------------------ */
-  const toggleEdit = () => setEditMode(true);
-
+  /* =========================
+     관리자 수정
+  ========================= */
   const handleChange = (e) =>
     setEditData({ ...editData, [e.target.name]: e.target.value });
 
   const submitEdit = async () => {
     const form = new FormData();
-
-    // 텍스트 데이터만 명시적으로 추가
-    form.append("name", editData.name);
-    form.append("price", editData.price);
-    form.append("description", editData.description);
-    form.append("category_id", editData.category_id);
-    form.append("perfume_type", editData.perfume_type);
-    form.append("volume", editData.volume);
-    form.append("longevity", editData.longevity);
-    form.append("sillage", editData.sillage);
-    form.append("top_notes", editData.top_notes);
-    form.append("middle_notes", editData.middle_notes);
-    form.append("base_notes", editData.base_notes);
-
-    // ✅ 이미지가 변경된 경우만 추가
-    if (editData.imgFile) {
-      form.append("img", editData.imgFile);
-    }
+    Object.entries(editData).forEach(([key, value]) => {
+      if (key !== "imgFile") form.append(key, value);
+    });
+    if (editData.imgFile) form.append("img", editData.imgFile);
 
     const res = await fetch(`${API_URL}/api/product-edit/${id}`, {
       method: "PUT",
@@ -147,60 +134,41 @@ function ProductDetail() {
     });
 
     const result = await res.json();
-
     if (result.success) {
-      alert("상품 수정 완료!");
-      setProduct(result.data); // 서버에서 최신 데이터 내려주면 베스트
+      alert("상품 수정 완료");
+      setProduct(result.data);
       setEditMode(false);
-    } else {
-      alert("수정 실패");
     }
   };
 
-
   if (!product) return <div className="loading">Loading...</div>;
 
-  /* ------------------------ 렌더 ------------------------ */
+  /* =========================
+     렌더
+  ========================= */
   return (
     <div className="Productstyles-container">
+      <img
+        className="Productstyles-image"
+        src={`${API_URL}${product.img}`}
+        alt={product.name}
+      />
 
-      {/* 이미지 */}
-      <img className="Productstyles-image" src={`${API_URL}${product.img}`} alt={product.name} />
+      <h1 className="Productstyles-name">{product.name}</h1>
+      <p className="Productstyles-price">
+        {product.price.toLocaleString()}원
+      </p>
 
-      {/* 상품명 */}
-      {editMode ? (
-        <input
-          className="Product_Name"
-          name="name"
-          value={editData.name}
-          onChange={handleChange}
-        />
-      ) : (
-        <h1 className="Productstyles-name">{product.name}</h1>
-      )}
-      {/* 가격 */}
-      {editMode ? (
-        <input
-          className="Product_Price"
-          name="price"
-          value={editData.price}
-          onChange={handleChange}
-        />
-      ) : (
-        <p className="Productstyles-price">{product.price.toLocaleString()}원</p>
-      )}
-
-      {/* USER UI */}
-      {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === "null") && (
+      {/* USER */}
+      {(localStorage.getItem("role") === "USER" ||
+        localStorage.getItem("role") === "null") && (
         <>
-          {/* 수량 */}
           <div className="qty-box">
-            <button onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}>-</button>
+            <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>-</button>
             <span>{quantity}</span>
-            <button onClick={() => setQuantity(quantity + 1)}>+</button>
+            <button onClick={() => setQuantity(q => q + 1)}>+</button>
           </div>
 
-          {/* 버튼들 */}
           <div className="Productstyles-btnGroup">
             <button
               className="Productstyles-wishBtn"
@@ -210,219 +178,27 @@ function ProductDetail() {
               {isInWish ? "♥ 위시리스트" : "♡ 위시리스트"}
             </button>
 
-            <button className="Productstyles-cartBtn" onClick={addToCartHandler}>
+            <button
+              className="Productstyles-cartBtn"
+              onClick={addToCartHandler}
+            >
               장바구니 담기 🛒
             </button>
           </div>
-
-
         </>
       )}
 
-      {/* 관리자 수정 버튼 */}
-      {localStorage.getItem("role") === "ADMIN" && !editMode && (
-        <button className="edit-btn" onClick={toggleEdit}>상품 수정</button>
-      )}
-      {editMode && (
-        <label className="file-upload">
-          이미지 변경
-          <input
-            type="file"
-            onChange={(e) => setEditData({ ...editData, imgFile: e.target.files[0] })}
-          />
-        </label>
-      )}
+      {/* 🔥 리뷰 섹션 (완전 분리) */}
+      <ReviewSection
+        productId={product.product_id}
+        userId={userId}
+        hasPurchased={hasPurchased}
+      />
 
-
-
-      {/* 상세 설명 */}
-      <div className="Productstyles-sectionBox">
-        <h2 className="Productstyles-sectionTitle">향수 설명</h2>
-
-        {editMode ? (
-          <textarea name="description" value={editData.description} onChange={handleChange} />
-        ) : (
-          <p className="Productstyles-desc">{product.description}</p>
-        )}
-      </div>
-
-      {/* LONGEVITY */}
-      <div className="Productstyles-sectionBox">
-        <div className="Productstyles-row">
-          <strong>카테고리</strong>
-
-          {editMode ? (
-            <select
-              className="Productstyles-select"
-              name="category_id"
-              value={editData.category_id || ""}
-              onChange={handleChange}
-            >
-              <option value="">선택</option>
-              {categoryList.map(cat => (
-                <option key={cat.category_id} value={cat.category_id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <span className="Productstyles-value">
-              {product.category_name || "카테고리 없음"}
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="Productstyles-sectionBox">
-        <h2 className="Productstyles-sectionTitle">향 구성</h2>
-
-        {["top_notes", "middle_notes", "base_notes"].map(note => (
-          <div className="Productstyles-row" key={note}>
-            <strong>{note.toUpperCase()}</strong>
-
-            {editMode ? (
-              <input
-                className="Productstyles-input"
-                name={note}
-                value={editData[note] || ""}
-                onChange={handleChange}
-              />
-            ) : (
-              <span className="Productstyles-value">{product[note] || "정보 없음"}</span>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* 스펙 */}
-      <div className="Productstyles-sectionBox">
-        <h2 className="Productstyles-sectionTitle">향수 스펙</h2>
-
-        {/* TYPE */}
-        <div className="Productstyles-row">
-          <strong>TYPE</strong>
-          {editMode ? (
-            <select
-              className="Productstyles-select"
-              name="perfume_type"
-              value={editData.perfume_type || ""}
-              onChange={handleChange}
-            >
-              <option value="">선택</option>
-              <option value="EDP">EDP</option>
-              <option value="EDT">EDT</option>
-              <option value="EDC">EDC</option>
-            </select>
-          ) : (
-            <span className="Productstyles-value">{product.perfume_type}</span>
-          )}
-        </div>
-
-        {/* VOLUME */}
-        <div className="Productstyles-row">
-          <strong>VOLUME</strong>
-          {editMode ? (
-            <input
-              type="number"
-              className="Productstyles-input"
-              name="volume"
-              value={editData.volume || ""}
-              onChange={handleChange}
-            />
-          ) : (
-            <span className="Productstyles-value">{product.volume} ml</span>
-          )}
-        </div>
-
-        {/* LONGEVITY */}
-        <div className="Productstyles-row">
-          <strong>LONGEVITY</strong>
-          {editMode ? (
-            <select
-              className="Productstyles-select"
-              name="longevity"
-              value={editData.longevity || ""}
-              onChange={handleChange}
-            >
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
-                <option key={n} value={n}>{n}</option>
-              ))}
-            </select>
-          ) : (
-            <span className="Productstyles-value">{product.longevity}</span>
-          )}
-        </div>
-
-
-
-        {/* SILLAGE */}
-        <div className="Productstyles-row">
-          <strong>SILLAGE</strong>
-          {editMode ? (
-            <select
-              className="Productstyles-select"
-              name="sillage"
-              value={editData.sillage || ""}
-              onChange={handleChange}
-            >
-              <option value="약함">약함</option>
-              <option value="보통">보통</option>
-              <option value="강함">강함</option>
-            </select>
-          ) : (
-            <span className="Productstyles-value">{product.sillage}</span>
-          )}
-        </div>
-      </div>
-
-      {/* 🔥 저장 버튼을 최하단으로 이동 */}
-      {editMode && (
-        <div className="save-btn-container">
-          <button className="save-btn" onClick={submitEdit}>
-            저장하기
-          </button>
-        </div>
-      )}
-      {/* 리뷰 */}
-      <div className="Productstyles-sectionBox review-box">
-        <h2 className="Productstyles-sectionTitle">고객 리뷰</h2>
-        {!userId ? (
-          <p style={{ color: "red" }}>로그인 후 리뷰를 작성할 수 있습니다.</p>
-        ) : hasPurchased ? (
-        <>
-        <h3>리뷰 작성</h3>
-        <div className="stars">
-          {[1, 2, 3, 4, 5].map(n => (
-            <span
-              key={n}
-              onClick={() => setReviewStar(n)}
-              style={{ color: n <= reviewStar ? "gold" : "#ccc", cursor: "pointer" }}
-              >
-            ★
-          </span>
-          ))}
-          </div>
-          <textarea
-          value={reviewContent}
-          onChange={(e) => setReviewContent(e.target.value)}
-          placeholder="리뷰를 입력해주세요"
-          />
-          <button
-          onClick={() => alert("리뷰 저장 테스트")}
-          disabled={!reviewContent || reviewStar === 0}>
-            리뷰 작성
-            </button>
-            </>
-            ) : (
-            <p style={{ color: "red" }}>
-              구매 완료 후 리뷰를 작성할 수 있습니다.
-              </p>
-            )}
-            </div>
-
-       
-
-      <button className="Productstyles-backBtn" onClick={() => navigate(-1)}>
+      <button
+        className="Productstyles-backBtn"
+        onClick={() => navigate(-1)}
+      >
         ← 뒤로 돌아가기
       </button>
     </div>
