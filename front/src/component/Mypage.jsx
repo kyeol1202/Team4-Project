@@ -90,10 +90,10 @@ function Mypage() {
   // 로그아웃
   const handleLogout = () => {
     localStorage.setItem("login", "false");
-  localStorage.setItem("role", "null");
-  localStorage.removeItem("member_id");
-  localStorage.removeItem("user_id");
-  localStorage.removeItem("user");
+    localStorage.setItem("role", "null");
+    localStorage.removeItem("member_id");
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("user");
     alert("로그아웃 되었습니다.");
     navigate("/main");
     navigate(0);
@@ -205,10 +205,10 @@ function Mypage() {
             <h3 className="mypage-section-title" onClick={() => setOpenReviewList(!openReviewList)}>
               내가 작성한 리뷰 {openReviewList ? "▲" : "▼"}
             </h3>
-            <ReviewSection 
-            userId={userId}
-            myPageMode={true}
-            />
+            {/* <ReviewSection
+              userId={userId}
+              myPageMode={true}
+            /> */}
 
 
             {openReviewList && (
