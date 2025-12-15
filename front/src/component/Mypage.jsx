@@ -20,7 +20,7 @@ function Mypage() {
   const [openQuestionIndex, setOpenQuestionIndex] = useState(null);
   const [editingOrderId, setEditingOrderId] = useState(null);
   const isAdmin = localStorage.getItem("role") === "ADMIN";
-  
+
 
   //검색어 처리(관리자 용)
   const location = useLocation();
@@ -31,6 +31,12 @@ function Mypage() {
   // ⭐ 관리자 전용 검색 결과
   const [searchInput, setSearchInput] = useState("");   // 입력창 검색어
   const [products, setProducts] = useState([]);         // 검색된 상품 리스트
+
+  const ORDER_STATUS_KR = {
+    ready: "결제 완료",
+    shipping: "출고 처리 중",
+    done: "주문 완료",
+  };
 
   // 로그인 체크 + 데이터 로드
   useEffect(() => {
@@ -84,6 +90,10 @@ function Mypage() {
   // 로그아웃
   const handleLogout = () => {
     localStorage.setItem("login", "false");
+  localStorage.setItem("role", "null");
+  localStorage.removeItem("member_id");
+  localStorage.removeItem("user_id");
+  localStorage.removeItem("user");
     alert("로그아웃 되었습니다.");
     navigate("/main");
     navigate(0);
@@ -140,7 +150,9 @@ function Mypage() {
 
                             <p>
                               <strong>배송:</strong>{" "}
-                              <span className={`status-${order.status}`}>{order.status}</span>
+                              <span className={`status-${order.status}`}>
+                                {ORDER_STATUS_KR[order.status] || order.status}
+                              </span>
                             </p>
 
                             <p>
@@ -290,7 +302,7 @@ function Mypage() {
           <h2>관리자 페이지</h2>
 
           <div className="search-box">
-            <input 
+            <input
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="검색어 입력"
@@ -307,11 +319,11 @@ function Mypage() {
               ))}
             </div>
           )}
-        
-      
-        {/* ================= ADMIN 주문내역 ================= */}
 
-          
+
+          {/* ================= ADMIN 주문내역 ================= */}
+
+
           <h3 style={{ marginTop: "40px" }}>주문 내역</h3>
 
           {adminOrders.length > 0 ? (
@@ -421,8 +433,8 @@ function Mypage() {
           ) : (
             <p>주문 내역이 없습니다.</p>
           )}
-          </>
-          )}
+        </>
+      )}
 
     </div>
   );
