@@ -4,6 +4,13 @@ import "../component/mypage.css";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const API_URL = "http://192.168.0.224:8080";
+const ORDER_STATUS_TEXT = {
+  pending: "결제 대기",
+  paid: "결제 완료",
+  shipping: "배송 중",
+  completed: "배송 완료",
+  cancel: "주문 취소",
+};
 
 function Mypage() {
   const navigate = useNavigate();
@@ -162,7 +169,7 @@ function Mypage() {
                             <p>
                               <strong>배송 상태:</strong>
                               <span className={`status-${order.status}`}>
-                                {order.status}
+                               {ORDER_STATUS_TEXT[order.status] || order.status}
                               </span>
                             </p>
 
