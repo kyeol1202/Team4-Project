@@ -107,6 +107,13 @@ function ProductDetail() {
 
   /* ------------------------ 위시 토글 ------------------------ */
   const toggleWish = () => {
+
+    if (!userId) return alert("로그인이 필요합니다!");
+
+    else{
+
+
+    
     if (isInWish) {
       removeFromWish(product.product_id);
       setIsInWish(false);
@@ -114,6 +121,7 @@ function ProductDetail() {
       addToWish({ product_id: product.product_id });
       setIsInWish(true);
     }
+  }
   };
 
   /* ------------------------ 관리자 상품 수정 ------------------------ */
