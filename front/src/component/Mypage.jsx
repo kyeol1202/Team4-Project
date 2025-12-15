@@ -203,8 +203,13 @@ function Mypage() {
           {/* 내가 쓴 리뷰 */}
           <section className="mypage-section">
             <h3 className="mypage-section-title" onClick={() => setOpenReviewList(!openReviewList)}>
-              내가 쓴 리뷰 {openReviewList ? "▲" : "▼"}
+              내가 작성한 리뷰 {openReviewList ? "▲" : "▼"}
             </h3>
+            <ReviewSection 
+            userId={userId}
+            myPageMode={true}
+            />
+
 
             {openReviewList && (
               <div className="card-list">
