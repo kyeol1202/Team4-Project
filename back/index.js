@@ -764,8 +764,33 @@ app.post("/api/order/create", async (req, res) => {
   }
 });
 
+/* ------------------------- 관리자용 ------------------------- */
+app.get("/admin/orders", (req,res)=> {
+  const sql = `
+  SELECT
+  o.member_id
+  o.username,
+  o.product,
+  o.status,
+  o.price
+  FROM orders o
+  JOIN members m ON o.username = m.username
+  ORDER BY o.product_at DESC
+  `;
+
+  pool.query(sql, (err, results)=> {
+    if(err) {
+      console.error(arr);
+      return res.status(500).json({ message : "주문 조회 실패"});
+    }
+    res.json(results);
+  });
+});
+
+
 // 서버 시작 (맨 마지막!)
 app.listen(8080, "0.0.0.0", () => {
   console.log("🚀 서버 실행 중: http://0.0.0.0:8080");
   console.log("📁 Static files: http://0.0.0.0:8080/uploads");
 });
+

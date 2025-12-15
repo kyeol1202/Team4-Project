@@ -24,10 +24,21 @@ function Mypage() {
   const params = new URLSearchParams(location.search);
   const keyword = params.get("keyword");             // URL 검색어
   const searchKeyword = keyword?.toLowerCase();      // 검색용 변환
+  const [adminOrders, setAdminOrders] = useState([]);
 
  // ⭐ 관리자 전용 검색 결과
   const [searchInput, setSearchInput] = useState("");   // 입력창 검색어
 const [products, setProducts] = useState([]);         // 검색된 상품 리스트
+
+//관리자전용 주문내역 조회
+useEffect(() => {
+  if (localStorage.getItem("role") === "ADMIN") {
+    fetch("http://localhost:3001/admin/orders")
+      .then(res => res.json())
+      .then(data => setAdminOrders(data))
+      .catch(err => console.error(err));
+  }
+}, []);
 
 
   // 로그인 체크 + 데이터 로드
@@ -324,11 +335,29 @@ const [products, setProducts] = useState([]);         // 검색된 상품 리스
         {products.map((item) => (
           <div key={item.member_id} className="admin-product-card">
             <h4>{item.name}</h4>
-
           </div>
         ))}
       </div>
     )}
+   {/* ===== 소비자 전체 주문 내역 (추가) ===== */}
+    <h3 style={{ marginTop: "40px" }}>전체 주문 내역</h3>
+
+    {adminOrders.length > 0 ? (
+      <div className="admin-search-grid">
+        {adminOrders.map(order => (
+          <div key={order.order_id} className="admin-product-card">
+            <p><strong>주문번호:</strong> {order.member_id}</p>
+            <p><strong>구매자:</strong> {order.username}</p>
+            <p><strong>상품:</strong> {order.product}</p>
+            <p><strong>금액:</strong> {order.price}원</p>
+            <p><strong>상태:</strong> {order.status}</p>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p>주문 내역이 없습니다.</p>
+    )}
+
   </>
 )}
 
