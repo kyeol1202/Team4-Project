@@ -40,10 +40,9 @@ function Mypage() {
 //관리자전용 주문내역 조회
 useEffect(() => {
   if (localStorage.getItem("role") === "ADMIN") {
-    fetch("http://localhost:3001/admin/orders")
+    fetch("http://localhost:3001/admin/search")
       .then(res => res.json())
       .then(data => setAdminOrders(data))
-      .catch(err => console.error(err));
   }
 }, []);
 
@@ -359,9 +358,10 @@ useEffect(() => {
       <div className="admin-search-grid">
         {adminOrders.map(order => (
           <div key={order.order_id} className="admin-product-card">
-            <p><strong>주문번호:</strong> {order.member_id}</p>
-            <p><strong>구매자:</strong> {order.username}</p>
-            <p><strong>상품:</strong> {order.product}</p>
+            <p><strong>주문번호:</strong> {order.order_id}</p>
+            <p><strong>구매자:</strong> {order.name}</p>
+            <p><strong>회원ID:</strong> {order.member_id}</p>
+            <p><strong>상품:</strong> {order.product_name}</p>
             <p><strong>금액:</strong> {order.price}원</p>
             <p><strong>상태:</strong> {order.status}</p>
           </div>

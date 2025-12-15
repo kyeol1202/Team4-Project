@@ -141,6 +141,32 @@ app.get("/api/search", async (req, res) => {
   }
 });
 
+/* ------------------------- 관리자용 검색 기능 ------------------------- */
+
+app.get("/admin/search", (req, res) => {
+  const { keyword } = req.query;
+
+  const sql = `
+    SELECT 
+      o.order_id,
+      m.member_id,
+      m.name,
+      o.product_name,
+      o.status
+    FROM orders o
+    JOIN members m ON o.member_id = m.member_id
+    WHERE m.name LIKE ? OR o.product_name LIKE ?
+  `;
+
+  const value = `%${keyword}%`;
+
+  pool.query(sql, [value, value], (err, results) => {
+    if (err) return res.status(500).json(err);
+    res.json(results);
+  });
+});
+
+
 /* ------------------------- 상품 목록 ------------------------- */
 
 app.get("/api/products/all", async (req, res) => {
