@@ -4,6 +4,13 @@ import "../component/mypage.css";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const API_URL = "http://192.168.0.224:8080";
+const ORDER_STATUS_TEXT = {
+  pending: "결제 대기",
+  paid: "결제 완료",
+  shipping: "배송 중",
+  completed: "배송 완료",
+  cancel: "주문 취소",
+};
 
 function Mypage() {
   const navigate = useNavigate();
@@ -19,16 +26,16 @@ function Mypage() {
   const [openQuestionList, setOpenQuestionList] = useState(false);
   const [openQuestionIndex, setOpenQuestionIndex] = useState(null);
 
-//검색어 처리(관리자 용)
+  //검색어 처리(관리자 용)
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const keyword = params.get("keyword");             // URL 검색어
   const searchKeyword = keyword?.toLowerCase();      // 검색용 변환
   const [adminOrders, setAdminOrders] = useState([]);
 
- // ⭐ 관리자 전용 검색 결과
+  // ⭐ 관리자 전용 검색 결과
   const [searchInput, setSearchInput] = useState("");   // 입력창 검색어
-const [products, setProducts] = useState([]);         // 검색된 상품 리스트
+  const [products, setProducts] = useState([]);         // 검색된 상품 리스트
 
 //관리자전용 주문내역 조회
 useEffect(() => {
@@ -68,14 +75,14 @@ useEffect(() => {
     setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
   }, []);
 
-  
+
   // ⭐⭐⭐ 7) 관리자 검색 API 실행(useEffect는 반드시 return 위에!)
 
 
   useEffect(() => {
     // ADMIN이 아니면 실행하지 않음
-    
-     if (localStorage.getItem("role") !== "ADMIN") return;
+
+    if (localStorage.getItem("role") !== "ADMIN") return;
     if (!searchKeyword) return;
 
     fetch(`http://192.168.0.224:8080/api/check-users?keyword=${searchKeyword}`)
@@ -89,15 +96,15 @@ useEffect(() => {
   }, [searchKeyword]);
 
 
-   function search() {
-  if (!searchInput.trim()) return alert("검색어를 입력하세요!");
+  function search() {
+    if (!searchInput.trim()) return alert("검색어를 입력하세요!");
 
-  // ⭐ URL에 검색어를 넣어서 state 업데이트
-  navigate(`/mypage?keyword=${searchInput}`);
-}
+    // ⭐ URL에 검색어를 넣어서 state 업데이트
+    navigate(`/mypage?keyword=${searchInput}`);
+  }
 
 
-  
+
 
   // 로그아웃
   const handleLogout = () => {
@@ -140,7 +147,7 @@ useEffect(() => {
     alert(`리뷰 수정 준비중: ${review.productName}`);
   };
 
- return (
+  return (
     <div className="mypage-container">
       {/* 상단 버튼 */}
       <div className="mypage-actions">
@@ -148,7 +155,7 @@ useEffect(() => {
         <button className="mypage-btn" onClick={() => navigate("/edituserinfo")}>정보 수정</button>
       </div>
 
-        {(localStorage.getItem("role") === "USER") && (
+      {(localStorage.getItem("role") === "USER") && (
         <>
           {/* 주문 내역 */}
           <section className="mypage-section">
@@ -163,7 +170,7 @@ useEffect(() => {
                 ) : (
                   orders.map((order) => (
                     <div className="card-item" key={order.id}>
-                      <p><strong>주문번호:</strong> {order.id}</p>
+                      <p><strong>주문번호:</strong> {order.orderNumber}</p>
 
                       <div className="order-items">
                         {order.items.map((item) => (
@@ -171,8 +178,10 @@ useEffect(() => {
                             <p className="item-name">{item.productName}</p>
 
                             <p>
-                              <strong>배송:</strong>{" "}
-                              <span className={`status-${order.status}`}>{order.status}</span>
+                              <strong>배송 상태:</strong>
+                              <span className={`status-${order.status}`}>
+                               {ORDER_STATUS_TEXT[order.status] || order.status}
+                              </span>
                             </p>
 
                             <p>
@@ -204,7 +213,7 @@ useEffect(() => {
                       </div>
 
                       <p className="order-total">
-                        총 금액: {order.total?.toLocaleString() || 0}원
+                        총 금액: {order.total.toLocaleString()}원
                       </p>
 
                       <button
@@ -313,8 +322,8 @@ useEffect(() => {
               </div>
             )}
           </section>
-          </>
-        )}
+        </>
+      )}
 
           {/* ================= ADMIN 화면 ================= */}
 {localStorage.getItem("role") === "ADMIN" && (
@@ -362,7 +371,7 @@ useEffect(() => {
 )}
 
     </div>
-  ); 
+  );
 }
 
 export default Mypage;

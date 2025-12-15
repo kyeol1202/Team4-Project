@@ -662,10 +662,78 @@ app.get("/api/products/category/:categoryId", async (req, res) => {
 /* =========================
    주문 + 결제 생성 (FINAL)
 ========================= */
+/* ========================= 주문내역 조회 ========================= */
 
+app.get("/api/order/:userId", async (req, res) => {
+  const userId = req.params.userId;
 
+  try {
+    // 1️⃣ 주문 목록
+    const orders = await pool.query(
+      `SELECT 
+         o.order_id,
+         o.order_date,
+         o.total_amount,
+         o.status,
+         o.order_number
+       FROM orders o
+       WHERE o.member_id = ?
+       ORDER BY o.order_date DESC`,
+      [userId]
+    );
+
+    if (orders.length === 0) {
+      return res.json({ success: true, orders: [] });
+    }
+
+    // 2️⃣ 주문 ID 목록
+    const orderIds = orders.map(o => o.order_id);
+
+    // 3️⃣ 주문 상품 조회
+    const items = await pool.query(
+      `SELECT 
+         oi.order_id,
+         oi.product_id,
+         oi.quantity,
+         oi.unit_price,
+         p.name AS product_name
+       FROM order_items oi
+       JOIN product p ON oi.product_id = p.product_id
+       WHERE oi.order_id IN (?)`,
+      [orderIds]
+    );
+
+    // 4️⃣ 프론트에서 쓰기 좋은 형태로 가공
+    const result = orders.map(order => ({
+      id: order.order_id,
+      orderNumber: order.order_number,
+      status: order.status,
+      total: order.total_amount,
+      date: order.order_date,
+      items: items
+        .filter(i => i.order_id === order.order_id)
+        .map(i => ({
+          productId: i.product_id,
+          productName: i.product_name,
+          qty: i.quantity,
+          price: i.unit_price
+        }))
+    }));
+
+    res.json({ success: true, orders: result });
+
+  } catch (err) {
+    console.error("❌ 주문 조회 오류:", err);
+    res.status(500).json({ success: false, message: "DB 오류" });
+  }
+});
 
 /* ========================= 테스트용 간단 주문 라우트 ========================= */
+
+
+
+
+
 app.post("/api/order/create", async (req, res) => {
   console.log("🎯 주문 라우트 호출됨!");
   console.log("📦 받은 데이터:", req.body);
@@ -709,7 +777,7 @@ app.post("/api/order/create", async (req, res) => {
     // 1. 주문 생성
     const orderResult = await conn.query(
       `INSERT INTO orders
-       (member_id, total_amount, shipping_address, receiver_name, receiver_phone, order_number, status)
+       (member_id, total_amount, shipping_address, receiver_name, receiver_phone, order_number, order_status)
        VALUES (?, ?, ?, ?, ?, ?, 'paid')`,
       [user_id, total, delivery.address, delivery.name, delivery.phone, orderNumber]
     );

@@ -98,14 +98,16 @@ function Main() {
       <div className="top-marquee-bar">
         <div className="marquee-content">
           <span>4TEAM</span>
-          <span>시=지</span>
           <span>김한결(팀장님)</span>
           <span>윤종빈</span>
+          <span>신은지</span>
           <span>이선화</span>
           {/* 반복되는 문구들을 적당히 넣기 */}
+
+          
         </div>
       </div>
-
+      
 
       <video
         className="main-video2"
@@ -160,10 +162,6 @@ function Main() {
             AuRa의 향은 당신의 분위기와 어우러져<br />
             세상에 단 하나의 잔향을 남깁니다.<br />
             지나가는 순간마저 특별하게"<br />
-            <br />
-            묵묵하고<br />
-            은은한 향기를 내 뿜는 <br />
-            지성의 향수 Aura Primeveil <br />
           </p>
           <button
             className="model-btn"
@@ -243,7 +241,7 @@ function Main() {
 
           <div class="footer-text">
             <p>
-              (주) AuRa | Owner : 김한결, 윤종빈 , 이선화 , 장화 안 신은지 오래됨  | Business Number : 010-010-010 |
+              (주) AuRa | Owner : 김한결, 윤종빈 , 이선화 , 신은지  | Business Number : 010-010-010 |
               <a href="javascript:void(0)" onclick="onopenPermit('1148510672')" class="biz-link">
               </a>
             </p>
