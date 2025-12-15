@@ -383,41 +383,44 @@ function ProductDetail() {
           </button>
         </div>
       )}
-
       {/* 리뷰 */}
-      {localStorage.getItem("role") === "USER" && (
-        <div className="Productstyles-sectionBox review-box">
-          <h2 className="Productstyles-sectionTitle">고객 리뷰</h2>
-
-          {userId && hasPurchased ? (
-            <>
-              <h3>리뷰 작성</h3>
-
-              <div className="stars">
-                {[1, 2, 3, 4, 5].map(n => (
-                  <span
-                    key={n}
-                    onClick={() => setReviewStar(n)}
-                    style={{ color: n <= reviewStar ? "gold" : "#ccc" }}
-                  >
-                    ★
-                  </span>
-                ))}
-              </div>
-
-              <textarea
-                value={reviewContent}
-                onChange={(e) => setReviewContent(e.target.value)}
-              />
-
-              <button onClick={() => alert("리뷰 저장 테스트")}>작성</button>
+      <div className="Productstyles-sectionBox review-box">
+        <h2 className="Productstyles-sectionTitle">고객 리뷰</h2>
+        {!userId ? (
+          <p style={{ color: "red" }}>로그인 후 리뷰를 작성할 수 있습니다.</p>
+        ) : hasPurchased ? (
+        <>
+        <h3>리뷰 작성</h3>
+        <div className="stars">
+          {[1, 2, 3, 4, 5].map(n => (
+            <span
+              key={n}
+              onClick={() => setReviewStar(n)}
+              style={{ color: n <= reviewStar ? "gold" : "#ccc", cursor: "pointer" }}
+              >
+            ★
+          </span>
+          ))}
+          </div>
+          <textarea
+          value={reviewContent}
+          onChange={(e) => setReviewContent(e.target.value)}
+          placeholder="리뷰를 입력해주세요"
+          />
+          <button
+          onClick={() => alert("리뷰 저장 테스트")}
+          disabled={!reviewContent || reviewStar === 0}>
+            리뷰 작성
+            </button>
             </>
-          ) : (
-            <p style={{ color: "red" }}>구매 고객만 리뷰를 작성할 수 있습니다.</p>
-          )}
-        </div>
+            ) : (
+            <p style={{ color: "red" }}>
+              구매 완료 후 리뷰를 작성할 수 있습니다.
+              </p>
+            )}
+            </div>
 
-      )}
+       
 
       <button className="Productstyles-backBtn" onClick={() => navigate(-1)}>
         ← 뒤로 돌아가기
