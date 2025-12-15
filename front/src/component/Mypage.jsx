@@ -5,10 +5,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const API_URL = "http://192.168.0.224:8080";
 
-
 function Mypage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { isLogin, logout, user } = useAuth();
   const userId = localStorage.getItem("member_id") || user?.id;
 
   const [orders, setOrders] = useState([]);
@@ -28,39 +27,10 @@ function Mypage() {
   const params = new URLSearchParams(location.search);
   const keyword = params.get("keyword");             // URL 검색어
   const searchKeyword = keyword?.toLowerCase();      // 검색용 변환
-  const [adminOrders, setAdminOrders] = useState([]);
 
   // ⭐ 관리자 전용 검색 결과
   const [searchInput, setSearchInput] = useState("");   // 입력창 검색어
   const [products, setProducts] = useState([]);         // 검색된 상품 리스트
-  // const [products, setProducts] = useState([]);         // 검색된 상품 리스트
-
-  const ORDER_STATUS_KR = {
-  ready: "결제 완료",
-  shipping: "출고 처리 중",
-  done: "주문 완료",
-};
-
-const ORDER_STATUS_TEXT = {
-  pending: "상품 준비중",
-  paid: "배송 준비 완료",
-  shipping: "배송 중",
-  completed: "배송 완료",
-  cancel: "주문 취소",
-};
-
-  //관리자전용 주문내역 조회
-  useEffect(() => {
-    if (localStorage.getItem("role") !== "ADMIN") return;
-
-    fetch("http://192.168.0.224:8080/admin/orders")
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          setAdminOrders(data.data);
-        }
-      });
-  }, []);
 
   // 로그인 체크 + 데이터 로드
   useEffect(() => {
@@ -89,13 +59,9 @@ const ORDER_STATUS_TEXT = {
     setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
   }, []);
 
-
-
   // ⭐⭐⭐ 7) 관리자 검색 API 실행(useEffect는 반드시 return 위에!)
   useEffect(() => {
     // ADMIN이 아니면 실행하지 않음
-    if (localStorage.getItem("role") !== "ADMIN") return;
-
     if (localStorage.getItem("role") !== "ADMIN") return;
     if (!searchKeyword) return;
 
@@ -103,7 +69,7 @@ const ORDER_STATUS_TEXT = {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          setAdminOrders(data.data);
+          setProducts(data.data);
         }
       })
       .catch(err => console.log("검색 에러:", err));
@@ -118,10 +84,6 @@ const ORDER_STATUS_TEXT = {
   // 로그아웃
   const handleLogout = () => {
     localStorage.setItem("login", "false");
-    localStorage.setItem("role", "null");
-    localStorage.removeItem("member_id");
-    localStorage.removeItem("user_id");
-    localStorage.removeItem("user");
     alert("로그아웃 되었습니다.");
     navigate("/main");
     navigate(0);
@@ -169,7 +131,7 @@ const ORDER_STATUS_TEXT = {
                 ) : (
                   orders.map((order) => (
                     <div className="card-item" key={order.id}>
-                      <p><strong>주문번호:</strong> {order.orderNumber}</p>
+                      <p><strong>주문번호:</strong> {order.id}</p>
 
                       <div className="order-items">
                         {order.items.map((item) => (
@@ -177,10 +139,8 @@ const ORDER_STATUS_TEXT = {
                             <p className="item-name">{item.productName}</p>
 
                             <p>
-                              <strong>배송 상태:</strong>
-                              <span className={`status-${order.status}`}>
-                                {ORDER_STATUS_TEXT[order.status] || order.status}
-                              </span>
+                              <strong>배송:</strong>{" "}
+                              <span className={`status-${order.status}`}>{order.status}</span>
                             </p>
 
                             <p>
@@ -212,7 +172,7 @@ const ORDER_STATUS_TEXT = {
                       </div>
 
                       <p className="order-total">
-                        총 금액: {order.total.toLocaleString()}원
+                        총 금액: {order.total?.toLocaleString() || 0}원
                       </p>
 
                       <button
@@ -465,8 +425,6 @@ const ORDER_STATUS_TEXT = {
           )}
 
     </div>
-
-
   );
 }
 

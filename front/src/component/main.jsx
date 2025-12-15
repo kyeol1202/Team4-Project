@@ -126,7 +126,7 @@ function Main() {
 
         <button
           className="video-link-btn"
-          onClick={() => navigate("/Category2")}
+          onClick={() => navigate("/products/all")}
         >
           상품 보러가기
         </button>
