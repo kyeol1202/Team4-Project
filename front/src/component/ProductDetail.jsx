@@ -192,7 +192,6 @@ function ProductDetail() {
       <ReviewSection
         productId={product.product_id}
         userId={userId}
-        hasPurchased={hasPurchased}
       />
 
       <button

@@ -76,14 +76,14 @@ export default function ReviewSection({
       <h3 className="review-title">리뷰</h3>
 
       {/* ================= 작성 버튼 ================= */}
-      {!myPageMode && hasPurchased && (
+      {!myPageMode && (
         <button
-          className="review-write-btn"
-          onClick={() => setShowForm(!showForm)}
-        >
+        className="review-write-btn"
+        onClick={() => setShowForm(!showForm)}>
           리뷰 작성
-        </button>
-      )}
+          </button>
+        )}
+
 
       {/* ================= 작성 폼 ================= */}
       {showForm && (
