@@ -19,16 +19,15 @@ function Mypage() {
   const [openQuestionList, setOpenQuestionList] = useState(false);
   const [openQuestionIndex, setOpenQuestionIndex] = useState(null);
 
-//검색어 처리(관리자 용)
+  //검색어 처리(관리자 용)
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const keyword = params.get("keyword");             // URL 검색어
   const searchKeyword = keyword?.toLowerCase();      // 검색용 변환
 
- // ⭐ 관리자 전용 검색 결과
+  // ⭐ 관리자 전용 검색 결과
   const [searchInput, setSearchInput] = useState("");   // 입력창 검색어
-const [products, setProducts] = useState([]);         // 검색된 상품 리스트
-
+  const [products, setProducts] = useState([]);         // 검색된 상품 리스트
 
   // 로그인 체크 + 데이터 로드
   useEffect(() => {
@@ -57,17 +56,13 @@ const [products, setProducts] = useState([]);         // 검색된 상품 리스
     setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
   }, []);
 
-  
   // ⭐⭐⭐ 7) 관리자 검색 API 실행(useEffect는 반드시 return 위에!)
-
-
   useEffect(() => {
     // ADMIN이 아니면 실행하지 않음
-    
-     if (localStorage.getItem("role") !== "ADMIN") return;
+    if (localStorage.getItem("role") !== "ADMIN") return;
     if (!searchKeyword) return;
 
-    fetch(`http://192.168.0.224:8080/api/check-users?keyword=${searchKeyword}`)
+    fetch(`${API_URL}/api/check-users?keyword=${searchKeyword}`)
       .then(res => res.json())
       .then(data => {
         if (data.success) {
@@ -77,16 +72,11 @@ const [products, setProducts] = useState([]);         // 검색된 상품 리스
       .catch(err => console.log("검색 에러:", err));
   }, [searchKeyword]);
 
-
-   function search() {
-  if (!searchInput.trim()) return alert("검색어를 입력하세요!");
-
-  // ⭐ URL에 검색어를 넣어서 state 업데이트
-  navigate(`/mypage?keyword=${searchInput}`);
-}
-
-
-  
+  function search() {
+    if (!searchInput.trim()) return alert("검색어를 입력하세요!");
+    // ⭐ URL에 검색어를 넣어서 state 업데이트
+    navigate(`/mypage?keyword=${searchInput}`);
+  }
 
   // 로그아웃
   const handleLogout = () => {
@@ -98,23 +88,9 @@ const [products, setProducts] = useState([]);         // 검색된 상품 리스
 
   const handleOrderClick = (orderId) => navigate(`/order/${orderId}`);
 
+  // ✅ 반품/교환 버튼 클릭 시 Returns 페이지로 이동
   const handleReturn = (orderId, productId, type) => {
-    if (!window.confirm(`${type} 신청을 진행하시겠습니까?`)) return;
-
-    const updatedOrders = orders.map((order) => {
-      if (order.id !== orderId) return order;
-
-      const updatedItems = order.items.map((item) =>
-        item.productId === productId
-          ? { ...item, returnStatus: `${type}신청중` }
-          : item
-      );
-
-      return { ...order, items: updatedItems };
-    });
-
-    setOrders(updatedOrders);
-    localStorage.setItem(`${userId}_orders`, JSON.stringify(updatedOrders));
+    navigate(`/returns?orderId=${orderId}&productId=${productId}&type=${type}`);
   };
 
   const handleDeleteReview = (reviewId) => {
@@ -129,7 +105,7 @@ const [products, setProducts] = useState([]);         // 검색된 상품 리스
     alert(`리뷰 수정 준비중: ${review.productName}`);
   };
 
- return (
+  return (
     <div className="mypage-container">
       {/* 상단 버튼 */}
       <div className="mypage-actions">
@@ -137,7 +113,7 @@ const [products, setProducts] = useState([]);         // 검색된 상품 리스
         <button className="mypage-btn" onClick={() => navigate("/edituserinfo")}>정보 수정</button>
       </div>
 
-        {(localStorage.getItem("role") === "USER") && (
+      {(localStorage.getItem("role") === "USER") && (
         <>
           {/* 주문 내역 */}
           <section className="mypage-section">
@@ -302,38 +278,36 @@ const [products, setProducts] = useState([]);         // 검색된 상품 리스
               </div>
             )}
           </section>
-          </>
-        )}
+        </>
+      )}
 
-          {/* ================= ADMIN 화면 ================= */}
-{localStorage.getItem("role") === "ADMIN" && (
-  <>
-    <h2>관리자 페이지</h2>
+      {/* ================= ADMIN 화면 ================= */}
+      {localStorage.getItem("role") === "ADMIN" && (
+        <>
+          <h2>관리자 페이지</h2>
 
-    <div className="search-box">
-      <input 
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-        placeholder="검색어 입력"
-      />
-      <button className="mypage-btn" onClick={search}>검색</button>
-    </div>
-
-    {products.length > 0 && (
-      <div className="admin-search-grid">
-        {products.map((item) => (
-          <div key={item.member_id} className="admin-product-card">
-            <h4>{item.name}</h4>
-
+          <div className="search-box">
+            <input 
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="검색어 입력"
+            />
+            <button className="mypage-btn" onClick={search}>검색</button>
           </div>
-        ))}
-      </div>
-    )}
-  </>
-)}
 
+          {products.length > 0 && (
+            <div className="admin-search-grid">
+              {products.map((item) => (
+                <div key={item.member_id} className="admin-product-card">
+                  <h4>{item.name}</h4>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
     </div>
-  ); 
+  );
 }
 
 export default Mypage;
