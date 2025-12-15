@@ -251,7 +251,7 @@ function Layout() {
 
 
         <div className="header-title" onClick={() => navigate("/")}>
-          Aura
+          AuRa
         </div>
 
         <div className="header-right">
