@@ -108,11 +108,15 @@ useEffect(() => {
 
   // 로그아웃
   const handleLogout = () => {
-    localStorage.setItem("login", "false");
-    alert("로그아웃 되었습니다.");
-    navigate("/main");
-    navigate(0);
-  };
+  localStorage.setItem("login", "false");
+  localStorage.setItem("role", "null");
+  localStorage.removeItem("member_id");
+  localStorage.removeItem("user_id");
+  localStorage.removeItem("user");
+  alert("로그아웃 되었습니다.");
+  navigate("/main");
+  navigate(0);
+};
 
   const handleOrderClick = (orderId) => navigate(`/order/${orderId}`);
 

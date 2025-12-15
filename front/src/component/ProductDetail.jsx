@@ -44,6 +44,13 @@ function ProductDetail() {
 
   /* ------------------------ 위시 토글 ------------------------ */
   const toggleWish = () => {
+
+    if (!userId) return alert("로그인이 필요합니다!");
+
+    else{
+
+
+    
     if (isInWish) {
       removeFromWish(product.product_id);
       setIsInWish(false);
@@ -51,26 +58,50 @@ function ProductDetail() {
       addToWish({ product_id: product.product_id });
       setIsInWish(true);
     }
+  }
   };
 
   /* ------------------------ 장바구니 ------------------------ */
   const addToCartHandler = async () => {
-    if (!userId) return alert("로그인이 필요합니다!");
+  // 1) 로그아웃 상태면 localStorage에 담기
+  if (!userId || userId === "null") {
+    const key = "guest_cart";
+    const cart = JSON.parse(localStorage.getItem(key) || "[]");
 
-    const res = await fetch(`${API_URL}/api/cart/add`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user_id: userId,
+    const existing = cart.find(i => i.product_id === product.product_id);
+
+    if (existing) {
+      existing.count += quantity;
+    } else {
+      cart.push({
         product_id: product.product_id,
+        name: product.name,
+        price: product.price,
+        img: product.img,
         count: quantity,
-      }),
-    });
+      });
+    }
 
-    const data = await res.json();
-    if (data.success) alert("장바구니에 담았습니다!");
-    else alert(data.message);
-  };
+    localStorage.setItem(key, JSON.stringify(cart));
+    alert("로그인 전 장바구니(임시)에 담았습니다!");
+    return;
+  }
+
+  // 2) 로그인 상태면 기존처럼 DB에 담기
+  const res = await fetch(`${API_URL}/api/cart/add`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user_id: userId,
+      product_id: product.product_id,
+      count: quantity,
+    }),
+  });
+
+  const data = await res.json();
+  if (data.success) alert("장바구니에 담았습니다!");
+  else alert(data.message);
+};
 
 
   /* ------------------------ 수정 모드 ------------------------ */
@@ -131,7 +162,7 @@ function ProductDetail() {
       )}
 
       {/* USER UI */}
-      {localStorage.getItem("role") === "USER" && (
+      {(localStorage.getItem("role") === "USER" || localStorage.getItem("role") === "null") && (
         <>
           {/* 수량 */}
           <div className="qty-box">
