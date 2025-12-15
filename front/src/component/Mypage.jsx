@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import "../component/mypage.css";
 import { useNavigate, useLocation } from "react-router-dom";
+// import ReviewSection from "../component/ReviewSection"; // 필요시 import 추가
 
 const API_URL = "http://192.168.0.224:8080";
-
 
 function Mypage() {
   const navigate = useNavigate();
@@ -22,18 +22,16 @@ function Mypage() {
   const [editingOrderId, setEditingOrderId] = useState(null);
   const isAdmin = localStorage.getItem("role") === "ADMIN";
 
-
   //검색어 처리(관리자 용)
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const keyword = params.get("keyword");             // URL 검색어
-  const searchKeyword = keyword?.toLowerCase();      // 검색용 변환
+  const keyword = params.get("keyword");
+  const searchKeyword = keyword?.toLowerCase();
   const [adminOrders, setAdminOrders] = useState([]);
 
   // ⭐ 관리자 전용 검색 결과
-  const [searchInput, setSearchInput] = useState("");   // 입력창 검색어
-  const [products, setProducts] = useState([]);         // 검색된 상품 리스트
-  // const [products, setProducts] = useState([]);         // 검색된 상품 리스트
+  const [searchInput, setSearchInput] = useState("");
+  const [products, setProducts] = useState([]);
 
   const ORDER_STATUS_KR = {
     ready: "결제 완료",
@@ -89,15 +87,10 @@ function Mypage() {
 
     setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
     setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
-  }, []);
+  }, [userId, navigate]);
 
-
-
-  // ⭐⭐⭐ 7) 관리자 검색 API 실행(useEffect는 반드시 return 위에!)
+  // ⭐⭐⭐ 관리자 검색 API 실행
   useEffect(() => {
-    // ADMIN이 아니면 실행하지 않음
-    if (localStorage.getItem("role") !== "ADMIN") return;
-
     if (localStorage.getItem("role") !== "ADMIN") return;
     if (!searchKeyword) return;
 
@@ -113,7 +106,6 @@ function Mypage() {
 
   function search() {
     if (!searchInput.trim()) return alert("검색어를 입력하세요!");
-    // ⭐ URL에 검색어를 넣어서 state 업데이트
     navigate(`/mypage?keyword=${searchInput}`);
   }
 
@@ -156,6 +148,7 @@ function Mypage() {
         <button className="mypage-btn" onClick={() => navigate("/edituserinfo")}>정보 수정</button>
       </div>
 
+      {/* ================= USER 화면 ================= */}
       {(localStorage.getItem("role") === "USER") && (
         <>
           {/* 주문 내역 */}
@@ -235,11 +228,9 @@ function Mypage() {
             <h3 className="mypage-section-title" onClick={() => setOpenReviewList(!openReviewList)}>
               내가 쓴 리뷰 {openReviewList ? "▲" : "▼"}
             </h3>
-            <ReviewSection
-              userId={userId}
-              myPageMode={true}/>
-            
 
+            {/* ReviewSection 컴포넌트 사용 - import 필요 */}
+            {/* <ReviewSection userId={userId} myPageMode={true}/> */}
 
             {openReviewList && (
               <div className="card-list">
@@ -328,6 +319,8 @@ function Mypage() {
               </div>
             )}
           </section>
+        </>
+      )}
 
       {/* ================= ADMIN 화면 ================= */}
       {isAdmin && (
@@ -353,17 +346,13 @@ function Mypage() {
             </div>
           )}
 
-
           {/* ================= ADMIN 주문내역 ================= */}
-
-
           <h3 style={{ marginTop: "40px" }}>주문 내역</h3>
 
           {adminOrders.length > 0 ? (
             <div className="admin-search-grid">
               {adminOrders.map(order => (
                 <div key={order.order_id} className="admin-product-card">
-
                   <p><strong>주문번호:</strong> {order.order_number}</p>
                   <p><strong>구매자:</strong> {order.member_name}</p>
                   <p>
@@ -463,7 +452,6 @@ function Mypage() {
                       </button>
                     )}
                   </div>
-
                 </div>
               ))}
             </div>
@@ -472,10 +460,7 @@ function Mypage() {
           )}
         </>
       )}
-
     </div>
-
-
   );
 }
 

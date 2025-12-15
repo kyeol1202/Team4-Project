@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./review.css";
+import "./ReviewSection.css";
 
 const API_URL = "http://192.168.0.224:8080";
 
@@ -78,11 +78,11 @@ export default function ReviewSection({
       {/* ================= 작성 버튼 ================= */}
       {!myPageMode && (
         <button
-        className="review-write-btn"
-        onClick={() => setShowForm(!showForm)}>
+          className="review-write-btn"
+          onClick={() => setShowForm(!showForm)}>
           리뷰 작성
-          </button>
-        )}
+        </button>
+      )}
 
 
       {/* ================= 작성 폼 ================= */}
