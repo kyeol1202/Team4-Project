@@ -777,7 +777,7 @@ app.post("/api/order/create", async (req, res) => {
     // 1. 주문 생성
     const orderResult = await conn.query(
       `INSERT INTO orders
-       (member_id, total_amount, shipping_address, receiver_name, receiver_phone, order_number, status)
+       (member_id, total_amount, shipping_address, receiver_name, receiver_phone, order_number, delivery_status)
        VALUES (?, ?, ?, ?, ?, ?, 'paid')`,
       [user_id, total, delivery.address, delivery.name, delivery.phone, orderNumber]
     );
