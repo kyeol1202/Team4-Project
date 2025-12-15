@@ -270,7 +270,7 @@ function ProductDetail() {
         productId={id}
         userId={userId}
         myPageMode={false}
-        hasPurchased={hasPurchased}
+        hasPurchased={true}
       />
 
       <button className="Productstyles-backBtn" onClick={() => navigate(-1)}>
