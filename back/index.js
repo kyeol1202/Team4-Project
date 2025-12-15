@@ -238,20 +238,29 @@ app.post("/api/productadd", upload.single("img"), async (req, res) => {
 /* ------------------------- 상품 상세 ------------------------- */
 
 app.get("/api/products/:id", async (req, res) => {
-  const id = req.params.id;
-
   try {
     const rows = await pool.query(
-      "SELECT * FROM product WHERE product_id = ?",
-      [id]
+      `
+      SELECT 
+        p.*,
+        c.name AS category_name
+      FROM product p
+      LEFT JOIN category c
+        ON p.category_id = c.category_id
+      WHERE p.product_id = ?
+      `,
+      [req.params.id]
     );
 
-    if (rows.length === 0)
+    if (rows.length === 0) {
       return res.json({ success: false, message: "상품 없음" });
+    }
 
-    return res.json({ success: true, data: rows[0] });
+    res.json({ success: true, data: rows[0] });
+
   } catch (err) {
-    return res.status(500).json({ success: false, message: "DB 오류" });
+    console.error("❌ 상품 상세 조회 오류:", err);
+    res.status(500).json({ success: false, message: "DB 오류" });
   }
 });
 
@@ -276,12 +285,10 @@ app.put("/api/product-edit/:id", upload.single("img"), async (req, res) => {
     search_tags
   } = req.body;
 
-  // 이미지가 새로 업로드되었으면 경로 저장
   const imgPath = req.file ? "/uploads/" + req.file.filename : null;
 
   try {
-    // 기존 데이터를 업데이트 (이미지 업데이트 포함)
-    const query = `
+    let query = `
       UPDATE product SET
         name = ?,
         price = ?,
@@ -296,11 +303,9 @@ app.put("/api/product-edit/:id", upload.single("img"), async (req, res) => {
         longevity = ?,
         sillage = ?,
         search_tags = ?
-        ${imgPath ? `, img = '${imgPath}'` : ""}
-      WHERE product_id = ?
     `;
 
-    await pool.query(query, [
+    const params = [
       name,
       price,
       category_id,
@@ -313,11 +318,28 @@ app.put("/api/product-edit/:id", upload.single("img"), async (req, res) => {
       perfume_type,
       longevity,
       sillage,
-      search_tags,
-      id,
-    ]);
+      search_tags
+    ];
 
-    res.json({ success: true, message: "상품 수정 완료!" });
+    // ✅ 이미지가 있을 때만 추가
+    if (imgPath) {
+      query += `, img = ?`;
+      params.push(imgPath);
+    }
+
+    query += ` WHERE product_id = ?`;
+    params.push(id);
+
+    await pool.query(query, params);
+
+    // 👉 수정 후 최신 데이터 반환 (프론트 안정화)
+    const updated = await pool.query(
+      "SELECT * FROM product WHERE product_id = ?",
+      [id]
+    );
+
+    res.json({ success: true, data: updated[0] });
+
   } catch (err) {
     console.error("❌ 상품 수정 실패:", err);
     res.status(500).json({ success: false, message: "DB 오류 발생" });

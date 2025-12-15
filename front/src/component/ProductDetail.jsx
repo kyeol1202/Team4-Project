@@ -19,6 +19,7 @@ function ProductDetail() {
   const [hasPurchased, setHasPurchased] = useState(false);
 
   const userId = localStorage.getItem("member_id");
+  const [categoryList, setCategoryList] = useState([]);
 
   /* ------------------------ 상품 데이터 ------------------------ */
   useEffect(() => {
@@ -41,67 +42,76 @@ function ProductDetail() {
       .then(data => { if (data.success) setHasPurchased(data.purchased); });
   }, [userId, id]);
 
+  useEffect(() => {
+    async function getCategory() {
+      const res = await fetch("http://192.168.0.224:8080/api/category");
+      const data = await res.json();
+      if (data.success) setCategoryList(data.data);
+    }
+    getCategory();
+  }, []);
+
 
   /* ------------------------ 위시 토글 ------------------------ */
   const toggleWish = () => {
 
     if (!userId) return alert("로그인이 필요합니다!");
 
-    else{
+    else {
 
 
-    
-    if (isInWish) {
-      removeFromWish(product.product_id);
-      setIsInWish(false);
-    } else {
-      addToWish({ product_id: product.product_id });
-      setIsInWish(true);
+
+      if (isInWish) {
+        removeFromWish(product.product_id);
+        setIsInWish(false);
+      } else {
+        addToWish({ product_id: product.product_id });
+        setIsInWish(true);
+      }
     }
-  }
   };
 
   /* ------------------------ 장바구니 ------------------------ */
   const addToCartHandler = async () => {
-  // 1) 로그아웃 상태면 localStorage에 담기
-  if (!userId || userId === "null") {
-    const key = "guest_cart";
-    const cart = JSON.parse(localStorage.getItem(key) || "[]");
+    // 1) 로그아웃 상태면 localStorage에 담기
+    if (!userId || userId === "null") {
+      const key = "guest_cart";
+      const cart = JSON.parse(localStorage.getItem(key) || "[]");
 
-    const existing = cart.find(i => i.product_id === product.product_id);
+      const existing = cart.find(i => i.product_id === product.product_id);
 
-    if (existing) {
-      existing.count += quantity;
-    } else {
-      cart.push({
-        product_id: product.product_id,
-        name: product.name,
-        price: product.price,
-        img: product.img,
-        count: quantity,
-      });
+      if (existing) {
+        existing.count += quantity;
+      } else {
+        cart.push({
+          product_id: product.product_id,
+          name: product.name,
+          price: product.price,
+          img: product.img,
+          count: quantity,
+        });
+      }
+
+      localStorage.setItem(key, JSON.stringify(cart));
+      alert("로그인 전 장바구니(임시)에 담았습니다!");
+      return;
     }
 
-    localStorage.setItem(key, JSON.stringify(cart));
-    alert("로그인 전 장바구니(임시)에 담았습니다!");
-    return;
-  }
+    // 2) 로그인 상태면 기존처럼 DB에 담기
+    const res = await fetch(`${API_URL}/api/cart/add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user_id: userId,
+        product_id: product.product_id,
+        count: quantity,
+      }),
+    });
 
-  // 2) 로그인 상태면 기존처럼 DB에 담기
-  const res = await fetch(`${API_URL}/api/cart/add`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      user_id: userId,
-      product_id: product.product_id,
-      count: quantity,
-    }),
-  });
-
-  const data = await res.json();
-  if (data.success) alert("장바구니에 담았습니다!");
-  else alert(data.message);
-};
+    const data = await res.json();
+    if (data.success) alert("장바구니에 담았습니다!");
+    else alert(data.message);
+  };
 
 
   /* ------------------------ 수정 모드 ------------------------ */
@@ -112,8 +122,24 @@ function ProductDetail() {
 
   const submitEdit = async () => {
     const form = new FormData();
-    Object.keys(editData).forEach(key => form.append(key, editData[key]));
-    if (editData.imgFile) form.append("img", editData.imgFile);
+
+    // 텍스트 데이터만 명시적으로 추가
+    form.append("name", editData.name);
+    form.append("price", editData.price);
+    form.append("description", editData.description);
+    form.append("category_id", editData.category_id);
+    form.append("perfume_type", editData.perfume_type);
+    form.append("volume", editData.volume);
+    form.append("longevity", editData.longevity);
+    form.append("sillage", editData.sillage);
+    form.append("top_notes", editData.top_notes);
+    form.append("middle_notes", editData.middle_notes);
+    form.append("base_notes", editData.base_notes);
+
+    // ✅ 이미지가 변경된 경우만 추가
+    if (editData.imgFile) {
+      form.append("img", editData.imgFile);
+    }
 
     const res = await fetch(`${API_URL}/api/product-edit/${id}`, {
       method: "PUT",
@@ -121,11 +147,14 @@ function ProductDetail() {
     });
 
     const result = await res.json();
+
     if (result.success) {
       alert("상품 수정 완료!");
-      setProduct(editData);
+      setProduct(result.data); // 서버에서 최신 데이터 내려주면 베스트
       setEditMode(false);
-    } else alert("수정 실패");
+    } else {
+      alert("수정 실패");
+    }
   };
 
 
@@ -186,7 +215,7 @@ function ProductDetail() {
             </button>
           </div>
 
-         
+
         </>
       )}
 
@@ -215,6 +244,33 @@ function ProductDetail() {
         ) : (
           <p className="Productstyles-desc">{product.description}</p>
         )}
+      </div>
+
+      {/* LONGEVITY */}
+      <div className="Productstyles-sectionBox">
+        <div className="Productstyles-row">
+          <strong>카테고리</strong>
+
+          {editMode ? (
+            <select
+              className="Productstyles-select"
+              name="category_id"
+              value={editData.category_id || ""}
+              onChange={handleChange}
+            >
+              <option value="">선택</option>
+              {categoryList.map(cat => (
+                <option key={cat.category_id} value={cat.category_id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <span className="Productstyles-value">
+              {product.category_name || "카테고리 없음"}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="Productstyles-sectionBox">
@@ -297,6 +353,8 @@ function ProductDetail() {
           )}
         </div>
 
+
+
         {/* SILLAGE */}
         <div className="Productstyles-row">
           <strong>SILLAGE</strong>
@@ -326,40 +384,40 @@ function ProductDetail() {
         </div>
       )}
 
-       {/* 리뷰 */}
-       {localStorage.getItem("role") === "USER" && (
-      <div className="Productstyles-sectionBox review-box">
-        <h2 className="Productstyles-sectionTitle">고객 리뷰</h2>
+      {/* 리뷰 */}
+      {localStorage.getItem("role") === "USER" && (
+        <div className="Productstyles-sectionBox review-box">
+          <h2 className="Productstyles-sectionTitle">고객 리뷰</h2>
 
-        {userId && hasPurchased ? (
-          <>
-            <h3>리뷰 작성</h3>
+          {userId && hasPurchased ? (
+            <>
+              <h3>리뷰 작성</h3>
 
-            <div className="stars">
-              {[1, 2, 3, 4, 5].map(n => (
-                <span
-                  key={n}
-                  onClick={() => setReviewStar(n)}
-                  style={{ color: n <= reviewStar ? "gold" : "#ccc" }}
-                >
-                  ★
-                </span>
-              ))}
-            </div>
+              <div className="stars">
+                {[1, 2, 3, 4, 5].map(n => (
+                  <span
+                    key={n}
+                    onClick={() => setReviewStar(n)}
+                    style={{ color: n <= reviewStar ? "gold" : "#ccc" }}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
 
-            <textarea
-              value={reviewContent}
-              onChange={(e) => setReviewContent(e.target.value)}
-            />
+              <textarea
+                value={reviewContent}
+                onChange={(e) => setReviewContent(e.target.value)}
+              />
 
-            <button onClick={() => alert("리뷰 저장 테스트")}>작성</button>
-          </>
-        ) : (
-          <p style={{ color: "red" }}>구매 고객만 리뷰를 작성할 수 있습니다.</p>
-        )}
-      </div>
+              <button onClick={() => alert("리뷰 저장 테스트")}>작성</button>
+            </>
+          ) : (
+            <p style={{ color: "red" }}>구매 고객만 리뷰를 작성할 수 있습니다.</p>
+          )}
+        </div>
 
-       )}
+      )}
 
       <button className="Productstyles-backBtn" onClick={() => navigate(-1)}>
         ← 뒤로 돌아가기
