@@ -102,7 +102,10 @@ app.get("/api/products", async (req, res) => {
   const keyword = req.query.keyword || "";
   try {
     const rows = await pool.query(
-      "SELECT product_id, name, price, img FROM product WHERE name LIKE ? OR search_tags LIKE ?",
+      `SELECT product_id, name, price, img, description 
+       FROM product 
+       WHERE name LIKE ? 
+       OR search_tags LIKE ?`,
       [`%${keyword}%`, `%${keyword}%`]
     );
     res.json({ success: true, data: rows });
@@ -138,14 +141,37 @@ app.get("/api/search", async (req, res) => {
   }
 });
 
+
+
 /* ------------------------- 상품 목록 ------------------------- */
 
 app.get("/api/products/all", async (req, res) => {
+  let { sort, min, max } = req.query;
+
+  let query = "SELECT * FROM product WHERE 1=1";
+  let params = [];
+
+  // 가격 필터
+  if (min) {
+    query += " AND price >= ?";
+    params.push(Number(min));
+  }
+  if (max) {
+    query += " AND price <= ?";
+    params.push(Number(max));
+  }
+
+  // 정렬
+  if (sort === "price_asc") query += " ORDER BY price ASC";
+  else if (sort === "price_desc") query += " ORDER BY price DESC";
+  else if (sort === "new") query += " ORDER BY product_id DESC";
+
   try {
-    const rows = await pool.query("SELECT * FROM product");
+    const rows = await pool.query(query, params);
     res.json({ success: true, data: rows });
   } catch (err) {
-    res.status(500).json({ success: false });
+    console.log(err);
+    res.status(500).json({ success: false, message: "DB 오류" });
   }
 });
 
@@ -212,20 +238,29 @@ app.post("/api/productadd", upload.single("img"), async (req, res) => {
 /* ------------------------- 상품 상세 ------------------------- */
 
 app.get("/api/products/:id", async (req, res) => {
-  const id = req.params.id;
-
   try {
     const rows = await pool.query(
-      "SELECT * FROM product WHERE product_id = ?",
-      [id]
+      `
+      SELECT 
+        p.*,
+        c.name AS category_name
+      FROM product p
+      LEFT JOIN category c
+        ON p.category_id = c.category_id
+      WHERE p.product_id = ?
+      `,
+      [req.params.id]
     );
 
-    if (rows.length === 0)
+    if (rows.length === 0) {
       return res.json({ success: false, message: "상품 없음" });
+    }
 
-    return res.json({ success: true, data: rows[0] });
+    res.json({ success: true, data: rows[0] });
+
   } catch (err) {
-    return res.status(500).json({ success: false, message: "DB 오류" });
+    console.error("❌ 상품 상세 조회 오류:", err);
+    res.status(500).json({ success: false, message: "DB 오류" });
   }
 });
 
@@ -250,12 +285,10 @@ app.put("/api/product-edit/:id", upload.single("img"), async (req, res) => {
     search_tags
   } = req.body;
 
-  // 이미지가 새로 업로드되었으면 경로 저장
   const imgPath = req.file ? "/uploads/" + req.file.filename : null;
 
   try {
-    // 기존 데이터를 업데이트 (이미지 업데이트 포함)
-    const query = `
+    let query = `
       UPDATE product SET
         name = ?,
         price = ?,
@@ -270,11 +303,9 @@ app.put("/api/product-edit/:id", upload.single("img"), async (req, res) => {
         longevity = ?,
         sillage = ?,
         search_tags = ?
-        ${imgPath ? `, img = '${imgPath}'` : ""}
-      WHERE product_id = ?
     `;
 
-    await pool.query(query, [
+    const params = [
       name,
       price,
       category_id,
@@ -287,11 +318,28 @@ app.put("/api/product-edit/:id", upload.single("img"), async (req, res) => {
       perfume_type,
       longevity,
       sillage,
-      search_tags,
-      id,
-    ]);
+      search_tags
+    ];
 
-    res.json({ success: true, message: "상품 수정 완료!" });
+    // ✅ 이미지가 있을 때만 추가
+    if (imgPath) {
+      query += `, img = ?`;
+      params.push(imgPath);
+    }
+
+    query += ` WHERE product_id = ?`;
+    params.push(id);
+
+    await pool.query(query, params);
+
+    // 👉 수정 후 최신 데이터 반환 (프론트 안정화)
+    const updated = await pool.query(
+      "SELECT * FROM product WHERE product_id = ?",
+      [id]
+    );
+
+    res.json({ success: true, data: updated[0] });
+
   } catch (err) {
     console.error("❌ 상품 수정 실패:", err);
     res.status(500).json({ success: false, message: "DB 오류 발생" });
@@ -504,7 +552,7 @@ ${JSON.stringify(ctx, null, 2)}
 `;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini", 
+      model: "gpt-4o-mini",
       messages: [
         { role: "system", content: "너는 향수 쇼핑몰 상담원 AI이다." },
         { role: "user", content: prompt }
@@ -604,7 +652,299 @@ app.post("/game2", async (req, res) => {
   }
 });
 
+app.get("/api/products/category/:categoryId", async (req, res) => {
+  const { categoryId } = req.params;
+  const { sort, min, max } = req.query;
+
+  let query = `SELECT * FROM product WHERE category_id = ?`;
+  let params = [categoryId];
+
+  // 가격 필터 추가
+  if (min) {
+    query += " AND price >= ?";
+    params.push(Number(min));
+  }
+  if (max) {
+    query += " AND price <= ?";
+    params.push(Number(max));
+  }
+
+  // 정렬 추가
+  if (sort === "price_asc") query += " ORDER BY price ASC";
+  if (sort === "price_desc") query += " ORDER BY price DESC";
+  if (sort === "new") query += " ORDER BY product_id DESC"; // 신상품순
+
+  try {
+    const rows = await pool.query(query, params);
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+});
+
+/* =========================
+   주문 + 결제 생성 (FINAL)
+========================= */
+/* ========================= 주문내역 조회 ========================= */
+
+app.get("/api/order/:userId", async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    // 1️⃣ 주문 목록
+    const orders = await pool.query(
+      `SELECT 
+         o.order_id,
+         o.order_date,
+         o.total_amount,
+         o.status,
+         o.order_number
+       FROM orders o
+       WHERE o.member_id = ?
+       ORDER BY o.order_date DESC`,
+      [userId]
+    );
+
+    if (orders.length === 0) {
+      return res.json({ success: true, orders: [] });
+    }
+
+    // 2️⃣ 주문 ID 목록
+    const orderIds = orders.map(o => o.order_id);
+
+    // 3️⃣ 주문 상품 조회
+    const items = await pool.query(
+      `SELECT 
+         oi.order_id,
+         oi.product_id,
+         oi.quantity,
+         oi.unit_price,
+         p.name AS product_name
+       FROM order_items oi
+       JOIN product p ON oi.product_id = p.product_id
+       WHERE oi.order_id IN (?)`,
+      [orderIds]
+    );
+
+    // 4️⃣ 프론트에서 쓰기 좋은 형태로 가공
+    const result = orders.map(order => ({
+      id: order.order_id,
+      orderNumber: order.order_number,
+      status: order.status,
+      total: order.total_amount,
+      date: order.order_date,
+      items: items
+        .filter(i => i.order_id === order.order_id)
+        .map(i => ({
+          productId: i.product_id,
+          productName: i.product_name,
+          qty: i.quantity,
+          price: i.unit_price
+        }))
+    }));
+
+    res.json({ success: true, orders: result });
+
+  } catch (err) {
+    console.error("❌ 주문 조회 오류:", err);
+    res.status(500).json({ success: false, message: "DB 오류" });
+  }
+});
+
+/* ========================= 테스트용 간단 주문 라우트 ========================= */
+
+
+
+
+
+app.post("/api/order/create", async (req, res) => {
+  console.log("🎯 주문 라우트 호출됨!");
+  console.log("📦 받은 데이터:", req.body);
+
+  const { user_id, items, total, delivery, paymentMethod } = req.body;
+
+  // 검증
+  if (!user_id) {
+    return res.status(400).json({ success: false, message: "로그인 필요" });
+  }
+
+  if (!items || items.length === 0) {
+    return res.status(400).json({ success: false, message: "주문 상품 없음" });
+  }
+
+  if (!delivery?.name || !delivery?.phone || !delivery?.address) {
+    return res.status(400).json({ success: false, message: "배송 정보 누락" });
+  }
+
+  if (!['kakaopay', 'naverpay', 'card', 'bank'].includes(paymentMethod)) {
+    return res.status(400).json({ success: false, message: "유효하지 않은 결제 수단" });
+  }
+
+  let conn;
+
+  try {
+    conn = await pool.getConnection();
+    console.log("✅ DB 연결 성공");
+
+    await conn.beginTransaction();
+    console.log("✅ 트랜잭션 시작");
+
+    // 주문번호 생성
+    const d = new Date();
+    const ymd = d.getFullYear().toString() +
+      String(d.getMonth() + 1).padStart(2, "0") +
+      String(d.getDate()).padStart(2, "0");
+    const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const orderNumber = `ORD-${ymd}-${rand}`;
+
+    // 1. 주문 생성
+    const orderResult = await conn.query(
+      `INSERT INTO orders
+       (member_id, total_amount, shipping_address, receiver_name, receiver_phone, order_number, order_status)
+       VALUES (?, ?, ?, ?, ?, ?, 'paid')`,
+      [user_id, total, delivery.address, delivery.name, delivery.phone, orderNumber]
+    );
+
+    const orderId = Number(orderResult.insertId);
+    console.log("✅ 주문 생성 완료, ID:", orderId);
+
+    // 2. 주문 상품 저장
+    for (const item of items) {
+      await conn.query(
+        `INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal)
+         VALUES (?, ?, ?, ?, ?)`,
+        [orderId, item.product_id, item.qty, item.price, item.price * item.qty]
+      );
+    }
+    console.log("✅ 주문 상품 저장 완료");
+
+    // 3. 결제 정보 저장
+    await conn.query(
+      `INSERT INTO payments (order_id, payment_method, amount, status)
+       VALUES (?, ?, ?, 'paid')`,
+      [orderId, paymentMethod, total]
+    );
+    console.log("✅ 결제 정보 저장 완료");
+
+    // 4. 장바구니 비우기
+    await conn.query(`DELETE FROM cart WHERE member_id = ?`, [user_id]);
+    console.log("✅ 장바구니 비우기 완료");
+
+    await conn.commit();
+    console.log("✅ 트랜잭션 커밋 완료");
+
+    return res.json({ success: true, order_id: orderId });
+
+  } catch (err) {
+    if (conn) {
+      await conn.rollback();
+      console.log("⚠️ 트랜잭션 롤백");
+    }
+    console.error("❌ 주문 생성 오류:", err);
+
+    return res.status(500).json({
+      success: false,
+      message: "결제 처리 중 오류 발생",
+      error: err.message
+    });
+  } finally {
+    if (conn) {
+      conn.release();
+      console.log("🔓 DB 연결 해제");
+    }
+  }
+});
+
+/* ------------------------- 관리자용 ------------------------- */
+app.get("/admin/orders", async (req, res) => {
+  try {
+    const rows = await pool.query(`
+      SELECT
+        o.order_id,
+        o.order_number,
+        o.member_id,
+        m.name AS member_name,
+        o.total_amount,
+        o.status,
+        o.order_status,
+        o.order_date
+      FROM orders o
+      JOIN member m ON o.member_id = m.member_id
+      ORDER BY o.order_date DESC
+    `);
+
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+});
+// 관리자 주문 상태 변경
+app.put("/admin/order/status", async (req, res) => {
+  const { order_id, status } = req.body;
+
+  try {
+    await pool.query(
+      "UPDATE orders SET status = ? WHERE order_id = ?",
+      [status, order_id]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+});
+
+// 관리자 배송 상태 변경
+app.put("/admin/order/delivery", async (req, res) => {
+  const { order_id, order_status } = req.body;
+
+  try {
+    await pool.query(
+      "UPDATE orders SET order_status = ? WHERE order_id = ?",
+      [order_status, order_id]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+});
+
+
+/* ------------------------- 관리자용 검색 기능 ------------------------- */
+
+app.get("/admin/search", async (req, res) => {
+  const { keyword } = req.query;
+
+  try {
+    const rows = await pool.query(`
+      SELECT
+        o.order_id,
+        o.order_number,
+        o.member_id,
+        m.name AS member_name,
+        o.total_amount,
+        o.order_status,
+        o.order_date
+      FROM orders o
+      JOIN member m ON o.member_id = m.member_id
+      WHERE m.name LIKE ?
+      ORDER BY o.order_date DESC
+    `, [`%${keyword}%`]);
+
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+});
+
+
+
+// 서버 시작 (맨 마지막!)
 app.listen(8080, "0.0.0.0", () => {
   console.log("🚀 서버 실행 중: http://0.0.0.0:8080");
   console.log("📁 Static files: http://0.0.0.0:8080/uploads");
 });
+
