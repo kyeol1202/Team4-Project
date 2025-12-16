@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import "../component/mypage.css";
 import { useNavigate, useLocation } from "react-router-dom";
+// import ReviewSection from "../component/ReviewSection"; // 필요시 import 추가
 
 const API_URL = "http://192.168.0.224:8080";
 
@@ -20,7 +21,6 @@ function Mypage() {
   const [openQuestionIndex, setOpenQuestionIndex] = useState(null);
   const [editingOrderId, setEditingOrderId] = useState(null);
   const isAdmin = localStorage.getItem("role") === "ADMIN";
-
 
   //검색어 처리(관리자 용)
   const location = useLocation();
@@ -63,7 +63,7 @@ function Mypage() {
 
     setReviews(JSON.parse(localStorage.getItem("reviews")) || []);
     setQuestions(JSON.parse(localStorage.getItem("questions")) || []);
-  }, []);
+  }, [userId, navigate]);
 
   // ⭐⭐⭐ 7) 관리자 검색 API 실행(useEffect는 반드시 return 위에!)
   useEffect(() => {
@@ -83,7 +83,6 @@ function Mypage() {
 
   function search() {
     if (!searchInput.trim()) return alert("검색어를 입력하세요!");
-    // ⭐ URL에 검색어를 넣어서 state 업데이트
     navigate(`/mypage?keyword=${searchInput}`);
   }
 
@@ -126,6 +125,7 @@ function Mypage() {
         <button className="mypage-btn" onClick={() => navigate("/edituserinfo")}>정보 수정</button>
       </div>
 
+      {/* ================= USER 화면 ================= */}
       {(localStorage.getItem("role") === "USER") && (
         <>
           {/* 주문 내역 */}
@@ -205,6 +205,8 @@ function Mypage() {
               myPageMode={true}
             /> */}
 
+            {/* ReviewSection 컴포넌트 사용 - import 필요 */}
+            {/* <ReviewSection userId={userId} myPageMode={true}/> */}
 
             {openReviewList && (
               <div className="card-list">
@@ -320,17 +322,13 @@ function Mypage() {
             </div>
           )}
 
-
           {/* ================= ADMIN 주문내역 ================= */}
-
-
           <h3 style={{ marginTop: "40px" }}>주문 내역</h3>
 
           {adminOrders.length > 0 ? (
             <div className="admin-search-grid">
               {adminOrders.map(order => (
                 <div key={order.order_id} className="admin-product-card">
-
                   <p><strong>주문번호:</strong> {order.order_number}</p>
                   <p><strong>구매자:</strong> {order.member_name}</p>
                   <p><strong>금액:</strong> {order.total_amount.toLocaleString()}원</p>
@@ -426,7 +424,6 @@ function Mypage() {
                       </button>
                     )}
                   </div>
-
                 </div>
               ))}
             </div>
@@ -435,7 +432,6 @@ function Mypage() {
           )}
         </>
       )}
-
     </div>
   );
 }
