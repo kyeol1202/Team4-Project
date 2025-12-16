@@ -9,7 +9,7 @@ import { useLocation } from "react-router-dom";
 
 function Layout() {
 
-  
+
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { addToWish } = useWish();
@@ -63,15 +63,15 @@ function Layout() {
     const saved = localStorage.getItem("login");
     setLogin(saved === "true");
   }, []);
- const location = useLocation();
+  const location = useLocation();
   useEffect(() => {
-  if (location.state?.openLogin) {
-    setLoginOpen(true);
+    if (location.state?.openLogin) {
+      setLoginOpen(true);
 
-    // 뒤로가기 시 다시 열리는 것 방지
-    navigate(location.pathname, { replace: true, state: {} });
-  }
-}, [location, navigate]);
+      // 뒤로가기 시 다시 열리는 것 방지
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   // 카테고리 목록 가져오기 (DB)
   useEffect(() => {
@@ -135,7 +135,7 @@ function Layout() {
   // ---------------- 로그인 ----------------
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
- 
+
 
   async function Login() {
     if (!userId || !password) return alert("아이디와 비밀번호를 입력하세요!");
@@ -242,11 +242,11 @@ function Layout() {
             </ul>
 
             {/* 다른 메뉴 */}
-            
+
 
           </ul>
 
-          
+
         </div>
 
 
@@ -393,11 +393,11 @@ function Layout() {
       <footer className="footer">
         <button onClick={() => navigate("/service")}>🎧</button>
         <button onClick={() => setChatbotOpen(true)}>🤖</button>
-        <button onClick={() => setGameOpen(true)}>🎮</button>
-        <button onClick={() => setGame2Open(true)}>🎮</button>
+        {/* <button onClick={() => setGameOpen(true)}>🎮</button>
+        <button onClick={() => setGame2Open(true)}>🎮</button> */}
       </footer>
 
-      {gameOpen && (
+      {/* {gameOpen && (
         <div className="game-overlay" onClick={() => setGameOpen(false)}>
           <div className="game-popup" onClick={(e) => e.stopPropagation()}>
             <Game />
@@ -413,7 +413,7 @@ function Layout() {
             <button onClick={() => setGame2Open(false)}>닫기</button>
           </div>
         </div>
-      )}
+      )} */}
 
       {chatbotOpen && (
         <div

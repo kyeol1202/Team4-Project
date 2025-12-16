@@ -101,7 +101,7 @@ function Mypage() {
     if (localStorage.getItem("role") !== "ADMIN") return;
     if (!searchKeyword) return;
 
-    fetch(`${API_URL}/api/check-users?keyword=${searchKeyword}`)
+    fetch(`${API_URL}/admin/search?keyword=${searchKeyword}`)
       .then(res => res.json())
       .then(data => {
         if (data.success) {
@@ -217,12 +217,12 @@ function Mypage() {
                         총 금액: {order.total.toLocaleString()}원
                       </p>
 
-                      <button
+                      {/* <button
                         className="mypage-btn"
                         onClick={() => handleOrderClick(order.id)}
                       >
                         상세보기
-                      </button>
+                      </button> */}
                     </div>
                   ))
                 )}
@@ -336,6 +336,7 @@ function Mypage() {
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="검색어 입력"
+              onKeyDown={(e) => e.key === "Enter" && search()}
             />
             <button className="mypage-btn" onClick={search}>검색</button>
           </div>
