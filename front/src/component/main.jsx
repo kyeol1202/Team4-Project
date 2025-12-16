@@ -102,12 +102,9 @@ function Main() {
           <span>윤종빈</span>
           <span>신은지</span>
           <span>이선화</span>
-          {/* 반복되는 문구들을 적당히 넣기 */}
-
-          
         </div>
       </div>
-      
+
 
       <video
         className="main-video2"
