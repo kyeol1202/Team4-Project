@@ -4,6 +4,7 @@
     opacity: 0;
     transform: translateY(30px) scale(0.97);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -11,7 +12,7 @@
 }
 
 .fade-section {
-will-change: opacity;
+  will-change: opacity;
 }
 
 .fade-section.show {
@@ -41,7 +42,8 @@ will-change: opacity;
 .top-marquee-bar {
   width: 100%;
   overflow: hidden;
-  background-color: #000;  /* 바 배경색 */
+  background-color: #000;
+  /* 바 배경색 */
   color: #fff;
   white-space: nowrap;
   box-sizing: border-box;
@@ -50,19 +52,26 @@ will-change: opacity;
 
 .marquee-content {
   display: inline-block;
-  padding-left: 100%; /* 처음엔 화면 오른쪽 바깥에서 시작 */
+  padding-left: 100%;
+  /* 처음엔 화면 오른쪽 바깥에서 시작 */
   animation: marquee 25s linear infinite;
 }
 
 .marquee-content span {
-  margin-right: 50px; /* 문구들 사이 간격 */
+  margin-right: 50px;
+  /* 문구들 사이 간격 */
   font-size: 16px;
   font-weight: 500;
 }
 
 @keyframes marquee {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 
@@ -75,7 +84,8 @@ will-change: opacity;
 /* 텍스트 오버레이 위치 설정 */
 .title-overlay {
   position: absolute;
-  bottom: 40px; /* 영상 아래쪽에서 살짝 위로 띄움 */
+  bottom: 40px;
+  /* 영상 아래쪽에서 살짝 위로 띄움 */
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
@@ -99,15 +109,18 @@ will-change: opacity;
 .content-wrapper {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;  /* 오른쪽 정렬 */
+  justify-content: flex-end;
+  /* 오른쪽 정렬 */
   align-items: center;
-  gap: 40px; /* 이미지와 글 사이 간격 */
+  gap: 40px;
+  /* 이미지와 글 사이 간격 */
   width: 100%;
 }
 
 /* 광고 영상은 기존 그대로 */
 .ad-video {
-  width: 55%;   /* 여기서 영상 가로 늘릴 수 있음 */
+  width: 55%;
+  /* 여기서 영상 가로 늘릴 수 있음 */
   height: auto;
   border-radius: 10px;
 }
@@ -177,14 +190,17 @@ will-change: opacity;
 .divider {
   width: 1px;
   height: 600px;
-  background: rgba(0,0,0,0.1); /* 얇고 은은한 회색 */
+  background: rgba(0, 0, 0, 0.1);
+  /* 얇고 은은한 회색 */
 }
 
 /* 오른쪽 묶음 */
 .right-panel {
   display: flex;
-  flex-direction: column; /* 이미지 위, 텍스트 아래 */
-  align-items: center; /* 가운데 정렬 */
+  flex-direction: column;
+  /* 이미지 위, 텍스트 아래 */
+  align-items: center;
+  /* 가운데 정렬 */
 }
 
 /* 향수 이미지 */
@@ -193,7 +209,7 @@ will-change: opacity;
   height: 400px;
   margin-bottom: 20px;
   border-radius: 30px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 
 }
 
@@ -218,8 +234,10 @@ will-change: opacity;
 
 .title-box {
   position: relative;
-  z-index: 5; /* fade-section 위 */
-  opacity: 1 !important; /* 부모 opacity 영향 안 받게 */
+  z-index: 5;
+  /* fade-section 위 */
+  opacity: 1 !important;
+  /* 부모 opacity 영향 안 받게 */
 }
 
 .title-overlay h1 {
@@ -228,7 +246,8 @@ will-change: opacity;
   font-size: 48px;
   font-weight: 400;
   margin: 0;
-  color: white; /* 영상 위는 흰색이 더 잘 보임 */
+  color: white;
+  /* 영상 위는 흰색이 더 잘 보임 */
 }
 
 .title-box h1 {
@@ -245,11 +264,13 @@ will-change: opacity;
 }
 
 .delay {
-  animation-delay: 0.4s; /* 두 번째 문장은 조금 늦게 */
+  animation-delay: 0.4s;
+  /* 두 번째 문장은 조금 늦게 */
 }
 
 .line2 {
-  transform: translateY(0); /* 레이아웃 겹침 제거 */
+  transform: translateY(0);
+  /* 레이아웃 겹침 제거 */
 }
 
 /* 애니메이션 적용 */
@@ -263,7 +284,8 @@ will-change: opacity;
   flex-direction: row !important;
   justify-content: center;
   align-items: center;
-  gap: 80px; /* 영상과 내용 사이 간격 */
+  gap: 80px;
+  /* 영상과 내용 사이 간격 */
   padding: 80px 0;
 }
 
@@ -286,7 +308,7 @@ will-change: opacity;
 
 .slider-inner {
   display: flex;
-  transition: transform 0.8s cubic-bezier(.23,1,.32,1);
+  transition: transform 0.8s cubic-bezier(.23, 1, .32, 1);
 }
 
 /* ============================
@@ -304,14 +326,14 @@ will-change: opacity;
   background: #fff;
   border-radius: 14px;
   padding: 18px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
   transition: all .25s ease;
   text-align: center;
 }
 
 .category-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
 .category-img {
@@ -355,13 +377,13 @@ will-change: opacity;
   padding: 18px;
   border-radius: 12px;
   text-align: center;
-  box-shadow: 0 3px 16px rgba(0,0,0,0.06);
+  box-shadow: 0 3px 16px rgba(0, 0, 0, 0.06);
   transition: all .25s ease;
 }
 
 .search-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
 }
 
 .search-img {
@@ -414,6 +436,7 @@ will-change: opacity;
   border-radius: 6px;
   border: 1px solid #ccc;
 }
+
 /* ------------------ 기타 ------------------ */
 
 .section-title {
@@ -454,7 +477,7 @@ will-change: opacity;
 .menu-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   z-index: 900;
 }
 
@@ -462,12 +485,13 @@ will-change: opacity;
 .side-menu {
   position: fixed;
   top: 0;
-  left: -300px;        /* 처음엔 화면 밖 */
+  left: -300px;
+  /* 처음엔 화면 밖 */
   width: 260px;
   height: 100%;
   background: #fff;
-  box-shadow: 5px 0 20px rgba(0,0,0,0.15);
-  
+  box-shadow: 5px 0 20px rgba(0, 0, 0, 0.15);
+
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
@@ -584,7 +608,7 @@ will-change: opacity;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255,255,255,0.97);
+  background: rgba(255, 255, 255, 0.97);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   opacity: 0;
@@ -640,13 +664,13 @@ will-change: opacity;
   border-radius: 14px;
   padding: 14px;
   text-align: center;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
   transition: all .25s ease;
 }
 
 .product-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 14px 26px rgba(0,0,0,0.15);
+  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.15);
 }
 
 .product-img {
@@ -694,7 +718,8 @@ will-change: opacity;
 
 .search-box input {
   width: 100%;
-  flex: 1;                 /* 입력창이 남은 공간 전체 차지 */
+  flex: 1;
+  /* 입력창이 남은 공간 전체 차지 */
   padding: 12px 15px;
   border-radius: 6px;
   border: 1px solid #dcdcdc;
@@ -733,6 +758,7 @@ will-change: opacity;
 .footer button:hover {
   opacity: 0.6;
 }
+
 .slider-wrapper {
   display: flex;
   align-items: center;
@@ -742,19 +768,23 @@ will-change: opacity;
 }
 
 .slider {
-  width: calc(330px * 3 + 20px * 2); /* 보이는 카드 3개 폭 */
-  overflow: hidden; /* 3개 이상은 숨김 */
+  width: calc(330px * 3 + 20px * 2);
+  /* 보이는 카드 3개 폭 */
+  overflow: hidden;
+  /* 3개 이상은 숨김 */
   position: relative;
 }
 
 .slider-inner {
   display: flex;
   transition: transform 0.8s ease-in-out;
-  width: max-content; /* 카드 전체 너비만큼 확장 */
+  width: max-content;
+  /* 카드 전체 너비만큼 확장 */
 }
 
 .product-card {
-  flex: 0 0 auto; /* 카드 고정 폭 유지 */
+  flex: 0 0 auto;
+  /* 카드 고정 폭 유지 */
   width: 330px;
   height: 330px;
   margin-right: 20px;
@@ -769,20 +799,21 @@ will-change: opacity;
 
 
 .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 90;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 90;
 }
 
 .login-drawer {
   position: fixed;
   top: 0;
-  right: -400px;        /* 처음에는 화면 밖 */
+  right: -400px;
+  /* 처음에는 화면 밖 */
   width: 350px;
   height: 100%;
   background: #fff;
-  box-shadow: -5px 0 20px rgba(0,0,0,0.15);
+  box-shadow: -5px 0 20px rgba(0, 0, 0, 0.15);
   padding: 40px 20px;
   display: flex;
   flex-direction: column;
@@ -818,6 +849,113 @@ will-change: opacity;
   cursor: pointer;
 }
 
+/* ===== 회원가입 ===== */
+
+.reg {
+  max-width: 420px;
+  /* ⭐ 폭만 제한 */
+  margin: 30px auto;
+  /* ⭐ 화면 가운데 정렬 */
+  display: flex;
+  flex-direction: column;
+  /* ⭐ 세로 정렬 */
+  gap: 8px;
+  /* ⭐ 요소 간 간격 */
+}
+
+/* 라벨 텍스트 간격 */
+.reg>div {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* input 기존 디자인 유지 + 정렬 */
+.reg input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  width: 100%;
+  /* ⭐ 줄 맞추기 */
+  box-sizing: border-box;
+}
+
+/* 버튼 정렬만 */
+.reg-btn {
+  padding: 12px;
+  background: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  /* ⭐ 버튼 폭 통일 */
+  border-radius: 6px;
+}
+
+/* select 디자인 유지 + 크기 조정 */
+.reg select {
+  width: 100%;
+  /* ⭐ 기본은 100% */
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  background-color: #fafafa;
+  appearance: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+/* 생년월일 select 묶음 */
+.reg .birth-select {
+  display: flex;
+  gap: 8px;
+}
+
+/* 생년월일 select만 가로 분할 */
+.reg .birth-select select {
+  width: 33.33%;
+  /* ⭐ 3개 균등 */
+}
+
+/* 포커스 효과 유지 */
+.reg select:focus {
+  outline: none;
+  border-color: #000;
+  background-color: #fff;
+}
+
+/* ===== 회원가입 유형 선택 ===== */
+
+.reg-type {
+  display: flex;
+  flex-direction: column;
+  /* 세로 정렬 */
+  align-items: center;
+  /* ⭐ 가로 중앙 */
+  justify-content: center;
+  /* ⭐ 세로 중앙 */
+  margin-top: 80px;
+  gap: 14px;
+  /* 버튼 간 간격 */
+}
+
+.reg-type h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* 상단 버튼 폭 통일 */
+.reg-type .reg-btn {
+  width: 220px;
+}
+
+.reg-title {
+  text-align: center;
+  /* ⭐ 가로 중앙 */
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
 /* ===== 팝업 전체 배경 ===== */
 
 
@@ -827,7 +965,7 @@ will-change: opacity;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -842,7 +980,7 @@ will-change: opacity;
   border-radius: 12px;
   padding: 20px;
   position: relative;
-  box-shadow: 0px 6px 20px rgba(0,0,0,0.25);
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.25);
   animation: popupShow 0.25s ease;
 }
 
@@ -852,6 +990,7 @@ will-change: opacity;
     transform: scale(0.8);
     opacity: 0;
   }
+
   to {
     transform: scale(1);
     opacity: 1;
@@ -902,18 +1041,19 @@ will-change: opacity;
 .open-btn:hover {
   background-color: #ffffff;
 }
-  
+
 .perfume-popup {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -10%);   /* 화면 정중앙 */
-  
+  transform: translate(-50%, -10%);
+  /* 화면 정중앙 */
+
   width: 550px;
   background: #ffffff;
   border-radius: 14px;
   padding: 32px;
-  
+
   max-height: 85vh;
   overflow-y: auto;
 
@@ -932,18 +1072,21 @@ will-change: opacity;
 .popup-form {
   display: flex;
   flex-direction: column;
-  gap: 14px;                  /* 입력칸 여유 */
+  gap: 14px;
+  /* 입력칸 여유 */
 }
 
 .popup-form label {
   font-size: 14px;
   color: #666;
 }
+
 .popup-bg {
   z-index: 200;
 }
 
-.popup-box, .perfume-popup {
+.popup-box,
+.perfume-popup {
   z-index: 300;
   position: relative;
 }
@@ -1004,8 +1147,8 @@ will-change: opacity;
   opacity: 0;
   transform: translateY(40px);
   transition: opacity .7s ease, transform .7s ease;
-  min-height: 50vh;          
-  min-width: 50vh;           
+  min-height: 50vh;
+  min-width: 50vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1029,7 +1172,8 @@ will-change: opacity;
 .Productstyles-container {
   display: flex;
   flex-direction: column;
-  align-items: center;    /* ⭐ 중앙 정렬 */
+  align-items: center;
+  /* ⭐ 중앙 정렬 */
 }
 
 /* ====== 공통 박스 ====== */
@@ -1039,7 +1183,7 @@ will-change: opacity;
   border-radius: 14px;
   background: #fafafa;
   border: 1px solid #e6e6e6;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 /* ====== 섹션 타이틀 ====== */
@@ -1122,8 +1266,10 @@ will-change: opacity;
 /* ===== 저장 버튼 ===== */
 /* 저장 버튼 영역 더 아래로 여유 공간 확보 */
 .save-btn-container {
-  margin-top: 60px;       /* 기존 40px → 60px */
-  margin-bottom: 40px;    /* 페이지 하단 공백 추가 */
+  margin-top: 60px;
+  /* 기존 40px → 60px */
+  margin-bottom: 40px;
+  /* 페이지 하단 공백 추가 */
   display: flex;
   justify-content: center;
 }
@@ -1148,7 +1294,8 @@ will-change: opacity;
   max-width: 320px;
   max-height: 420px;
   object-fit: contain;
-  margin: 0 auto 30px; /* ⭐ 자동 중앙 + 아래 여백 */
+  margin: 0 auto 30px;
+  /* ⭐ 자동 중앙 + 아래 여백 */
   display: block;
 }
 
@@ -1174,14 +1321,17 @@ will-change: opacity;
 /* ====== 공통 박스 크기 통일 ====== */
 .Productstyles-sectionBox {
   width: 100%;
-  max-width: 680px;        /* ⭐ 모든 박스 동일 크기 */
-  margin: 40px auto;        /* ⭐ 중앙 정렬 */
+  max-width: 680px;
+  /* ⭐ 모든 박스 동일 크기 */
+  margin: 40px auto;
+  /* ⭐ 중앙 정렬 */
   padding: 25px 28px;
   border-radius: 14px;
   background: #fafafa;
   border: 1px solid #e6e6e6;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  box-sizing: border-box;    /* 패딩 포함 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  /* 패딩 포함 */
 }
 
 /* 섹션 제목 */
@@ -1303,7 +1453,7 @@ body.dark .product-card {
 }
 
 body.dark .product-card:hover {
-  box-shadow: 0 15px 35px rgba(255,255,255,0.15);
+  box-shadow: 0 15px 35px rgba(255, 255, 255, 0.15);
 }
 
 /* LOGIN DRAWER */
@@ -1318,14 +1468,14 @@ body.dark .login-drawer input {
   border-color: #555;
 }
 
-body.dark .side-menu{
+body.dark .side-menu {
 
   background: #181818;
   color: white;
 
 }
 
-body.dark .side-menu{
+body.dark .side-menu {
 
   background: #181818;
   color: white;
