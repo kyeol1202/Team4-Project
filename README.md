@@ -12,7 +12,10 @@
 구분기술FrontendReact.js, HTML5, CSS3BackendNode.js, ExpressDatabaseMariaDB협업 도구GitHub, Notion, Figma, ERD Cloud개발 환경Visual Studio Code, Chrome
 
 👥 팀원 및 역할
-이름역할김한결 (팀장)Full-Stack Developer — 프로젝트 기획·총괄, Git 환경 구축, MariaDB 서버 구축 및 Front-Back 연동, 검색·상품등록·카테고리 기능, 주문·마이페이지, 관리자 권한 시스템, 통합 테스트윤종빈Back-end Developer · AI Content — DB 설계, 로그인·주문·장바구니 기능, AI 챗봇·이미지·광고 영상 제작신은지Front-end Developer · UI/UX — 전체 레이아웃 설계, 메인 화면·컴포넌트 UI, 회원가입, 관리자 마이페이지이선화Front-end Developer · User UX — 마이페이지·위시리스트·장바구니·결제·고객센터 페이지, AI 상품이미지 추출
+김한결 (팀장)Full-Stack Developer — 프로젝트 기획·총괄, Git 환경 구축, MariaDB 서버 구축 및 Front-Back 연동, 검색·상품등록·카테고리 기능, 주문·마이페이지, 관리자 권한 시스템, 통합 테스트
+윤종빈Back-end Developer · AI Content — DB 설계, 로그인·주문·장바구니 기능, AI 챗봇·이미지·광고 영상 제작
+신은지Front-end Developer · UI/UX — 전체 레이아웃 설계, 메인 화면·컴포넌트 UI, 회원가입, 관리자 마이페이지
+이선화Front-end Developer · User UX — 마이페이지·위시리스트·장바구니·결제·고객센터 페이지, AI 상품이미지 추출
 
 📂 데이터베이스 구조
 사용자 / 제품 / 주문 3개 도메인을 중심으로 설계하였으며, ERD 설계를 통해 데이터 흐름을 최적화하고 데이터 중복을 최소화하였습니다.
@@ -67,7 +70,6 @@ AI 챗봇 (프론트·백엔드·DB 구현 완료)
 ✅ 초기 목표 대비 115% 기능 구현
 ✅ AI 이미지·영상 활용 마케팅 콘텐츠 제작
 ✅ 관리자·사용자 권한 분리 구조 구현
-
 
 💬 팀원 회고
 
