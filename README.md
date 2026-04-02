@@ -1,8 +1,7 @@
-<div align="center">
+<img width="1919" height="1039" alt="image" src="https://github.com/user-attachments/assets/5eaa653f-f375-48b7-a1b9-4fca0b9766fd" /><img width="2000" height="1508" alt="image" src="https://github.com/user-attachments/assets/35151919-e49c-4fc1-9c60-0cb3500ac34c" /><div align="center">
 
 # 🌸 AuRA
 ### 당신의 느낌을 향으로 기록하다
-<img width="2000" height="1508" alt="image" src="https://github.com/user-attachments/assets/8ac9e3e3-8663-4d59-885f-4f7ebd87f3b9" />
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![NodeJS](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
@@ -68,6 +67,21 @@ DBeaver      — DB 관리
 | **이선화** | Front-end · UX | 마이페이지·위시리스트·장바구니·결제·고객센터 페이지, AI 상품이미지 추출 |
 
 ---
+
+## 사이트 이미지
+
+<img width="1914" height="1040" alt="image" src="https://github.com/user-attachments/assets/95a803c5-0b5f-4f39-88d2-0a7ccbf224d5" />
+<img width="1915" height="1031" alt="image" src="https://github.com/user-attachments/assets/dc929dfe-0dd7-4d02-9662-a8349f556b7e" />
+<img width="1919" height="1039" alt="image" src="https://github.com/user-attachments/assets/abd82adc-38c9-4f34-ac0c-89b809b3d82d" />
+
+<img width="1850" height="1137" alt="image" src="https://github.com/user-attachments/assets/8dd13bb3-fa76-4758-935d-cc6f2cae00ac" />
+<img width="1960" height="1175" alt="image" src="https://github.com/user-attachments/assets/fa09ced6-a844-4e04-a38e-c5b8f45f0b83" />
+<img width="1996" height="1025" alt="image" src="https://github.com/user-attachments/assets/1c1fd87d-1200-43d9-9843-9e5b2dc4b262" />
+<img width="1867" height="1150" alt="image" src="https://github.com/user-attachments/assets/9b601943-1144-4dde-88bc-fe17db451377" />
+![Uploading image.png…]()
+
+
+
 
 ## 🗂️ 프로젝트 구조
 
