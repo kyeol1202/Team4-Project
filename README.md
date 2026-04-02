@@ -68,14 +68,19 @@ DBeaver      — DB 관리
 
 ## 사이트 이미지
 
-<img width="1914" height="1040" alt="image" src="https://github.com/user-attachments/assets/95a803c5-0b5f-4f39-88d2-0a7ccbf224d5" />
-<img width="1915" height="1031" alt="image" src="https://github.com/user-attachments/assets/dc929dfe-0dd7-4d02-9662-a8349f556b7e" />
-<img width="1919" height="1039" alt="image" src="https://github.com/user-attachments/assets/abd82adc-38c9-4f34-ac0c-89b809b3d82d" />
+<img width="1920" height="1038" alt="메인 화면1" src="https://github.com/user-attachments/assets/301975c7-71e8-4dfa-be6f-875dfc664e5f" />
+<img width="1919" height="1035" alt="메인 화면2" src="https://github.com/user-attachments/assets/cf40813e-1265-496c-a164-823b23b16f39" />
+<img width="1920" height="1035" alt="메인 화면3(슬라이드)" src="https://github.com/user-attachments/assets/bc7eced0-69e2-4272-ab94-05ef1d6b1a8e" />
+<img width="1920" height="1037" alt="로그인" src="https://github.com/user-attachments/assets/90a2af25-7805-474f-aa67-9f172805e237" />
+<img width="1915" height="1030" alt="메인 화면3" src="https://github.com/user-attachments/assets/fb3a936a-2597-4367-8ba2-27ba20e419f7" />
+<img width="1920" height="1034" alt="상품목록(전체)" src="https://github.com/user-attachments/assets/484401bd-6012-443d-bd81-9a9ac5efe2b2" />
+<img width="1920" height="1037" alt="남성상품(카테고리 별 분류)" src="https://github.com/user-attachments/assets/8e0840b6-c006-41c4-8204-230c0e60ff54" />
+<img width="1920" height="1036" alt="전체인기상품" src="https://github.com/user-attachments/assets/10200c09-5367-4315-9ba3-dd677d39e529" />
+<img width="1919" height="1038" alt="여성인기상품" src="https://github.com/user-attachments/assets/f1227440-bab9-4829-b2c5-2ad5c79c31a1" />
+<img width="1919" height="1036" alt="검색" src="https://github.com/user-attachments/assets/a2f8b21d-a26f-4dce-90ea-9302013fc17b" />
+<img width="1919" height="1036" alt="장바구니(비회원)" src="https://github.com/user-attachments/assets/d4802a0a-d5c6-4ebd-93ef-58547ab94f26" />
+<img width="300" height="505" alt="카테고리" src="https://github.com/user-attachments/assets/d1318519-814a-4639-90b1-7fa93d960e9c" />
 
-<img width="1850" height="1137" alt="image" src="https://github.com/user-attachments/assets/8dd13bb3-fa76-4758-935d-cc6f2cae00ac" />
-<img width="1960" height="1175" alt="image" src="https://github.com/user-attachments/assets/fa09ced6-a844-4e04-a38e-c5b8f45f0b83" />
-<img width="1996" height="1025" alt="image" src="https://github.com/user-attachments/assets/1c1fd87d-1200-43d9-9843-9e5b2dc4b262" />
-<img width="1867" height="1150" alt="image" src="https://github.com/user-attachments/assets/9b601943-1144-4dde-88bc-fe17db451377" />
 
 
 
