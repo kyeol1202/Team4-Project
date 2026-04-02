@@ -1,5 +1,3 @@
-<img width="1919" height="1039" alt="image" src="https://github.com/user-attachments/assets/5eaa653f-f375-48b7-a1b9-4fca0b9766fd" /><img width="2000" height="1508" alt="image" src="https://github.com/user-attachments/assets/35151919-e49c-4fc1-9c60-0cb3500ac34c" /><div align="center">
-
 # 🌸 AuRA
 ### 당신의 느낌을 향으로 기록하다
 
