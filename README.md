@@ -76,7 +76,6 @@ DBeaver      — DB 관리
 <img width="1960" height="1175" alt="image" src="https://github.com/user-attachments/assets/fa09ced6-a844-4e04-a38e-c5b8f45f0b83" />
 <img width="1996" height="1025" alt="image" src="https://github.com/user-attachments/assets/1c1fd87d-1200-43d9-9843-9e5b2dc4b262" />
 <img width="1867" height="1150" alt="image" src="https://github.com/user-attachments/assets/9b601943-1144-4dde-88bc-fe17db451377" />
-![Uploading image.png…]()
 
 
 
