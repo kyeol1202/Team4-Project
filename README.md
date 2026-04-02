@@ -8,17 +8,24 @@
 온라인 향수 시장의 지속적인 성장에 따라, 소비자들이 향수 정보에 쉽게 접근하고 구매까지 이어지는 전문 웹사이트를 구축하였습니다.
 각 향수마다 고유한 스토리를 제공하여 사용자가 이미지를 상상하고 감성적으로 경험할 수 있도록 설계하였습니다.
 
+
 🛠️ 기술 스택
 구분기술FrontendReact.js, HTML5, CSS3BackendNode.js, ExpressDatabaseMariaDB협업 도구GitHub, Notion, Figma, ERD Cloud개발 환경Visual Studio Code, Chrome
 
 👥 팀원 및 역할
+
 김한결 (팀장)Full-Stack Developer — 프로젝트 기획·총괄, Git 환경 구축, MariaDB 서버 구축 및 Front-Back 연동, 검색·상품등록·카테고리 기능, 주문·마이페이지, 관리자 권한 시스템, 통합 테스트
+
 윤종빈Back-end Developer · AI Content — DB 설계, 로그인·주문·장바구니 기능, AI 챗봇·이미지·광고 영상 제작
+
 신은지Front-end Developer · UI/UX — 전체 레이아웃 설계, 메인 화면·컴포넌트 UI, 회원가입, 관리자 마이페이지
+
 이선화Front-end Developer · User UX — 마이페이지·위시리스트·장바구니·결제·고객센터 페이지, AI 상품이미지 추출
 
 📂 데이터베이스 구조
+
 사용자 / 제품 / 주문 3개 도메인을 중심으로 설계하였으며, ERD 설계를 통해 데이터 흐름을 최적화하고 데이터 중복을 최소화하였습니다.
+
 사용자 (User)         제품 (Product)        주문 (Order)
 ├ 회원 정보           ├ 향수 제품            ├ 장바구니
 ├ 위시리스트          ├ 카테고리             ├ 주문 정보
@@ -26,9 +33,11 @@
 └ 챗봇 로그           └ 상품 이미지          └ 결제 정보
 
 ✨ 주요 기능
+
 👤 사용자
 
 일반 / 사업자 회원가입 및 로그인 (localStorage 기반 세션 유지)
+
 다크모드 지원 (localStorage 기반 상태 유지)
 
 🛍️ 쇼핑
