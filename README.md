@@ -73,6 +73,7 @@ DBeaver      — DB 관리
 <img width="1920" height="1035" alt="메인 화면3(슬라이드)" src="https://github.com/user-attachments/assets/bc7eced0-69e2-4272-ab94-05ef1d6b1a8e" />
 <img width="1920" height="1037" alt="로그인" src="https://github.com/user-attachments/assets/90a2af25-7805-474f-aa67-9f172805e237" />
 <img width="1915" height="1030" alt="메인 화면3" src="https://github.com/user-attachments/assets/fb3a936a-2597-4367-8ba2-27ba20e419f7" />
+<img width="1920" height="1038" alt="메뉴" src="https://github.com/user-attachments/assets/20862786-bacf-4785-804b-38ecc2b119a2" />
 <img width="1920" height="1034" alt="상품목록(전체)" src="https://github.com/user-attachments/assets/484401bd-6012-443d-bd81-9a9ac5efe2b2" />
 <img width="1920" height="1037" alt="남성상품(카테고리 별 분류)" src="https://github.com/user-attachments/assets/8e0840b6-c006-41c4-8204-230c0e60ff54" />
 <img width="1920" height="1036" alt="전체인기상품" src="https://github.com/user-attachments/assets/10200c09-5367-4315-9ba3-dd677d39e529" />
@@ -80,6 +81,7 @@ DBeaver      — DB 관리
 <img width="1919" height="1036" alt="검색" src="https://github.com/user-attachments/assets/a2f8b21d-a26f-4dce-90ea-9302013fc17b" />
 <img width="1919" height="1036" alt="장바구니(비회원)" src="https://github.com/user-attachments/assets/d4802a0a-d5c6-4ebd-93ef-58547ab94f26" />
 <img width="300" height="505" alt="카테고리" src="https://github.com/user-attachments/assets/d1318519-814a-4639-90b1-7fa93d960e9c" />
+<img width="1919" height="1031" alt="챗봇" src="https://github.com/user-attachments/assets/5809b456-1223-4e3d-ba9f-bc6db33c73f9" />
 
 
 
