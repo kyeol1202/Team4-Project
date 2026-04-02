@@ -83,6 +83,9 @@ DBeaver      — DB 관리
 <img width="300" height="505" alt="카테고리" src="https://github.com/user-attachments/assets/d1318519-814a-4639-90b1-7fa93d960e9c" />
 <img width="1919" height="1031" alt="챗봇" src="https://github.com/user-attachments/assets/5809b456-1223-4e3d-ba9f-bc6db33c73f9" />
 
+## 영상
+https://github.com/user-attachments/assets/2580b2e0-1ee4-4340-bbab-422e338218ac
+
 
 
 
