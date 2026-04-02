@@ -2,6 +2,7 @@
 
 # 🌸 AuRA
 ### 당신의 느낌을 향으로 기록하다
+<img width="2000" height="1508" alt="image" src="https://github.com/user-attachments/assets/8ac9e3e3-8663-4d59-885f-4f7ebd87f3b9" />
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![NodeJS](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
